@@ -20,8 +20,8 @@
 | 1-01 | Project Scaffold | `feature/project-scaffold` | ✅ Done |
 | 1-02 | Folder Structure | `feature/folder-structure` | ✅ Done |
 | 1-03 | Install Dependencies | `feature/dependencies` | ✅ Done |
-| 1-04 | Environment Variables | `feature/env-setup` | ⏳ Next |
-| 1-05 | Firebase Client Setup | `feature/firebase-client` | ⏳ Pending |
+| 1-04 | Environment Variables | `feature/env-setup` | ✅ Done |
+| 1-05 | Firebase Client Setup | `feature/firebase-client` | ⏳ Next |
 | 1-06 | Shared Types | `feature/shared-types` | ⏳ Pending |
 | 1-07 | Character Constants | `feature/character-constants` | ⏳ Pending |
 | 1-08 | Zustand Stores | `feature/zustand-stores` | ⏳ Pending |
