@@ -1,0 +1,413 @@
+# Spark Tutor — Cursor Rules
+# K-1 AI Tutoring App | Next.js + Firebase + Claude + Gemini
+# Last updated: June 2026
+
+# ─────────────────────────────────────────────────────────────
+# PROJECT CONTEXT
+# ─────────────────────────────────────────────────────────────
+
+# Spark Tutor is a K-1 tutoring app where children pick and name
+# a mascot character (the Spark Squad), then learn Math and Reading/ELA
+# through Socratic AI conversations. Parents get automatic session
+# summaries after each session.
+#
+# Architecture:
+#   - Frontend:      Next.js 14 (App Router) + Tailwind CSS + Shadcn UI
+#   - Auth + DB:     Firebase Auth + Firestore
+#   - Vector search: Firebase Vector Search (RAG index)
+#   - RAG model:     Gemini (Google AI Studio) — embeddings + retrieval
+#   - Chat model:    Claude (Anthropic API) — mascot voice + Socratic Q&A
+#   - Agentic:       Claude — auto session summary on session end
+#   - MCP tool:      Custom Next.js API route — math problem generator
+#   - State:         Zustand (lightweight global state)
+#   - Deployment:    Vercel
+#
+# Users:
+#   - Children (K-1, ages 5-6) use the chat UI with their mascot
+#   - Parents create accounts, view dashboards, receive session summaries
+#   - No child accounts — all data stored under parent UID (COPPA)
+
+
+# ─────────────────────────────────────────────────────────────
+# CODING STYLE & QUALITY
+# ─────────────────────────────────────────────────────────────
+
+# Language
+- Use TypeScript for every file — no plain .js files except config
+- Enable strict mode in tsconfig.json — never disable it
+- Always define types and interfaces; never use `any`
+- Use `interface` for object shapes, `type` for unions and primitives
+- Export types from a central /types directory when shared across files
+
+# Readability
+- Write code as if a junior developer will read it tomorrow
+- Prefer explicit, descriptive names over short clever ones
+  - BAD:  const d = new Date()
+  - GOOD: const sessionStartDate = new Date()
+- One concept per function — if a function does two things, split it
+- Add a one-line JSDoc comment above every function explaining what it does
+- Use blank lines to separate logical sections within a function
+
+# File size
+- Hard limit: 500 lines per file — split into smaller modules if approaching this
+- Hard limit: 200 lines per component — extract sub-components early
+- Each file should have one clear responsibility (single responsibility principle)
+
+# Comments
+- Comment the WHY, not the WHAT
+  - BAD:  // increment counter
+  - GOOD: // track stars separately from score so we can animate them independently
+- Add a file-level comment at the top of every file explaining its purpose
+- Mark todos clearly: // TODO: add voice input in v2
+
+# Formatting
+- Use Prettier defaults (enforced via .prettierrc)
+- 2-space indentation
+- Single quotes for strings
+- Trailing commas in multi-line objects and arrays
+- Max line length: 100 characters
+
+
+# ─────────────────────────────────────────────────────────────
+# NEXT.JS CONVENTIONS
+# ─────────────────────────────────────────────────────────────
+
+# App Router structure
+- Use the App Router exclusively — no Pages Router
+- Every route segment gets its own folder under /app
+- Keep page.tsx files thin — logic lives in components, not pages
+- Use layout.tsx for shared UI (nav, auth wrappers)
+- Use loading.tsx and error.tsx for every major route segment
+
+# Server vs Client components
+- Default to Server Components — only add 'use client' when needed
+- 'use client' is needed for: useState, useEffect, event handlers, Zustand, Firebase listeners
+- Never fetch data in a Client Component if a Server Component can do it
+- Keep 'use client' components as small as possible — push them to leaf nodes
+
+# API routes
+- All AI calls (Claude, Gemini) go through /app/api routes — never call AI APIs from the client
+- Never expose API keys to the browser — always server-side only
+- Name API routes clearly: /api/chat, /api/summary, /api/mcp/math-problem
+- Every API route must handle errors and return consistent response shapes:
+  { success: boolean, data?: unknown, error?: string }
+
+# Data fetching
+- Use Firebase onSnapshot for real-time data (session updates, parent dashboard)
+- Use Firebase getDoc/getDocs for one-time reads
+- Always handle loading and error states — never assume data is available
+- Cancel Firestore listeners in useEffect cleanup functions
+
+
+# ─────────────────────────────────────────────────────────────
+# COMPONENT ARCHITECTURE
+# ─────────────────────────────────────────────────────────────
+
+# File structure
+src/
+  app/                      # Next.js App Router pages and API routes
+    (auth)/                 # Auth group: login, signup
+    (child)/                # Child-facing routes: character select, chat
+    (parent)/               # Parent-facing routes: dashboard, session history
+    api/                    # Server-side API routes
+      chat/                 # Claude conversation endpoint
+      summary/              # Agentic session summary endpoint
+      mcp/                  # MCP tool endpoints
+        math-problem/       # Math problem generator
+      rag/                  # RAG retrieval endpoint
+  components/               # Reusable UI components
+    ui/                     # Shadcn UI components (auto-generated, do not edit)
+    child/                  # Child-specific components (CharacterCard, ChatBubble, StarBurst)
+    parent/                 # Parent-specific components (SessionSummaryCard, ProgressPanel)
+    shared/                 # Shared across child and parent (LoadingSpinner, ErrorMessage)
+  lib/                      # Utility functions and service clients
+    firebase/               # Firebase init and helper functions
+    claude/                 # Claude API client and prompt builders
+    gemini/                 # Gemini embedding and retrieval functions
+    mcp/                    # MCP tool definitions
+  store/                    # Zustand state stores
+  types/                    # Shared TypeScript types and interfaces
+  constants/                # App-wide constants (character definitions, subjects)
+  hooks/                    # Custom React hooks (useSession, useAuth, useStars)
+
+# Naming conventions
+- Components:    PascalCase  (CharacterSelectionScreen.tsx)
+- Hooks:         camelCase with 'use' prefix (useSessionSummary.ts)
+- Utilities:     camelCase (buildSystemPrompt.ts)
+- Constants:     SCREAMING_SNAKE_CASE (MAX_SESSION_STARS)
+- Types:         PascalCase with descriptive suffix (SessionSummaryType, CharacterConfig)
+- API routes:    kebab-case folders (math-problem, session-end)
+
+# Component rules
+- Every component gets its own file — no multi-component files
+- Props must be typed with an interface named [ComponentName]Props
+- Destructure props at the top of every component
+- Keep JSX readable — extract complex conditional rendering into variables
+- Example:
+
+  interface CharacterCardProps {
+    character: CharacterConfig;
+    isSelected: boolean;
+    onSelect: (id: string) => void;
+  }
+
+  export function CharacterCard({ character, isSelected, onSelect }: CharacterCardProps) {
+    const cardClasses = isSelected ? 'ring-4 ring-yellow-400' : '';
+
+    return (
+      <button
+        className={`rounded-2xl p-4 ${cardClasses}`}
+        onClick={() => onSelect(character.id)}
+      >
+        {/* character content */}
+      </button>
+    );
+  }
+
+
+# ─────────────────────────────────────────────────────────────
+# FIREBASE RULES
+# ─────────────────────────────────────────────────────────────
+
+# Auth
+- Only parents create accounts — children never authenticate directly
+- Always check auth state before accessing Firestore — never assume logged in
+- Use Firebase Auth onAuthStateChanged in a top-level AuthProvider component
+- Redirect unauthenticated users to /login from protected routes
+
+# Firestore
+- Never write directly to Firestore from a component — always go through a service function in /lib/firebase
+- Always use the typed converter pattern for Firestore documents
+- Structure all child session data under the parent UID:
+  users/{parentUID}/sessions/{sessionID}
+- Never store child real names, ages, photos, or any PII
+- The only "child" data stored is: character type, character name chosen by child (not real name)
+- Always include error handling on every read and write operation
+
+# Security rules (firestore.rules)
+- Users can only read/write their own documents
+- No public read/write access on any collection
+- Validate data shape in rules — reject malformed writes
+
+# Environment variables
+- Firebase config goes in .env.local — never hardcode credentials
+- All env vars accessed server-side only through /lib/firebase/config.ts
+- Prefix client-safe vars with NEXT_PUBLIC_ (only Firebase client config needs this)
+- Never log env vars or API keys — not even in development
+
+
+# ─────────────────────────────────────────────────────────────
+# AI & PROMPT ENGINEERING RULES
+# ─────────────────────────────────────────────────────────────
+
+# Claude (conversation)
+- All Claude calls go through /app/api/chat — never call from the client
+- Always compose the system prompt from three separate layers:
+    1. BASE_TUTOR_RULES   — never changes, enforces K-1 safety and Socratic method
+    2. CHARACTER_VOICE    — loaded from /constants/characters.ts based on selected character
+    3. RAG_CONTEXT        — curriculum chunks retrieved from Firebase Vector Search
+- Stream Claude responses using the Anthropic streaming API for better UX
+- Always set max_tokens to a reasonable limit (300 for child chat, 600 for parent summary)
+- Always set temperature to 0.7 for child chat (warm but consistent)
+- Log token usage in development to monitor costs
+
+# Gemini (RAG)
+- Gemini is used ONLY for creating embeddings and retrieving curriculum chunks
+- Gemini is NOT used for generating conversation — that is Claude's job
+- Retrieve top 3 most relevant chunks per child message
+- Filter retrieved chunks by subject and grade_band metadata before returning
+- Cache embeddings — never re-embed a document that is already in Firebase Vector Search
+
+# Prompt safety rules
+- BASE_TUTOR_RULES must include explicit instruction to stay on Math and Reading/ELA only
+- Claude must be instructed to never discuss personal topics, current events, or anything outside curriculum
+- If a child input seems off-topic, the mascot redirects warmly back to the lesson
+- Never include child input verbatim in a log or database field — summarize only
+
+# MCP tool
+- The math problem generator MCP tool lives at /app/api/mcp/math-problem
+- It accepts: { grade: 'K' | '1', topic: string, difficulty: 'easy' | 'medium' }
+- It returns: { problem: string, hint: string, answer: string }
+- The answer field is NEVER sent to the client — server-side only
+- Claude uses the problem and hint only; it guides the child Socratically toward the answer
+
+
+# ─────────────────────────────────────────────────────────────
+# ZUSTAND STATE MANAGEMENT
+# ─────────────────────────────────────────────────────────────
+
+# What goes in Zustand (global state)
+- Active character selection (id, chosen name)
+- Current session data (sessionId, subject, messageCount, starsEarned)
+- Auth state mirror (parentUID, isAuthenticated) — mirrors Firebase Auth
+- UI state that crosses multiple components (isChatLoading, isSessionEnding)
+
+# What stays in local state (useState)
+- Input field values
+- Component-level toggle states (dropdown open/closed)
+- Animation triggers
+
+# Store structure
+- One store per domain: useChildStore, useSessionStore, useAuthStore
+- Keep stores small — max 8-10 fields per store
+- Always define the full TypeScript interface for each store
+- Use shallow equality checks when selecting multiple fields from a store
+
+# Example store pattern:
+  interface SessionStore {
+    sessionId: string | null;
+    subject: 'math' | 'reading' | null;
+    starsEarned: number;
+    messageCount: number;
+    startSession: (subject: 'math' | 'reading') => void;
+    addStar: () => void;
+    endSession: () => void;
+  }
+
+
+# ─────────────────────────────────────────────────────────────
+# UI / TAILWIND RULES
+# ─────────────────────────────────────────────────────────────
+
+# Child UI (ages 5-6 — these are non-negotiable)
+- Minimum touch target size: 48x48px on all interactive elements
+- Minimum font size: 18px for any text the child reads
+- Use rounded-2xl or rounded-3xl for all child-facing cards and buttons
+- Bright, saturated colors — this is a kids app, not a SaaS dashboard
+- Every interactive element must have a visible hover AND focus state
+- Never rely on color alone to convey meaning — add an icon or label too
+- Keep the child chat UI to a single column — no side panels on mobile
+
+# Parent UI
+- Clean and minimal — parents want information, not excitement
+- Use Shadcn UI components for the parent dashboard (Card, Table, Badge)
+- Standard readable font sizes (16px minimum)
+- Neutral color palette with one accent color for important actions
+
+# Tailwind conventions
+- Use Tailwind utility classes directly — no custom CSS unless absolutely necessary
+- Group Tailwind classes in this order: layout → spacing → sizing → color → typography → effects
+- Extract long class strings into a variable when they exceed one line:
+  const buttonClasses = 'flex items-center justify-center min-h-[48px] rounded-2xl bg-yellow-400 text-lg font-bold hover:bg-yellow-300 active:scale-95 transition-all'
+- Use the cn() utility (from shadcn) for conditional class merging — not template literals
+
+# Shadcn UI
+- Use Shadcn components for the parent dashboard and auth screens
+- Do NOT use Shadcn components in the child chat UI — build custom kid-friendly components there
+- Never modify files inside /components/ui — extend them with wrapper components instead
+- Install components with: npx shadcn@latest add [component-name]
+
+
+# ─────────────────────────────────────────────────────────────
+# ERROR HANDLING
+# ─────────────────────────────────────────────────────────────
+
+# General rules
+- Every async function must be wrapped in try/catch
+- Never swallow errors silently — always log or surface them
+- Distinguish between user-facing errors (show in UI) and dev errors (log only)
+- API routes must always return a response — never leave a request hanging
+
+# Child-facing errors
+- Never show technical error messages to a child
+- On AI call failure: mascot says something warm like "Hmm, let me think for a second... try asking me again!"
+- On network error: show a friendly "Something went wrong — let's try again" with a retry button
+
+# Parent-facing errors
+- Clear, plain English — "We couldn't load your session history. Please refresh."
+- Always offer a retry action
+- Log errors to console in development with full context
+
+# TypeScript error handling pattern
+  type ApiResult<T> = 
+    | { success: true; data: T }
+    | { success: false; error: string };
+
+  // Use this return type on all API route handlers and service functions
+
+
+# ─────────────────────────────────────────────────────────────
+# SECURITY & PRIVACY
+# ─────────────────────────────────────────────────────────────
+
+# COPPA compliance (children under 13)
+- Never collect child's real name, age, school, photo, or location
+- The only identity stored for a child is: character type + character name (fictional)
+- All session data is owned by the parent account (parent UID)
+- Never build features that allow children to communicate with other users
+
+# API security
+- Rate limit all AI API routes — use Vercel's built-in rate limiting or upstash/ratelimit
+- Validate and sanitize all user input before sending to Claude or Gemini
+- Never include raw user input in database keys or query parameters
+- Always verify Firebase Auth token on every protected API route:
+  const token = await admin.auth().verifyIdToken(authHeader)
+
+# Environment & secrets
+- .env.local is gitignored — never commit it
+- Add all required env var names (without values) to .env.example
+- Rotate API keys immediately if accidentally exposed
+
+
+# ─────────────────────────────────────────────────────────────
+# TESTING & QUALITY
+# ─────────────────────────────────────────────────────────────
+
+# For this MVP, focus on:
+- TypeScript types catching bugs at compile time (your primary safety net)
+- Manual testing of all AI flows before each weekly milestone
+- Test on mobile viewport (375px wide) — the child UI must work on a tablet
+
+# Things to manually test every week
+- Character selection and naming flow end-to-end
+- Chat session: send 5 messages, verify Socratic responses, verify stars increment
+- RAG retrieval: ask a curriculum question, verify answer references real content
+- Session end: verify parent summary appears on dashboard within 5 seconds
+- Parent auth: login, logout, protected route redirect
+
+# Code quality before committing
+- No TypeScript errors (run: npx tsc --noEmit)
+- No unused imports or variables
+- No console.log statements in production code (use a logger utility)
+- Run Prettier before every commit (add as a pre-commit hook with husky)
+
+
+# ─────────────────────────────────────────────────────────────
+# GIT CONVENTIONS
+# ─────────────────────────────────────────────────────────────
+
+# Commit message format
+# type(scope): short description
+#
+# Types: feat | fix | refactor | style | docs | chore
+# Scope: child-ui | parent-ui | api | rag | mcp | auth | store | types
+#
+# Examples:
+#   feat(child-ui): add character selection screen with 6 spark squad cards
+#   feat(api): add claude chat endpoint with composable system prompt
+#   feat(rag): add gemini embedding ingestion script for k-1 math content
+#   fix(auth): redirect unauthenticated users to login from parent dashboard
+#   refactor(store): split session store into child and session domains
+#   chore: add prettier and husky pre-commit hook
+
+# Branch strategy (simple, solo developer)
+- main:    production — only merge when a weekly milestone is complete
+- dev:     active development — commit here daily
+- feature/ branches for anything that takes more than one session to build
+
+
+# ─────────────────────────────────────────────────────────────
+# THINGS TO NEVER DO
+# ─────────────────────────────────────────────────────────────
+
+- Never call Claude or Gemini APIs directly from a React component
+- Never store API keys in client-side code or .env files without NEXT_PUBLIC_ awareness
+- Never store child PII (name, age, photo, location) — ever
+- Never use `any` in TypeScript
+- Never use inline styles in JSX — use Tailwind classes
+- Never create a component over 200 lines without splitting it
+- Never create a file over 500 lines without refactoring
+- Never send the MCP math problem answer to the client
+- Never disable TypeScript strict mode
+- Never commit with console.logs or TODO-hacks left in production code paths
+- Never use the Pages Router — App Router only
