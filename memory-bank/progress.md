@@ -19,8 +19,8 @@
 |---|---|---|---|
 | 1-01 | Project Scaffold | `feature/project-scaffold` | ✅ Done |
 | 1-02 | Folder Structure | `feature/folder-structure` | ✅ Done |
-| 1-03 | Install Dependencies | `feature/dependencies` | ⏳ Next |
-| 1-04 | Environment Variables | `feature/env-setup` | ⏳ Pending |
+| 1-03 | Install Dependencies | `feature/dependencies` | ✅ Done |
+| 1-04 | Environment Variables | `feature/env-setup` | ⏳ Next |
 | 1-05 | Firebase Client Setup | `feature/firebase-client` | ⏳ Pending |
 | 1-06 | Shared Types | `feature/shared-types` | ⏳ Pending |
 | 1-07 | Character Constants | `feature/character-constants` | ⏳ Pending |
@@ -38,9 +38,12 @@
 ## What Works Right Now
 - Next.js 16.2.9 project scaffolded with TypeScript, Tailwind, ESLint, App Router
 - Full `/src` folder structure in place
-- `.cursorrules` and `ROADMAP.md` in project root
+- Memory bank initialized in `memory-bank/`
+- All dependencies installed: Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge
+- Shadcn UI initialized (Tailwind v4 compatible) — card, badge, button, input components ready
+- `src/lib/utils.ts` with `cn()` utility created by Shadcn
 - Git initialized, pushed to GitHub: https://github.com/CGalentin/spark-tutor
-- Branches: `main`, `dev`, `feature/project-scaffold`, `feature/folder-structure`
+- Branches: `main`, `dev`, `feature/project-scaffold`, `feature/folder-structure`, `feature/dependencies`
 
 ## What Does Not Work Yet
 - No dependencies installed (Firebase, Claude, Gemini, Zustand, Shadcn)
