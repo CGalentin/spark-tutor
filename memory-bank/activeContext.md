@@ -5,13 +5,13 @@
 
 ## Completed PRs
 - [x] PR 1-01 · Project Scaffold — Next.js 16 + TypeScript + Tailwind + ESLint scaffolded, `.cursorrules` and `ROADMAP.md` copied in, pushed to GitHub
-- [x] PR 1-02 · Folder Structure — All `/src` subdirectories created with `.gitkeep` files
+- [x] PR 1-02 · Folder Structure — All `/src` subdirectories created with `.gitkeep` files, memory bank initialized
+- [x] PR 1-03 · Install Dependencies — Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge, Shadcn UI (card, badge, button, input) installed. Zero TypeScript errors.
 
 ## Currently Working On
-- PR 1-03 · Install Dependencies
+- PR 1-04 · Environment Variables
 
 ## Up Next (this week)
-- PR 1-03 · Install Dependencies (Firebase, Claude SDK, Gemini SDK, Zustand, Shadcn UI)
 - PR 1-04 · Environment Variables
 - PR 1-05 · Firebase Client Setup
 - PR 1-06 · Shared Types
@@ -26,7 +26,7 @@
 - PR 1-15 · Week 1 Integration Test & Deploy
 
 ## Active Branch
-`feature/folder-structure` (last completed) — next branch: `feature/dependencies`
+`feature/dependencies` (last completed) — next branch: `feature/env-setup`
 
 ## Recent Decisions & Notes
 - Using Next.js 16.2.9 (latest, installed by create-next-app)
@@ -34,6 +34,8 @@
 - GitHub repo: https://github.com/CGalentin/spark-tutor (public)
 - MIT License added at repo creation
 - Shell is PowerShell on Windows 10 — heredoc syntax does NOT work, use simple `-m "message"` for git commits
+- Shadcn 4.11.0 initialized with Tailwind v4 support — created `src/lib/utils.ts` (cn() utility) and `components.json`
+- Feature branches must be merged into `dev` before creating the next feature branch to keep all branches in sync
 
 ## Known Issues / Blockers
 - None currently
