@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — In Progress (12/15 PRs complete)**
+**Week 1 of 4 — In Progress (13/15 PRs complete)**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -29,7 +29,7 @@
 | 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ✅ Done |
 | 1-11 | Character Selection Screen | `feature/character-selection` | ✅ Done |
 | 1-12 | Claude API Route | `feature/claude-api` | ✅ Done |
-| 1-13 | Chat UI — Message Bubbles | `feature/chat-bubbles` | ⏳ Pending |
+| 1-13 | Chat UI — Message Bubbles | `feature/chat-bubbles` | ✅ Done |
 | 1-14 | Chat UI — Input & Session | `feature/chat-input` | ⏳ Pending |
 | 1-15 | Week 1 Integration Test & Deploy | `dev` | ⏳ Pending |
 
