@@ -119,18 +119,18 @@
 
 ---
 
-### PR 1-07 · Character Constants
+### PR 1-07 · Character Constants ✅
 **Branch:** `feature/character-constants`
 
-- [ ] Create `/src/constants/characters.ts`
-- [ ] Define all 6 Spark Squad characters with:
+- [x] Create `/src/constants/characters.ts`
+- [x] Define all 6 Spark Squad characters with:
   - `id`, `name` (default), `type` (animal/robot/fantasy)
   - `emoji` (placeholder until art is ready)
   - `colors` (primary bg color, accent color — Tailwind class names)
   - `voicePrompt` (the character personality paragraph for Claude system prompt)
-- [ ] Create `/src/constants/subjects.ts` — subject and grade band constants
-- [ ] Create `/src/constants/prompts.ts` — BASE_TUTOR_RULES string
-- [ ] Commit: `feat(constants): add spark squad character definitions and base prompt rules`
+- [x] Create `/src/constants/subjects.ts` — subject and grade band constants
+- [x] Create `/src/constants/prompts.ts` — BASE_TUTOR_RULES string
+- [x] Commit: `feat(constants): add spark squad character definitions and base prompt rules`
 
 ---
 
