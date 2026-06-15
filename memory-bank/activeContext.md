@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 1 — Foundation & Chat UI** (in progress — 8 of 15 PRs complete)
+**Week 1 — Foundation & Chat UI** (in progress — 9 of 15 PRs complete)
 
 ## Completed PRs
 - [x] PR 1-01 · Project Scaffold — Next.js 16.2.9 + TypeScript + Tailwind + ESLint, `.cursorrules` and `ROADMAP.md` in project root, pushed to GitHub
@@ -26,7 +26,7 @@
 - PR 1-15 · Week 1 Integration Test & Deploy
 
 ## Active Branch
-`feature/auth-pages` — merge into `dev` when PR is approved, then create `feature/auth-provider`
+`feature/auth-provider` — branch created from `dev` after merging PR 1-09; ready to build PR 1-10
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)

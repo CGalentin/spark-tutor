@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — In Progress (8/15 PRs complete)**
+**Week 1 of 4 — In Progress (9/15 PRs complete)**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -61,7 +61,7 @@
 - Root `src/app/page.tsx` redirects to `/login`
 
 ## What Does Not Work Yet
-- No auth provider (PR 1-10) — login/signup forms work but there's no global auth state listener yet
+- No auth provider (PR 1-10) — login/signup forms work but there's no global auth state listener yet; `feature/auth-provider` branch is ready
 - No route protection — unauthenticated users can navigate to any URL
 - No Claude API route
 - No child-facing UI (character select, chat)

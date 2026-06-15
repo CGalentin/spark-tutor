@@ -145,15 +145,20 @@
 
 ---
 
-### PR 1-09 · Auth Layout & Login Page
+### PR 1-09 · Auth Layout & Login Page ✅
 **Branch:** `feature/auth-pages`
 
-- [ ] Create `/src/app/(auth)/layout.tsx` — centered card layout for auth screens
-- [ ] Create `/src/app/(auth)/login/page.tsx` — parent login form (email + password)
-- [ ] Create `/src/app/(auth)/signup/page.tsx` — parent signup form (email + password)
-- [ ] Use Shadcn `Card`, `Input`, `Button` components
-- [ ] Wire up Firebase Auth signIn and createUser functions
-- [ ] Commit: `feat(auth): add parent login and signup pages with firebase auth`
+- [x] Create `/src/app/(auth)/layout.tsx` — centered card layout with Spark Tutor branding + privacy footer
+- [x] Create `/src/app/(auth)/login/page.tsx` — thin server page wrapping `LoginForm`
+- [x] Create `/src/app/(auth)/signup/page.tsx` — thin server page wrapping `SignupForm`
+- [x] Create `/src/components/parent/LoginForm.tsx` — Firebase signIn, Shadcn Card/Input/Button, friendly error messages
+- [x] Create `/src/components/parent/SignupForm.tsx` — Firebase signUp, confirm password validation, friendly errors
+- [x] Update `src/app/page.tsx` — strip Next.js boilerplate, redirect root → `/login`
+- [x] Update `src/app/layout.tsx` — set app metadata (title: "Spark Tutor")
+- [x] Use Shadcn `Card`, `Input`, `Button` components
+- [x] Wire up Firebase Auth signIn and createUser functions
+- [x] Verify TypeScript compiles: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(auth): add auth layout, login and signup pages (PR 1-09)`
 
 ---
 
