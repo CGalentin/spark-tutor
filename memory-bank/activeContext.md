@@ -9,9 +9,10 @@
 - [x] PR 1-03 · Install Dependencies — Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge, Shadcn UI (card, badge, button, input) installed. Zero TypeScript errors.
 - [x] PR 1-04 · Environment Variables — `.env.local` created (gitignored), `.env.example` committed with all required keys and comments. `.gitignore` updated to allow `.env.example` through.
 - [x] PR 1-05 · Firebase Client Setup — `config.ts` (singleton init), `auth.ts` (signIn, signUp, signOut, onAuthChange), `firestore.ts` (getSession, getSessions, saveSummary). Zero TypeScript errors.
+- [x] PR 1-06 · Shared Types — `character.ts` (CharacterConfig, CharacterVoice), `session.ts` (Session, SessionSummary, Message, Subject), `api.ts` (ApiResult<T>, ChatRequest, ChatResponse, SummaryRequest, SummaryResponse), `index.ts` (central re-export). Zero TypeScript errors.
 
 ## Currently Working On
-- PR 1-06 · Shared Types
+- PR 1-07 · Character Constants
 
 ## Up Next (this week)
 - PR 1-04 · Environment Variables
@@ -28,7 +29,7 @@
 - PR 1-15 · Week 1 Integration Test & Deploy
 
 ## Active Branch
-`feature/firebase-client` (last completed) — next branch: `feature/shared-types`
+`feature/shared-types` (last completed) — next branch: `feature/character-constants`
 
 ## Recent Decisions & Notes
 - Using Next.js 16.2.9 (latest, installed by create-next-app)

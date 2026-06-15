@@ -22,8 +22,8 @@
 | 1-03 | Install Dependencies | `feature/dependencies` | ✅ Done |
 | 1-04 | Environment Variables | `feature/env-setup` | ✅ Done |
 | 1-05 | Firebase Client Setup | `feature/firebase-client` | ✅ Done |
-| 1-06 | Shared Types | `feature/shared-types` | ⏳ Next |
-| 1-07 | Character Constants | `feature/character-constants` | ⏳ Pending |
+| 1-06 | Shared Types | `feature/shared-types` | ✅ Done |
+| 1-07 | Character Constants | `feature/character-constants` | ⏳ Next |
 | 1-08 | Zustand Stores | `feature/zustand-stores` | ⏳ Pending |
 | 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ⏳ Pending |
 | 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ⏳ Pending |
