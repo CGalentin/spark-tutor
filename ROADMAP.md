@@ -203,14 +203,16 @@
 
 ---
 
-### PR 1-13 · Chat UI — Message Bubbles
+### PR 1-13 · Chat UI — Message Bubbles ✅
 **Branch:** `feature/chat-bubbles`
 
-- [ ] Create `/src/components/child/ChatBubble.tsx` — single message bubble (child vs mascot variants)
-- [ ] Create `/src/components/child/ChatMessageList.tsx` — scrollable list of ChatBubbles
-- [ ] Create `/src/components/child/MascotAvatar.tsx` — character emoji/avatar with name badge
-- [ ] Style for K-1: large text (18px+), rounded-3xl bubbles, bright colors
-- [ ] Commit: `feat(child-ui): add chat bubble and message list components`
+- [x] Create `/src/components/child/MascotAvatar.tsx` — emoji circle (character primary color), custom mascot name, accent color tag
+- [x] Create `/src/components/child/ChatBubble.tsx` — child (right, slate-100) and mascot (left, character color) variants; strips `[STAR EARNED]` from display text
+- [x] Create `/src/components/child/ChatMessageList.tsx` — scrollable flex column, auto-scroll on new messages, bouncing 3-dot typing indicator
+- [x] Add `@keyframes bounce` to `globals.css` for the typing indicator dots
+- [x] Style: 18px+ text, rounded-3xl bubbles, 80% max-width
+- [x] Verify TypeScript compiles: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(child-ui): add chat bubble and message list components (PR 1-13)`
 
 ---
 
