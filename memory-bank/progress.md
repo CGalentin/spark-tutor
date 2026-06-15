@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — Complete ✅ (15/15 PRs done) | Live: https://spark-tutor-iota.vercel.app**
+**Week 1 of 4 — Complete ✅ (15/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -70,7 +70,7 @@
 - `src/components/child/ChatInput.tsx` — large input + 🚀 send button, 48px touch targets, Enter-key support
 - `src/components/child/SubjectSelector.tsx` — Math 🔢 / Reading 📖 picker, 80px touch targets
 - `src/app/(child)/chat/page.tsx` — full chat page: MascotAvatar + SubjectSelector + ChatMessageList + ChatInput; SSE streaming from /api/chat; [STAR EARNED] detection; redirect guard to /character-select
-- Vercel deployment live: https://spark-tutor-iota.vercel.app (all 11 env vars set, zero build errors)
+- Vercel deployment live: https://spark-tutor-app.vercel.app (all 11 env vars set, zero build errors, publicly accessible)
 - dev → main merged for Week 1 milestone
 
 ## What Does Not Work Yet
