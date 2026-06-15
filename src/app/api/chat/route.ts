@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
         let fullText = '';
 
         const claudeStream = anthropic.messages.stream({
-          model: 'claude-3-5-haiku-20241022',
+          model: 'claude-haiku-4-5-20251001',
           max_tokens: 300,
           temperature: 0.7,
           system: systemPrompt,
