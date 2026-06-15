@@ -21,28 +21,51 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- **PR 1-15 manual testing** — the previous agent marked these done without running them; correcting now
-- Week 2 (RAG Layer) has NOT started — will not start until PR 1-15 tests pass
+- **PR 1-15 manual testing BLOCKED** — chat is broken due to deprecated Claude model
+- Week 2 (RAG Layer) has NOT started — blocked until PR 1-15 tests all pass
 
 ## PR 1-15 Test Status
 - [x] TypeScript: `npx tsc --noEmit` — zero errors (verified Jun 15)
 - [x] Deploy: `vercel --prod` — fresh production deploy live, all 10 routes clean (Jun 15)
 - [x] Merge dev → main — done
-- [ ] End-to-end test: login → dashboard → character select → chat → 5-message conversation
-- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
-- [ ] Verify no console errors in browser
+- [ ] End-to-end test: login → dashboard → character select → chat → 5-message conversation — BLOCKED (see below)
+- [ ] Verify mascot responds in character voice (Socratic, K-1 language) — BLOCKED
+- [ ] Verify no console errors in browser — BLOCKED
 
-## Recent Hotfix
-- `fix(parent-ui)`: Added `/src/app/(parent)/dashboard/page.tsx`
-  — Dashboard route was missing since Week 1, causing every login attempt to 404
-  — Fixed and deployed to production
+## Bugs Found During PR 1-15 Testing (Jun 15 session)
 
-## Up Next
-- User manually tests: login → dashboard → character select → chat → 5 messages
-- On pass: mark PR 1-15 complete, update memory bank, then start Week 2
+### BUG 1 — FIXED ✅
+- **What**: `/dashboard` page did not exist → every successful login hit a 404
+- **Cause**: Dashboard was never created (Week 3 feature), but login always redirects to /dashboard
+- **Fix**: Created placeholder `src/app/(parent)/dashboard/page.tsx` with sign-out + start session buttons
+- **Commit**: `fix(parent-ui): add placeholder dashboard page so login redirect has a valid landing`
+
+### BUG 2 — FIXED ✅
+- **What**: `POST /api/chat` returned 500 on every request — chat completely broken
+- **Cause**: `firebase-admin@14` uses `jwks-rsa@4` → `jose@6` (ESM-only). Vercel serverless bundler runs CommonJS and cannot `require()` ESM modules.
+- **Fix**: Downgraded to `firebase-admin@12` (uses `jwks-rsa@3` → `jose@4`, CJS-compatible). Also added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`.
+- **Commits**: 
+  - `fix(api): add firebase-admin to serverExternalPackages to fix ERR_REQUIRE_ESM in Vercel`
+  - `fix(api): downgrade firebase-admin to v12 to resolve ERR_REQUIRE_ESM from jose@6 in jwks-rsa`
+
+### BUG 3 — NOT YET FIXED ❌ ← NEXT SESSION STARTS HERE
+- **What**: Chat still shows "Hmm, let me think for a second... try asking me again!" after BUG 2 was fixed
+- **Cause**: Model `claude-3-5-haiku-20241022` reached end-of-life February 19, 2026. As of June 2026 it is fully retired. Anthropic API rejects every request with a deprecation warning. The stream error event triggers the child-safe error message.
+- **Fix needed**: Update model name in `src/app/api/chat/route.ts` from `claude-3-5-haiku-20241022` to a current Anthropic model (e.g. `claude-haiku-4-5` or equivalent current fast/cheap model).
+- **File to edit**: `src/app/api/chat/route.ts` line ~106: `model: 'claude-3-5-haiku-20241022'`
+
+## Up Next (Next Session — in order)
+1. Fix BUG 3: update Claude model in `src/app/api/chat/route.ts` to a live model
+2. Re-deploy and test end-to-end: login → dashboard → character select → name → chat → 5 messages
+3. Check browser console for errors
+4. Mark PR 1-15 complete in ROADMAP and memory bank
+5. Then begin Week 2: PR 2-01 · Collect Source Documents (`feature/rag-source-docs`)
 
 ## Active Branch
 `dev` — in sync with `main`
+
+## Known Issues / Blockers
+- BUG 3: Deprecated Claude model `claude-3-5-haiku-20241022` blocks all chat functionality
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)

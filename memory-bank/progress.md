@@ -73,9 +73,15 @@
 - Vercel deployment live: https://spark-tutor-app.vercel.app (all 11 env vars set, zero build errors, publicly accessible)
 - dev → main merged for Week 1 milestone
 
+## Hotfixes Applied (Jun 15 — during PR 1-15 testing)
+- ✅ `fix(parent-ui)`: Added placeholder `/dashboard` page — login redirect was 404ing since Week 1
+- ✅ `fix(api)`: Added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
+- ✅ `fix(api)`: Downgraded `firebase-admin@14` → `firebase-admin@12` to fix `ERR_REQUIRE_ESM` crash in Vercel serverless (jose@6 ESM incompatibility via jwks-rsa)
+
 ## What Does Not Work Yet
-- No parent dashboard
-- No RAG layer (Week 2)
+- **CHAT IS BROKEN** — `claude-3-5-haiku-20241022` model is deprecated (EOL Feb 19, 2026). Fix: update model name in `src/app/api/chat/route.ts` to a current Anthropic model.
+- No parent dashboard (placeholder only — full dashboard is Week 3)
+- No RAG layer (Week 2 — not started)
 - No Firestore session persistence (session ID is client-side only until PR 2-xx)
 - No agentic session summary (Week 3)
 - No MCP math tool (Week 4)

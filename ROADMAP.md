@@ -227,25 +227,45 @@
 
 ---
 
-### PR 1-15 · Week 1 Integration Test & Deploy
+### PR 1-15 · Week 1 Integration Test & Deploy — ⚠️ BLOCKED
 **Branch:** `dev` (merge all Week 1 features)
 
-- [ ] End-to-end test: sign up → select character → name it → have a 5-message conversation
-- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
+- [ ] End-to-end test: sign up → select character → name it → have a 5-message conversation ← BLOCKED by BUG 3
+- [ ] Verify mascot responds in character voice (Socratic, K-1 language) ← BLOCKED by BUG 3
 - [x] Verify no TypeScript errors: `npx tsc --noEmit` — zero errors confirmed Jun 15
-- [ ] Verify no console errors in browser
+- [ ] Verify no console errors in browser ← pending BUG 3 fix
 - [x] Deploy to Vercel: `vercel --prod` — fresh production deploy Jun 15, all 10 routes building clean
 - [x] Merge `dev` → `main`
 - [x] Commit: `chore: week 1 complete — foundation and chat ui live`
 
 ---
 
-### Hotfix · Placeholder Dashboard Page
+### Hotfix 1 · Placeholder Dashboard Page ✅
 **Branch:** `dev` → merged to `main`
 
 - [x] Create `/src/app/(parent)/dashboard/page.tsx` — protected placeholder with sign-out + "Start Session" button
-- [x] Fixes 404 on `/dashboard` that broke the login redirect since Week 1 deploy
+- [x] Fixes 404 on `/dashboard` — login redirect was broken since Week 1 deploy
 - [x] Commit: `fix(parent-ui): add placeholder dashboard page so login redirect has a valid landing`
+
+---
+
+### Hotfix 2 · Firebase Admin ESM Crash ✅
+**Branch:** `dev` → merged to `main`
+
+- [x] Add `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
+- [x] Downgrade `firebase-admin@14` → `firebase-admin@12` — fixes `ERR_REQUIRE_ESM` caused by `jwks-rsa@4` trying to `require()` the ESM-only `jose@6` in Vercel serverless functions
+- [x] Commit: `fix(api): downgrade firebase-admin to v12 to resolve ERR_REQUIRE_ESM from jose@6 in jwks-rsa`
+
+---
+
+### BUG 3 · Deprecated Claude Model ❌ ← NEXT SESSION STARTS HERE
+**File:** `src/app/api/chat/route.ts`
+
+- [ ] Model `claude-3-5-haiku-20241022` is retired (EOL was Feb 19, 2026) — Anthropic API rejects all chat requests
+- [ ] Update model name on line ~106 to a current Anthropic model (e.g. `claude-haiku-4-5` or latest equivalent)
+- [ ] Verify chat works end-to-end after model update
+- [ ] Re-run full PR 1-15 test checklist
+- [ ] Deploy fix to Vercel production
 
 ---
 
