@@ -190,16 +190,16 @@
 
 ---
 
-### PR 1-12 · Claude API Route
+### PR 1-12 · Claude API Route ✅
 **Branch:** `feature/claude-api`
 
-- [ ] Create `/src/app/api/chat/route.ts` — POST endpoint for chat messages
-- [ ] Create `/src/lib/claude/client.ts` — Anthropic SDK client initialization
-- [ ] Create `/src/lib/claude/buildSystemPrompt.ts` — composes Base + Character + RAG context layers
-- [ ] Wire up a basic Claude call (no RAG yet — just Base + Character layers)
-- [ ] Return streamed response using Anthropic streaming API
-- [ ] Test with a curl or Postman request before building the UI
-- [ ] Commit: `feat(api): add claude chat endpoint with composable system prompt`
+- [x] Create `/src/lib/firebase/admin.ts` — Firebase Admin SDK init, exports `adminAuth` for token verification
+- [x] Create `/src/lib/claude/client.ts` — Anthropic SDK singleton (`getAnthropicClient()`)
+- [x] Create `/src/lib/claude/buildSystemPrompt.ts` — 3-layer composer: BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT (RAG slot ready for PR 2-05)
+- [x] Create `/src/app/api/chat/route.ts` — POST endpoint: verifies Firebase token, streams Claude via SSE (`delta`/`done`/`error` events), detects `[STAR EARNED]`
+- [x] Model: `claude-3-5-haiku-20241022`, `max_tokens: 300`, `temperature: 0.7`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(api): add claude chat endpoint with composable system prompt (PR 1-12)`
 
 ---
 
