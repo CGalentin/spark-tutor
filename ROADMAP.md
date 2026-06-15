@@ -162,14 +162,18 @@
 
 ---
 
-### PR 1-10 · Auth Provider & Route Protection
+### PR 1-10 · Auth Provider & Route Protection ✅
 **Branch:** `feature/auth-provider`
 
-- [ ] Create `/src/components/shared/AuthProvider.tsx` — wraps app with Firebase onAuthStateChanged
-- [ ] Add AuthProvider to `/src/app/layout.tsx`
-- [ ] Create `/src/hooks/useAuth.ts` — reads from useAuthStore, handles redirects
-- [ ] Protect `/app/(parent)/` routes — redirect to `/login` if not authenticated
-- [ ] Commit: `feat(auth): add auth provider and protected route logic`
+- [x] Create `/src/components/shared/AuthProvider.tsx` — Firebase onAuthStateChanged listener, hydrates useAuthStore
+- [x] Create `/src/components/shared/AuthRouteGuard.tsx` — redirects authenticated parents away from /login and /signup
+- [x] Create `/src/components/shared/LoadingSpinner.tsx` — reusable full-screen loading spinner
+- [x] Add AuthProvider to `/src/app/layout.tsx` — wraps all routes
+- [x] Create `/src/hooks/useAuth.ts` — reads auth state from useAuthStore with individual selectors
+- [x] Create `/src/app/(parent)/layout.tsx` — protected layout, redirects unauthenticated users to /login
+- [x] Update `/src/app/(auth)/layout.tsx` — wraps children in AuthRouteGuard
+- [x] Verify TypeScript compiles: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(auth): add auth provider and protected route logic (PR 1-10)`
 
 ---
 

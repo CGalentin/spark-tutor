@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — In Progress (9/15 PRs complete)**
+**Week 1 of 4 — In Progress (10/15 PRs complete)**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -26,7 +26,7 @@
 | 1-07 | Character Constants | `feature/character-constants` | ✅ Done |
 | 1-08 | Zustand Stores | `feature/zustand-stores` | ✅ Done |
 | 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ✅ Done |
-| 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ⏳ Pending |
+| 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ✅ Done |
 | 1-11 | Character Selection Screen | `feature/character-selection` | ⏳ Pending |
 | 1-12 | Claude API Route | `feature/claude-api` | ⏳ Pending |
 | 1-13 | Chat UI — Message Bubbles | `feature/chat-bubbles` | ⏳ Pending |
@@ -59,10 +59,15 @@
 - `src/app/(auth)/login/page.tsx` + `src/components/parent/LoginForm.tsx` — parent login with Firebase signIn, friendly error messages, link to /signup
 - `src/app/(auth)/signup/page.tsx` + `src/components/parent/SignupForm.tsx` — parent signup with Firebase signUp, confirm password, friendly error messages
 - Root `src/app/page.tsx` redirects to `/login`
+- `src/components/shared/AuthProvider.tsx` — Firebase onAuthStateChanged listener, hydrates useAuthStore
+- `src/components/shared/AuthRouteGuard.tsx` — redirects authenticated parents away from /login and /signup
+- `src/components/shared/LoadingSpinner.tsx` — reusable full-screen loading state
+- `src/hooks/useAuth.ts` — reads auth state from useAuthStore with individual selectors
+- `src/app/(parent)/layout.tsx` — protected layout: unauthenticated users redirected to /login
+- Root `src/app/layout.tsx` wraps all pages in AuthProvider
 
 ## What Does Not Work Yet
-- No auth provider (PR 1-10) — login/signup forms work but there's no global auth state listener yet; `feature/auth-provider` branch is ready
-- No route protection — unauthenticated users can navigate to any URL
+- No child-facing character selection screen (PR 1-11 next)
 - No Claude API route
 - No child-facing UI (character select, chat)
 - No parent dashboard
