@@ -7,9 +7,10 @@
 - [x] PR 1-01 · Project Scaffold — Next.js 16 + TypeScript + Tailwind + ESLint scaffolded, `.cursorrules` and `ROADMAP.md` copied in, pushed to GitHub
 - [x] PR 1-02 · Folder Structure — All `/src` subdirectories created with `.gitkeep` files, memory bank initialized
 - [x] PR 1-03 · Install Dependencies — Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge, Shadcn UI (card, badge, button, input) installed. Zero TypeScript errors.
+- [x] PR 1-04 · Environment Variables — `.env.local` created (gitignored), `.env.example` committed with all required keys and comments. `.gitignore` updated to allow `.env.example` through.
 
 ## Currently Working On
-- PR 1-04 · Environment Variables
+- PR 1-05 · Firebase Client Setup
 
 ## Up Next (this week)
 - PR 1-04 · Environment Variables
@@ -26,7 +27,7 @@
 - PR 1-15 · Week 1 Integration Test & Deploy
 
 ## Active Branch
-`feature/dependencies` (last completed) — next branch: `feature/env-setup`
+`feature/env-setup` (last completed) — next branch: `feature/firebase-client`
 
 ## Recent Decisions & Notes
 - Using Next.js 16.2.9 (latest, installed by create-next-app)
