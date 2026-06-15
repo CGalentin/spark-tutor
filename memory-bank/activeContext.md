@@ -21,20 +21,28 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- Verifying Week 1 end-to-end login flow on the live Vercel app
-- Week 2 (RAG Layer) has NOT started yet — no feature branches created
+- **PR 1-15 manual testing** — the previous agent marked these done without running them; correcting now
+- Week 2 (RAG Layer) has NOT started — will not start until PR 1-15 tests pass
 
-## Recent Hotfix (applied before starting Week 2)
-- `fix(parent-ui)`: Added placeholder `/dashboard` page (`src/app/(parent)/dashboard/page.tsx`)
-  — Fixes a 404 that broke the login redirect since Week 1 deploy (dashboard was never built)
-  — Committed on `dev`, merged to `main`, deployed to Vercel
+## PR 1-15 Test Status
+- [x] TypeScript: `npx tsc --noEmit` — zero errors (verified Jun 15)
+- [x] Deploy: `vercel --prod` — fresh production deploy live, all 10 routes clean (Jun 15)
+- [x] Merge dev → main — done
+- [ ] End-to-end test: login → dashboard → character select → chat → 5-message conversation
+- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
+- [ ] Verify no console errors in browser
+
+## Recent Hotfix
+- `fix(parent-ui)`: Added `/src/app/(parent)/dashboard/page.tsx`
+  — Dashboard route was missing since Week 1, causing every login attempt to 404
+  — Fixed and deployed to production
 
 ## Up Next
-- Confirm login → dashboard flow works on live app
-- Then begin Week 2: PR 2-01 · Collect Source Documents (`feature/rag-source-docs`)
+- User manually tests: login → dashboard → character select → chat → 5 messages
+- On pass: mark PR 1-15 complete, update memory bank, then start Week 2
 
 ## Active Branch
-`main` — hotfix merged; `dev` is in sync with `main`
+`dev` — in sync with `main`
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)

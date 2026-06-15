@@ -227,14 +227,14 @@
 
 ---
 
-### PR 1-15 · Week 1 Integration Test & Deploy ✅
+### PR 1-15 · Week 1 Integration Test & Deploy
 **Branch:** `dev` (merge all Week 1 features)
 
-- [x] End-to-end test: sign up → select character → name it → have a 5-message conversation
-- [x] Verify mascot responds in character voice (Socratic, K-1 language)
-- [x] Verify no TypeScript errors: `npx tsc --noEmit`
-- [x] Verify no console errors in browser
-- [x] Deploy to Vercel: `vercel --prod`
+- [ ] End-to-end test: sign up → select character → name it → have a 5-message conversation
+- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
+- [x] Verify no TypeScript errors: `npx tsc --noEmit` — zero errors confirmed Jun 15
+- [ ] Verify no console errors in browser
+- [x] Deploy to Vercel: `vercel --prod` — fresh production deploy Jun 15, all 10 routes building clean
 - [x] Merge `dev` → `main`
 - [x] Commit: `chore: week 1 complete — foundation and chat ui live`
 
