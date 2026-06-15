@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — In Progress**
+**Week 1 of 4 — In Progress (8/15 PRs complete)**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -36,21 +36,34 @@
 ---
 
 ## What Works Right Now
-- Next.js 16.2.9 project scaffolded with TypeScript, Tailwind, ESLint, App Router
-- Full `/src` folder structure in place
+- Next.js 16.2.9 scaffolded — TypeScript strict mode, Tailwind v4, ESLint, App Router
+- Full `/src` folder structure: `components/child|parent|shared`, `lib/firebase|claude|gemini`, `store`, `types`, `constants`, `hooks`
 - Memory bank initialized in `memory-bank/`
-- All dependencies installed: Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge
-- Shadcn UI initialized (Tailwind v4 compatible) — card, badge, button, input components ready
-- `src/lib/utils.ts` with `cn()` utility created by Shadcn
-- Git initialized, pushed to GitHub: https://github.com/CGalentin/spark-tutor
-- Branches: `main`, `dev`, `feature/project-scaffold`, `feature/folder-structure`, `feature/dependencies`
+- All npm dependencies installed and verified (zero TypeScript errors)
+- Shadcn UI initialized — `Card`, `Badge`, `Button`, `Input` components in `src/components/ui/`
+- `src/lib/utils.ts` — `cn()` utility for Tailwind class merging
+- `src/lib/firebase/config.ts` — Firebase singleton init (auth + db exported)
+- `src/lib/firebase/auth.ts` — signIn, signUp, signOut, onAuthChange
+- `src/lib/firebase/firestore.ts` — getSession, getSessions, saveSummary
+- `src/types/` — CharacterConfig, Session, Message, ApiResult<T>, all shared types exported from index.ts
+- `src/constants/characters.ts` — all 6 Spark Squad characters with voicePrompts
+- `src/constants/prompts.ts` — BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
+- `src/constants/subjects.ts` — Subject, GradeBand, MAX_SESSION_STARS, TARGET_SESSION_MESSAGES
+- `src/store/useChildStore.ts` — character selection state
+- `src/store/useSessionStore.ts` — active session state
+- `src/store/useAuthStore.ts` — auth state mirror
+- Firebase project `spark-tutor-96f9c`: Auth (Email/Password) + Firestore (Standard, production mode) live
+- All `.env.local` keys filled (Firebase client + admin, Anthropic, Gemini)
+- GitHub: https://github.com/CGalentin/spark-tutor — branches: main, dev, all feature branches
 
 ## What Does Not Work Yet
-- No dependencies installed (Firebase, Claude, Gemini, Zustand, Shadcn)
-- No environment variables configured
-- No Firebase project connected
-- No auth, no database, no AI calls
-- No real UI beyond the default Next.js starter page
+- No UI pages built (still showing default Next.js starter page)
+- No auth flow (login/signup pages not created yet)
+- No Claude API route
+- No child-facing UI (character select, chat)
+- No parent dashboard
+- No RAG layer
+- No session tracking
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete
