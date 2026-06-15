@@ -134,14 +134,14 @@
 
 ---
 
-### PR 1-08 · Zustand Stores
+### PR 1-08 · Zustand Stores ✅
 **Branch:** `feature/zustand-stores`
 
-- [ ] Create `/src/store/useChildStore.ts` — character selection, character name
-- [ ] Create `/src/store/useSessionStore.ts` — sessionId, subject, starsEarned, messageCount
-- [ ] Create `/src/store/useAuthStore.ts` — parentUID, isAuthenticated
-- [ ] Verify all stores are fully typed with TypeScript interfaces
-- [ ] Commit: `feat(store): add zustand stores for child, session, and auth state`
+- [x] Create `/src/store/useChildStore.ts` — character selection, character name
+- [x] Create `/src/store/useSessionStore.ts` — sessionId, subject, starsEarned, messageCount
+- [x] Create `/src/store/useAuthStore.ts` — parentUID, isAuthenticated
+- [x] Verify all stores are fully typed with TypeScript interfaces
+- [x] Commit: `feat(store): add zustand stores for child, session, and auth state`
 
 ---
 

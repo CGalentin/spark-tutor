@@ -10,10 +10,11 @@
 - [x] PR 1-04 · Environment Variables — `.env.local` created (gitignored), `.env.example` committed with all required keys and comments. `.gitignore` updated to allow `.env.example` through.
 - [x] PR 1-05 · Firebase Client Setup — `config.ts` (singleton init), `auth.ts` (signIn, signUp, signOut, onAuthChange), `firestore.ts` (getSession, getSessions, saveSummary). Zero TypeScript errors.
 - [x] PR 1-06 · Shared Types — `character.ts`, `session.ts`, `api.ts`, `index.ts`. Zero TypeScript errors.
-- [x] PR 1-07 · Character Constants — All 6 Spark Squad characters defined (Blip, Finn, Zorro, Luna, Pip, Nova) with voicePrompts, colors, emoji. `subjects.ts` with grade bands and MAX_SESSION_STARS. `prompts.ts` with BASE_TUTOR_RULES and SUMMARY_SYSTEM_PROMPT.
+- [x] PR 1-07 · Character Constants — All 6 Spark Squad characters, subjects.ts, prompts.ts with BASE_TUTOR_RULES and SUMMARY_SYSTEM_PROMPT.
+- [x] PR 1-08 · Zustand Stores — `useChildStore` (character selection/name), `useSessionStore` (sessionId, subject, stars, messages, loading states), `useAuthStore` (parentUID, isAuthenticated, isAuthLoading). All fully typed.
 
 ## Currently Working On
-- PR 1-08 · Zustand Stores
+- PR 1-09 · Auth Layout & Login Page
 
 ## Up Next (this week)
 - PR 1-04 · Environment Variables
@@ -30,7 +31,7 @@
 - PR 1-15 · Week 1 Integration Test & Deploy
 
 ## Active Branch
-`feature/character-constants` (last completed) — next branch: `feature/zustand-stores`
+`feature/zustand-stores` (last completed) — next branch: `feature/auth-pages`
 
 ## Recent Decisions & Notes
 - Using Next.js 16.2.9 (latest, installed by create-next-app)

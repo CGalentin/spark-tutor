@@ -24,8 +24,8 @@
 | 1-05 | Firebase Client Setup | `feature/firebase-client` | ✅ Done |
 | 1-06 | Shared Types | `feature/shared-types` | ✅ Done |
 | 1-07 | Character Constants | `feature/character-constants` | ✅ Done |
-| 1-08 | Zustand Stores | `feature/zustand-stores` | ⏳ Next |
-| 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ⏳ Pending |
+| 1-08 | Zustand Stores | `feature/zustand-stores` | ✅ Done |
+| 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ⏳ Next |
 | 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ⏳ Pending |
 | 1-11 | Character Selection Screen | `feature/character-selection` | ⏳ Pending |
 | 1-12 | Claude API Route | `feature/claude-api` | ⏳ Pending |
