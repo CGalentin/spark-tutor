@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 1 — Foundation & Chat UI** (in progress — 13 of 15 PRs complete)
+**Week 1 — Foundation & Chat UI COMPLETE** (15/15 PRs done — live at https://spark-tutor-iota.vercel.app)
 
 ## Completed PRs
 - [x] PR 1-01 · Project Scaffold — Next.js 16.2.9 + TypeScript + Tailwind + ESLint, `.cursorrules` and `ROADMAP.md` in project root, pushed to GitHub
@@ -17,20 +17,21 @@
 - [x] PR 1-11 · Character Selection Screen — `src/app/(child)/character-select/page.tsx`, `CharacterCard.tsx` (emoji, color, selection ring), `CharacterGrid.tsx` (2-col grid), `CharacterNameInput.tsx` (name entry + "Let's Go!" button). Wired to useChildStore. Zero TS errors.
 - [x] PR 1-12 · Claude API Route — `src/lib/firebase/admin.ts` (Admin SDK, token verification), `src/lib/claude/client.ts` (Anthropic singleton), `src/lib/claude/buildSystemPrompt.ts` (3-layer: BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT), `src/app/api/chat/route.ts` (POST, auth-verified, SSE streaming, `[STAR EARNED]` detection). Zero TS errors.
 - [x] PR 1-13 · Chat UI — Message Bubbles — `MascotAvatar.tsx` (emoji circle + name badge), `ChatBubble.tsx` (child right/mascot left, strips `[STAR EARNED]`), `ChatMessageList.tsx` (auto-scroll, bouncing typing indicator). `globals.css` bounce keyframe added. Zero TS errors.
+- [x] PR 1-14 · Chat UI — Input & Session — `ChatInput.tsx` (large input + 🚀 send button, 48px touch targets), `SubjectSelector.tsx` (Math/Reading 80px buttons), `src/app/(child)/chat/page.tsx` (full chat page: SSE streaming, star detection, redirect guard). Zero TS errors.
+- [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-iota.vercel.app, dev→main merged.
 
 ## Currently Working On
-- PR 1-14 · Chat UI — Input & Session
+- Starting Week 2 — RAG Layer
 
-## Up Next (this week)
-- PR 1-10 · Auth Provider & Route Protection
-- PR 1-11 · Character Selection Screen
-- PR 1-12 · Claude API Route
-- PR 1-13 · Chat UI — Message Bubbles
-- PR 1-14 · Chat UI — Input & Session
-- PR 1-15 · Week 1 Integration Test & Deploy
+## Up Next (Week 2)
+- PR 2-01 · Collect Source Documents
+- PR 2-02 · Firebase Vector Search Setup
+- PR 2-03 · Document Chunking Utility
+- PR 2-04 · Gemini Embedding Setup
+- PR 2-05 · Document Ingestion Script
 
 ## Active Branch
-`feature/chat-input` — branch created from `dev` after merging PR 1-13; ready to build PR 1-14
+`dev` — Week 1 complete, ready to start Week 2 feature branches
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)

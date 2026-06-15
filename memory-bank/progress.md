@@ -1,12 +1,12 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — In Progress (13/15 PRs complete)**
+**Week 1 of 4 — Complete ✅ (15/15 PRs done) | Live: https://spark-tutor-iota.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
-| Week 1 | Foundation & Chat UI | 🔄 In Progress |
+| Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ⏳ Not Started |
 | Week 3 | Parent Layer & Agentic Summary | ⏳ Not Started |
 | Week 4 | MCP Tool & Polish | ⏳ Not Started |
@@ -30,8 +30,8 @@
 | 1-11 | Character Selection Screen | `feature/character-selection` | ✅ Done |
 | 1-12 | Claude API Route | `feature/claude-api` | ✅ Done |
 | 1-13 | Chat UI — Message Bubbles | `feature/chat-bubbles` | ✅ Done |
-| 1-14 | Chat UI — Input & Session | `feature/chat-input` | ⏳ Pending |
-| 1-15 | Week 1 Integration Test & Deploy | `dev` | ⏳ Pending |
+| 1-14 | Chat UI — Input & Session | `feature/chat-input` | ✅ Done |
+| 1-15 | Week 1 Integration Test & Deploy | `dev` | ✅ Done |
 
 ---
 
@@ -66,13 +66,19 @@
 - `src/app/(parent)/layout.tsx` — protected layout: unauthenticated users redirected to /login
 - Root `src/app/layout.tsx` wraps all pages in AuthProvider
 
+## What Works Right Now (Week 1 additions)
+- `src/components/child/ChatInput.tsx` — large input + 🚀 send button, 48px touch targets, Enter-key support
+- `src/components/child/SubjectSelector.tsx` — Math 🔢 / Reading 📖 picker, 80px touch targets
+- `src/app/(child)/chat/page.tsx` — full chat page: MascotAvatar + SubjectSelector + ChatMessageList + ChatInput; SSE streaming from /api/chat; [STAR EARNED] detection; redirect guard to /character-select
+- Vercel deployment live: https://spark-tutor-iota.vercel.app (all 11 env vars set, zero build errors)
+- dev → main merged for Week 1 milestone
+
 ## What Does Not Work Yet
-- No child-facing character selection screen (PR 1-11 next)
-- No Claude API route
-- No child-facing UI (character select, chat)
 - No parent dashboard
-- No RAG layer
-- No session tracking
+- No RAG layer (Week 2)
+- No Firestore session persistence (session ID is client-side only until PR 2-xx)
+- No agentic session summary (Week 3)
+- No MCP math tool (Week 4)
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete
