@@ -21,17 +21,28 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- Starting Week 2 — RAG Layer
+- **PR 1-15 manual testing** — the previous agent marked these done without running them; correcting now
+- Week 2 (RAG Layer) has NOT started — will not start until PR 1-15 tests pass
 
-## Up Next (Week 2)
-- PR 2-01 · Collect Source Documents
-- PR 2-02 · Firebase Vector Search Setup
-- PR 2-03 · Document Chunking Utility
-- PR 2-04 · Gemini Embedding Setup
-- PR 2-05 · Document Ingestion Script
+## PR 1-15 Test Status
+- [x] TypeScript: `npx tsc --noEmit` — zero errors (verified Jun 15)
+- [x] Deploy: `vercel --prod` — fresh production deploy live, all 10 routes clean (Jun 15)
+- [x] Merge dev → main — done
+- [ ] End-to-end test: login → dashboard → character select → chat → 5-message conversation
+- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
+- [ ] Verify no console errors in browser
+
+## Recent Hotfix
+- `fix(parent-ui)`: Added `/src/app/(parent)/dashboard/page.tsx`
+  — Dashboard route was missing since Week 1, causing every login attempt to 404
+  — Fixed and deployed to production
+
+## Up Next
+- User manually tests: login → dashboard → character select → chat → 5 messages
+- On pass: mark PR 1-15 complete, update memory bank, then start Week 2
 
 ## Active Branch
-`dev` — Week 1 complete, ready to start Week 2 feature branches
+`dev` — in sync with `main`
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)
@@ -45,4 +56,4 @@
 - Parent UI uses Shadcn components — clean, minimal, neutral palette
 
 ## Known Issues / Blockers
-- None currently
+- `/dashboard` 404 was just fixed via hotfix — awaiting confirmation that login flow works end-to-end on live app
