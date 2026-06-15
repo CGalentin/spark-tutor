@@ -25,7 +25,7 @@
 | 1-06 | Shared Types | `feature/shared-types` | ✅ Done |
 | 1-07 | Character Constants | `feature/character-constants` | ✅ Done |
 | 1-08 | Zustand Stores | `feature/zustand-stores` | ✅ Done |
-| 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ⏳ Next |
+| 1-09 | Auth Layout & Login Page | `feature/auth-pages` | ✅ Done |
 | 1-10 | Auth Provider & Route Protection | `feature/auth-provider` | ⏳ Pending |
 | 1-11 | Character Selection Screen | `feature/character-selection` | ⏳ Pending |
 | 1-12 | Claude API Route | `feature/claude-api` | ⏳ Pending |
@@ -55,10 +55,14 @@
 - Firebase project `spark-tutor-96f9c`: Auth (Email/Password) + Firestore (Standard, production mode) live
 - All `.env.local` keys filled (Firebase client + admin, Anthropic, Gemini)
 - GitHub: https://github.com/CGalentin/spark-tutor — branches: main, dev, all feature branches
+- `src/app/(auth)/layout.tsx` — centered auth layout with Spark Tutor branding + privacy footer
+- `src/app/(auth)/login/page.tsx` + `src/components/parent/LoginForm.tsx` — parent login with Firebase signIn, friendly error messages, link to /signup
+- `src/app/(auth)/signup/page.tsx` + `src/components/parent/SignupForm.tsx` — parent signup with Firebase signUp, confirm password, friendly error messages
+- Root `src/app/page.tsx` redirects to `/login`
 
 ## What Does Not Work Yet
-- No UI pages built (still showing default Next.js starter page)
-- No auth flow (login/signup pages not created yet)
+- No auth provider (PR 1-10) — login/signup forms work but there's no global auth state listener yet
+- No route protection — unauthenticated users can navigate to any URL
 - No Claude API route
 - No child-facing UI (character select, chat)
 - No parent dashboard
