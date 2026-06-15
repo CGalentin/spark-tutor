@@ -107,15 +107,15 @@
 
 ---
 
-### PR 1-06 · Shared Types
+### PR 1-06 · Shared Types ✅
 **Branch:** `feature/shared-types`
 
-- [ ] Create `/src/types/character.ts` — CharacterConfig, CharacterVoice types
-- [ ] Create `/src/types/session.ts` — Session, SessionSummary, Message types
-- [ ] Create `/src/types/api.ts` — ApiResult<T> type, ChatRequest, ChatResponse types
-- [ ] Create `/src/types/index.ts` — re-export all types from one place
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(types): add shared typescript types for characters, sessions, and api`
+- [x] Create `/src/types/character.ts` — CharacterConfig, CharacterVoice types
+- [x] Create `/src/types/session.ts` — Session, SessionSummary, Message types
+- [x] Create `/src/types/api.ts` — ApiResult<T> type, ChatRequest, ChatResponse types
+- [x] Create `/src/types/index.ts` — re-export all types from one place
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(types): add shared typescript types for characters, sessions, and api`
 
 ---
 
