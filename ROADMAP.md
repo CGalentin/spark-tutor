@@ -177,16 +177,16 @@
 
 ---
 
-### PR 1-11 · Character Selection Screen
+### PR 1-11 · Character Selection Screen ✅
 **Branch:** `feature/character-selection`
 
-- [ ] Create `/src/app/(child)/character-select/page.tsx`
-- [ ] Create `/src/components/child/CharacterCard.tsx` — single character card with emoji, name, color
-- [ ] Create `/src/components/child/CharacterGrid.tsx` — 2x3 grid of CharacterCards
-- [ ] Create `/src/components/child/CharacterNameInput.tsx` — name input shown after selection
-- [ ] Wire selection to `useChildStore`
-- [ ] Add "Let's Go!" button that navigates to `/chat` once character is selected and named
-- [ ] Commit: `feat(child-ui): add character selection screen with spark squad grid`
+- [x] Create `/src/app/(child)/character-select/page.tsx` — client page, wired to useChildStore, navigates to /chat on confirm
+- [x] Create `/src/components/child/CharacterCard.tsx` — emoji, character name, primary color bg, selection ring, 120px min tap target
+- [x] Create `/src/components/child/CharacterGrid.tsx` — 2-column grid of all 6 CharacterCards
+- [x] Create `/src/components/child/CharacterNameInput.tsx` — large name input + "Let's Go! 🚀" button, disabled until name entered
+- [x] Wire selection and name to `useChildStore`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(child-ui): add character selection screen with spark squad grid (PR 1-11)`
 
 ---
 
