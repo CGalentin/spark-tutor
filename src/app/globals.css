@@ -128,3 +128,15 @@
     @apply font-sans;
   }
 }
+
+/* Typing indicator bounce — used by ChatMessageList's TypingIndicator */
+@keyframes bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
