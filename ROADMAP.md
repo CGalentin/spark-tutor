@@ -11,7 +11,7 @@
 
 ## Progress Overview
 
-- [ ] Week 1 — Foundation & Chat UI
+- [x] Week 1 — Foundation & Chat UI ✅
 - [ ] Week 2 — RAG Layer
 - [ ] Week 3 — Parent Layer & Agentic Summary
 - [ ] Week 4 — MCP Tool & Polish
@@ -216,27 +216,36 @@
 
 ---
 
-### PR 1-14 · Chat UI — Input & Session
+### PR 1-14 · Chat UI — Input & Session ✅
 **Branch:** `feature/chat-input`
 
-- [ ] Create `/src/components/child/ChatInput.tsx` — large text input with Send button (48px touch target)
-- [ ] Create `/src/app/(child)/chat/page.tsx` — assembles MascotAvatar + ChatMessageList + ChatInput
-- [ ] Wire ChatInput to POST `/api/chat` and stream response into ChatMessageList
-- [ ] Show typing indicator while mascot is responding
-- [ ] Commit: `feat(child-ui): add chat input and wire up full conversation flow`
+- [x] Create `/src/components/child/ChatInput.tsx` — large text input with Send button (48px touch target)
+- [x] Create `/src/app/(child)/chat/page.tsx` — assembles MascotAvatar + ChatMessageList + ChatInput
+- [x] Wire ChatInput to POST `/api/chat` and stream response into ChatMessageList
+- [x] Show typing indicator while mascot is responding
+- [x] Commit: `feat(child-ui): add chat input and wire up full conversation flow`
 
 ---
 
-### PR 1-15 · Week 1 Integration Test & Deploy
+### PR 1-15 · Week 1 Integration Test & Deploy ✅
 **Branch:** `dev` (merge all Week 1 features)
 
-- [ ] End-to-end test: sign up → select character → name it → have a 5-message conversation
-- [ ] Verify mascot responds in character voice (Socratic, K-1 language)
-- [ ] Verify no TypeScript errors: `npx tsc --noEmit`
-- [ ] Verify no console errors in browser
-- [ ] Deploy to Vercel: `vercel --prod`
-- [ ] Merge `dev` → `main`
-- [ ] Commit: `chore: week 1 complete — foundation and chat ui live`
+- [x] End-to-end test: sign up → select character → name it → have a 5-message conversation
+- [x] Verify mascot responds in character voice (Socratic, K-1 language)
+- [x] Verify no TypeScript errors: `npx tsc --noEmit`
+- [x] Verify no console errors in browser
+- [x] Deploy to Vercel: `vercel --prod`
+- [x] Merge `dev` → `main`
+- [x] Commit: `chore: week 1 complete — foundation and chat ui live`
+
+---
+
+### Hotfix · Placeholder Dashboard Page
+**Branch:** `dev` → merged to `main`
+
+- [x] Create `/src/app/(parent)/dashboard/page.tsx` — protected placeholder with sign-out + "Start Session" button
+- [x] Fixes 404 on `/dashboard` that broke the login redirect since Week 1 deploy
+- [x] Commit: `fix(parent-ui): add placeholder dashboard page so login redirect has a valid landing`
 
 ---
 

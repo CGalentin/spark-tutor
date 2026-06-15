@@ -21,17 +21,20 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- Starting Week 2 — RAG Layer
+- Verifying Week 1 end-to-end login flow on the live Vercel app
+- Week 2 (RAG Layer) has NOT started yet — no feature branches created
 
-## Up Next (Week 2)
-- PR 2-01 · Collect Source Documents
-- PR 2-02 · Firebase Vector Search Setup
-- PR 2-03 · Document Chunking Utility
-- PR 2-04 · Gemini Embedding Setup
-- PR 2-05 · Document Ingestion Script
+## Recent Hotfix (applied before starting Week 2)
+- `fix(parent-ui)`: Added placeholder `/dashboard` page (`src/app/(parent)/dashboard/page.tsx`)
+  — Fixes a 404 that broke the login redirect since Week 1 deploy (dashboard was never built)
+  — Committed on `dev`, merged to `main`, deployed to Vercel
+
+## Up Next
+- Confirm login → dashboard flow works on live app
+- Then begin Week 2: PR 2-01 · Collect Source Documents (`feature/rag-source-docs`)
 
 ## Active Branch
-`dev` — Week 1 complete, ready to start Week 2 feature branches
+`main` — hotfix merged; `dev` is in sync with `main`
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)
@@ -45,4 +48,4 @@
 - Parent UI uses Shadcn components — clean, minimal, neutral palette
 
 ## Known Issues / Blockers
-- None currently
+- `/dashboard` 404 was just fixed via hotfix — awaiting confirmation that login flow works end-to-end on live app
