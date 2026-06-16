@@ -78,9 +78,12 @@
 - ✅ `fix(api)`: Added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
 - ✅ `fix(api)`: Downgraded `firebase-admin@14` → `firebase-admin@12` to fix `ERR_REQUIRE_ESM` crash in Vercel serverless (jose@6 ESM incompatibility via jwks-rsa)
 
-## What Works Right Now (added Jun 15 — BUG 3 fix)
-- ✅ **CHAT IS WORKING** — Updated model to `claude-haiku-4-5-20251001` (claude-3-5-haiku-20241022 was EOL Feb 2026). PR 1-15 fully passing.
-- Chat SSE streaming works end-to-end: login → dashboard → character select → name → subject → 5-message Socratic conversation ✅
+## What Works Right Now (added Jun 15 — all bugs fixed)
+- ✅ **CHAT FULLY WORKING** — model `claude-haiku-4-5-20251001`, SSE streaming, Socratic responses in character voice
+- ✅ Full end-to-end flow: login → dashboard → character select → name → subject → 5-message conversation
+- ✅ Child message bubbles: centered, soft violet-to-indigo gradient, visually distinct from mascot bubbles
+- ✅ Mascot bubbles: left-aligned, character color, white text
+- ✅ All 5 bugs from PR 1-15 testing resolved and deployed to production
 
 ## What Does Not Work Yet
 - No parent dashboard (placeholder only — full dashboard is Week 3)

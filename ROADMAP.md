@@ -269,6 +269,24 @@
 
 ---
 
+### BUG 4 · Anthropic API Out of Credits ✅ FIXED Jun 15
+
+- [x] Root cause: Anthropic account credit balance was $0 — API returned 400 on every chat request
+- [x] Fix: Added credits via Anthropic Console → Plans & Billing
+- [x] No code changes required
+
+---
+
+### BUG 5 · Child Chat Bubbles Off-Screen ✅ FIXED Jun 15
+**Files:** `src/components/child/ChatBubble.tsx`, `src/components/child/ChatMessageList.tsx`
+
+- [x] Root cause: `justify-end` in a flex container referenced a parent width wider than the viewport (body `flex flex-col` without constrained width)
+- [x] Fix: Removed full-width wrapper div; bubble is now a direct flex item of the `flex-col` list using `self-center` for child messages and `self-start` for mascot messages — no parent-width dependency
+- [x] Child bubble restyled with soft violet-to-indigo gradient + shadow to visually distinguish from mascot bubbles
+- [x] Deployed — chat fully functional, all bubbles visible
+
+---
+
 ## Week 2 — RAG Layer
 > Goal: Mascot answers are grounded in real K-1 curriculum from vetted OER sources.
 

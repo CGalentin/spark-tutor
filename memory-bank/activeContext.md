@@ -21,32 +21,33 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- **Week 2 RAG Layer — PR 2-01** (`feature/rag-source-docs`) — collecting K-1 source documents
+- **Week 2 RAG Layer — PR 2-01** (`feature/rag-source-docs`) — ready to start next session
 
-## PR 1-15 Test Status — ALL PASSING ✅
-- [x] TypeScript: `npx tsc --noEmit` — zero errors (verified Jun 15)
-- [x] Deploy: `vercel --prod` — production deploy live (Jun 15), all routes clean
+## PR 1-15 Test Status — ALL PASSING ✅ (fully verified Jun 15)
+- [x] TypeScript: `npx tsc --noEmit` — zero errors
+- [x] Deploy: `vercel --prod` — production live, all routes clean
 - [x] Merge dev → main — done
-- [x] End-to-end test: login → dashboard → character select → chat → 5-message conversation ✅
-- [x] Verify mascot responds in character voice (Socratic, K-1 language) ✅
-- [x] Verify no console errors in browser ✅
+- [x] Login → dashboard → character select → name → subject → 5-message Socratic chat ✅
+- [x] Mascot responds in character voice (Socratic, K-1 language) ✅
+- [x] No console errors in browser ✅
+- [x] Child message bubbles visible and styled correctly ✅
 
-## Bugs Found During PR 1-15 Testing (Jun 15 session — ALL RESOLVED)
+## All Bugs Found During PR 1-15 Testing (Jun 15 — ALL RESOLVED)
 
 ### BUG 1 — FIXED ✅
-- **What**: `/dashboard` page did not exist → every successful login hit a 404
-- **Fix**: Created placeholder `src/app/(parent)/dashboard/page.tsx` with sign-out + start session buttons
-- **Commit**: `fix(parent-ui): add placeholder dashboard page so login redirect has a valid landing`
+- `/dashboard` 404 — created placeholder page
 
 ### BUG 2 — FIXED ✅
-- **What**: `POST /api/chat` returned 500 — `firebase-admin@14` ESM incompatibility in Vercel serverless
-- **Fix**: Downgraded to `firebase-admin@12`; added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
+- `firebase-admin@14` ESM crash — downgraded to v12, added `serverExternalPackages`
 
-### BUG 3 — FIXED ✅ (Jun 15)
-- **What**: Claude model `claude-3-5-haiku-20241022` retired Feb 19, 2026 — API rejected all chat requests
-- **Fix**: Updated `src/app/api/chat/route.ts` line 106 to `model: 'claude-haiku-4-5-20251001'`
-- **Commit**: `fix(api): update Claude model to claude-haiku-4-5-20251001 (claude-3-5-haiku-20241022 EOL Feb 2026)`
-- **Deployed**: Vercel production redeploy successful — all routes clean, zero build errors
+### BUG 3 — FIXED ✅
+- `claude-3-5-haiku-20241022` EOL — updated to `claude-haiku-4-5-20251001`
+
+### BUG 4 — FIXED ✅
+- Anthropic account out of credits — topped up via Anthropic Console billing
+
+### BUG 5 — FIXED ✅
+- Child chat bubbles rendering off-screen right — switched from `justify-end` wrapper to `self-center` direct flex item; restyled with violet gradient
 
 ## Up Next (Week 2 — in order)
 1. **PR 2-01** · Collect Source Documents — download K-1 Math + Reading/ELA OER docs to `/rag-sources/`
@@ -57,10 +58,10 @@
 6. Continue through PR 2-10 (see ROADMAP.md Week 2 section)
 
 ## Active Branch
-`dev` — switch to `feature/rag-source-docs` for PR 2-01
+`main` — create `feature/rag-source-docs` from `dev` at start of next session
 
 ## Known Issues / Blockers
-- None — all Week 1 bugs resolved, chat fully functional
+- None — Week 1 fully verified and deployed, chat working end-to-end
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)
