@@ -1,78 +1,76 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 1 — Foundation & Chat UI COMPLETE** (15/15 PRs done — live at https://spark-tutor-app.vercel.app)
+**Week 2 — RAG Layer — 3/10 PRs done (PR 2-01, 2-02, 2-03 ✅)**
 
-## Completed PRs
-- [x] PR 1-01 · Project Scaffold — Next.js 16.2.9 + TypeScript + Tailwind + ESLint, `.cursorrules` and `ROADMAP.md` in project root, pushed to GitHub
-- [x] PR 1-02 · Folder Structure — All `/src` subdirectories created with `.gitkeep`, memory bank initialized
-- [x] PR 1-03 · Install Dependencies — Firebase, firebase-admin, @anthropic-ai/sdk, @google/generative-ai, zustand, clsx, tailwind-merge, Shadcn UI (card, badge, button, input). Zero TS errors.
-- [x] PR 1-04 · Environment Variables — `.env.local` created (gitignored, all 11 keys filled), `.env.example` committed. `.gitignore` updated with `!.env.example` exception.
-- [x] PR 1-05 · Firebase Client Setup — `src/lib/firebase/config.ts` (singleton init), `auth.ts` (signIn, signUp, signOut, onAuthChange), `firestore.ts` (getSession, getSessions, saveSummary). Zero TS errors.
-- [x] PR 1-06 · Shared Types — `src/types/character.ts` (CharacterConfig, CharacterVoice), `session.ts` (Session, SessionSummary, Message, Subject, MessageRole), `api.ts` (ApiResult<T>, ChatRequest, ChatResponse, SummaryRequest, SummaryResponse), `index.ts` (central re-export). Zero TS errors.
-- [x] PR 1-07 · Character Constants — `src/constants/characters.ts` (all 6 Spark Squad: Blip🤖 Finn🦊 Zorro🐲 Luna🐰 Pip🧚 Nova🦉 with voicePrompts + Tailwind colors), `subjects.ts` (Subject, GradeBand, MAX_SESSION_STARS=10, TARGET_SESSION_MESSAGES=10), `prompts.ts` (BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT). Zero TS errors.
-- [x] PR 1-08 · Zustand Stores — `src/store/useChildStore.ts` (selectedCharacterId, characterName), `useSessionStore.ts` (sessionId, subject, starsEarned, messageCount, isChatLoading, isSessionEnding), `useAuthStore.ts` (parentUID, parentEmail, isAuthenticated, isAuthLoading). All fully typed. Zero TS errors.
-- [x] PR 1-09 · Auth Layout & Login Page — `src/app/(auth)/layout.tsx` (centered branding layout), `src/app/(auth)/login/page.tsx` + `src/components/parent/LoginForm.tsx` (Firebase signIn, Shadcn Card/Input/Button, friendly error messages), `src/app/(auth)/signup/page.tsx` + `src/components/parent/SignupForm.tsx` (Firebase signUp, confirm password). Root `page.tsx` redirects to `/login`. Metadata updated. Zero TS errors.
-- [x] PR 1-10 · Auth Provider & Route Protection — `src/components/shared/AuthProvider.tsx` (Firebase onAuthStateChanged → useAuthStore), `src/components/shared/AuthRouteGuard.tsx` (redirects authenticated users away from /login), `src/components/shared/LoadingSpinner.tsx`, `src/hooks/useAuth.ts`, `src/app/(parent)/layout.tsx` (guards parent routes → /login), root `layout.tsx` wrapped with AuthProvider. Zero TS errors.
-- [x] PR 1-11 · Character Selection Screen — `src/app/(child)/character-select/page.tsx`, `CharacterCard.tsx` (emoji, color, selection ring), `CharacterGrid.tsx` (2-col grid), `CharacterNameInput.tsx` (name entry + "Let's Go!" button). Wired to useChildStore. Zero TS errors.
-- [x] PR 1-12 · Claude API Route — `src/lib/firebase/admin.ts` (Admin SDK, token verification), `src/lib/claude/client.ts` (Anthropic singleton), `src/lib/claude/buildSystemPrompt.ts` (3-layer: BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT), `src/app/api/chat/route.ts` (POST, auth-verified, SSE streaming, `[STAR EARNED]` detection). Zero TS errors.
-- [x] PR 1-13 · Chat UI — Message Bubbles — `MascotAvatar.tsx` (emoji circle + name badge), `ChatBubble.tsx` (child right/mascot left, strips `[STAR EARNED]`), `ChatMessageList.tsx` (auto-scroll, bouncing typing indicator). `globals.css` bounce keyframe added. Zero TS errors.
-- [x] PR 1-14 · Chat UI — Input & Session — `ChatInput.tsx` (large input + 🚀 send button, 48px touch targets), `SubjectSelector.tsx` (Math/Reading 80px buttons), `src/app/(child)/chat/page.tsx` (full chat page: SSE streaming, star detection, redirect guard). Zero TS errors.
-- [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
+---
 
-## Currently Working On
-- **Week 2 RAG Layer — PR 2-01** (`feature/rag-source-docs`) — ready to start next session
+## Completed PRs (this session — Jun 16)
 
-## PR 1-15 Test Status — ALL PASSING ✅ (fully verified Jun 15)
-- [x] TypeScript: `npx tsc --noEmit` — zero errors
-- [x] Deploy: `vercel --prod` — production live, all routes clean
-- [x] Merge dev → main — done
-- [x] Login → dashboard → character select → name → subject → 5-message Socratic chat ✅
-- [x] Mascot responds in character voice (Socratic, K-1 language) ✅
-- [x] No console errors in browser ✅
-- [x] Child message bubbles visible and styled correctly ✅
+- [x] PR 2-01 · Collect Source Documents (`feature/rag-source-docs`)
+  - 9 math PDFs downloaded to `rag-sources/math/` (EngageNY K + G1 modules, Common Core Math)
+  - 8 reading/ELA PDFs downloaded to `rag-sources/reading/` (CKLA KG + G1 ICs, Common Core ELA)
+  - `/rag-sources/README.md` committed — 17 sources, licenses confirmed (CC BY-NC-SA 3.0 + public domain)
+  - `.gitignore` updated to exclude PDFs/zips from git
 
-## All Bugs Found During PR 1-15 Testing (Jun 15 — ALL RESOLVED)
+- [x] PR 2-02 · Firebase Vector Search Setup (`feature/vector-search-setup`)
+  - `src/types/rag.ts` — `CurriculumChunk`, `RankedChunk`, `GradeBand` types; exported from `src/types/index.ts`
+  - `src/lib/firebase/vectorSearch.ts` — `saveChunk()`, `chunkExists()`, `queryByEmbedding()` (in-memory cosine similarity), `countChunks()`
+  - Decision: using in-memory cosine similarity instead of Firebase Vector Search extension (corpus < 1 000 chunks, no index setup needed)
 
-### BUG 1 — FIXED ✅
-- `/dashboard` 404 — created placeholder page
+- [x] PR 2-03 · Document Chunking Utility (`feature/doc-chunking`)
+  - `pdf-parse@1.1.1` + `ts-node` installed as devDependencies
+  - `tsconfig.scripts.json` created for CommonJS ts-node scripts
+  - `scripts/rag/chunkDocument.ts` — full pipeline: `extractTextFromPdf()` → `splitIntoChunks()` → `chunkDocument()`
+  - Chunks: 200–400 words, 50-word overlap, tagged with `{ subject, gradeBand, topic, source, chunkIndex, createdAt }`
+  - Tested: Common Core Math → 156 chunks (avg 308 words) ✅; CKLA KG D1 → 4 chunks (avg 274 words) ✅
+  - `require.main === module` guard so chunker can be imported by ingestion script (PR 2-05)
 
-### BUG 2 — FIXED ✅
-- `firebase-admin@14` ESM crash — downgraded to v12, added `serverExternalPackages`
+---
 
-### BUG 3 — FIXED ✅
-- `claude-3-5-haiku-20241022` EOL — updated to `claude-haiku-4-5-20251001`
+## Up Next — PR 2-04 through PR 2-10
 
-### BUG 4 — FIXED ✅
-- Anthropic account out of credits — topped up via Anthropic Console billing
+1. **PR 2-04** · Gemini Embedding Setup (`feature/gemini-embeddings`) — ← START HERE
+   - Create `src/lib/gemini/client.ts` — Google Generative AI SDK singleton
+   - Create `src/lib/gemini/embed.ts` — `embedText(text: string): Promise<number[]>`
+   - Test: embed one chunk, log vector length (should be 768)
+   - Commit: `feat(rag): add gemini embedding client and embed function`
 
-### BUG 5 — FIXED ✅
-- Child chat bubbles rendering off-screen right — switched from `justify-end` wrapper to `self-center` direct flex item; restyled with violet gradient
+2. **PR 2-05** · Document Ingestion Script (`feature/ingestion-script`)
+   - `scripts/rag/ingestDocuments.ts` — reads all PDFs from `rag-sources/`, chunks, embeds, saves to Firestore
+   - `--subject math` flag to run on math sources first
+   - Deduplication via `chunkExists()` — never re-embeds
 
-## Up Next (Week 2 — in order)
-1. **PR 2-01** · Collect Source Documents — download K-1 Math + Reading/ELA OER docs to `/rag-sources/`
-2. **PR 2-02** · Firebase Vector Search Setup — enable extension, create `curriculum_chunks` collection
-3. **PR 2-03** · Document Chunking Utility — 200-400 word chunks with subject/grade metadata
-4. **PR 2-04** · Gemini Embedding Setup — `src/lib/gemini/client.ts` + `embed.ts`
-5. **PR 2-05** · Document Ingestion Script — full pipeline: chunk → embed → save to Firestore
-6. Continue through PR 2-10 (see ROADMAP.md Week 2 section)
+3. **PR 2-06** · Ingest Reading Sources (`feature/ingest-reading`)
+   - Run ingestion script on reading sources
+   - Verify `subject: 'reading'` in Firestore console
+
+4. **PR 2-07** · RAG Retrieval API Route (`feature/rag-retrieval`)
+   - `src/app/api/rag/route.ts` — POST `{ query, subject }` → embed → `queryByEmbedding()` → return top 3 chunks
+
+5. **PR 2-08** · Wire RAG Into Chat (`feature/rag-in-chat`)
+   - Update `src/app/api/chat/route.ts` — call `/api/rag`, inject chunks into Layer 3 of system prompt
+
+6. **PR 2-09** · RAG Quality Check (`feature/rag-quality`)
+   - `scripts/rag/testRetrieval.ts` — 10 sample K-1 questions, verify retrievals are relevant
+
+7. **PR 2-10** · Week 2 Integration Test & Deploy (`dev`)
+   - TypeScript clean, deploy to Vercel, merge dev → main
+
+---
 
 ## Active Branch
-`main` — create `feature/rag-source-docs` from `dev` at start of next session
+`dev` — create `feature/gemini-embeddings` from `dev` at start of next session
 
-## Known Issues / Blockers
-- None — Week 1 fully verified and deployed, chat working end-to-end
+## Known Issues / Decisions
+- CKLA Instructional Companion PDFs are mostly image-based → low chunk counts (4–8 chunks per IC)
+  → Supplemental and scope/sequence PDFs yield more text; the Teacher Guide PDFs are text-rich (2MB+)
+- pdf-parse@1.1.1 pinned — v2 changed to class-based API entirely
+- In-memory cosine similarity chosen over Firebase Vector Search extension — fast enough for MVP corpus size
+- PowerShell on Windows 10 — no bash heredoc, use `-m "message"` for git commits
+- Git rule: always merge feature branch to dev BEFORE creating next feature branch
 
 ## Recent Decisions & Notes
-- Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)
-- GitHub repo: https://github.com/CGalentin/spark-tutor (public, MIT license)
-- Shell: PowerShell on Windows 10 — NO bash heredoc syntax, use simple `-m "message"` for all git commits
-- Shadcn 4.11.0 with Tailwind v4 — `src/lib/utils.ts` has `cn()` utility, `components.json` at project root
-- Firebase project: `spark-tutor-96f9c` — Auth (Email/Password enabled), Firestore (Standard edition, production mode)
-- **Git workflow rule:** Always merge completed feature branch into `dev` BEFORE creating the next feature branch
-- `[STAR EARNED]` phrase in Claude response signals a star should be awarded to the child
-- Child UI uses custom components (NOT Shadcn) — large text (18px+), 48px+ touch targets, rounded-3xl, bright colors
-- Parent UI uses Shadcn components — clean, minimal, neutral palette
-
-## Current Status
-**Week 1 complete ✅ — beginning Week 2 RAG Layer**
+- EngageNY (archive.org) used for math instead of CK-12 (CK-12 PDFs require account login, no direct download URL)
+- All scripts use `tsconfig.scripts.json` with CommonJS module resolution (not Next.js bundler)
+- `@/` path alias configured in `tsconfig.scripts.json` paths (points to `./src/*`)
