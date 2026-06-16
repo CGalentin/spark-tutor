@@ -33,8 +33,8 @@ export function ChatBubble({ message, mascotColorClass }: ChatBubbleProps) {
         'max-w-[75%] rounded-3xl px-5 py-3',
         // Typography — 18px minimum for K-1 readability
         'text-[18px] leading-relaxed font-medium',
-        // Positioning — self-end = right side, self-start = left side
-        isChild ? 'self-end rounded-br-md bg-slate-100 text-slate-800' : cn('self-start rounded-bl-md text-white', mascotColorClass),
+        // Positioning — child messages centered, mascot messages left-aligned
+        isChild ? 'self-center rounded-3xl bg-slate-100 text-slate-800' : cn('self-start rounded-bl-md text-white', mascotColorClass),
       )}
     >
       {displayText}
