@@ -78,8 +78,11 @@
 - ✅ `fix(api)`: Added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
 - ✅ `fix(api)`: Downgraded `firebase-admin@14` → `firebase-admin@12` to fix `ERR_REQUIRE_ESM` crash in Vercel serverless (jose@6 ESM incompatibility via jwks-rsa)
 
+## What Works Right Now (added Jun 15 — BUG 3 fix)
+- ✅ **CHAT IS WORKING** — Updated model to `claude-haiku-4-5-20251001` (claude-3-5-haiku-20241022 was EOL Feb 2026). PR 1-15 fully passing.
+- Chat SSE streaming works end-to-end: login → dashboard → character select → name → subject → 5-message Socratic conversation ✅
+
 ## What Does Not Work Yet
-- **CHAT IS BROKEN** — `claude-3-5-haiku-20241022` model is deprecated (EOL Feb 19, 2026). Fix: update model name in `src/app/api/chat/route.ts` to a current Anthropic model.
 - No parent dashboard (placeholder only — full dashboard is Week 3)
 - No RAG layer (Week 2 — not started)
 - No Firestore session persistence (session ID is client-side only until PR 2-xx)

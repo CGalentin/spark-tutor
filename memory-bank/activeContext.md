@@ -21,51 +21,46 @@
 - [x] PR 1-15 · Week 1 Integration Test & Deploy — TypeScript clean, production build clean, all 11 env vars pushed to Vercel, live at https://spark-tutor-app.vercel.app, dev→main merged.
 
 ## Currently Working On
-- **PR 1-15 manual testing BLOCKED** — chat is broken due to deprecated Claude model
-- Week 2 (RAG Layer) has NOT started — blocked until PR 1-15 tests all pass
+- **Week 2 RAG Layer — PR 2-01** (`feature/rag-source-docs`) — collecting K-1 source documents
 
-## PR 1-15 Test Status
+## PR 1-15 Test Status — ALL PASSING ✅
 - [x] TypeScript: `npx tsc --noEmit` — zero errors (verified Jun 15)
-- [x] Deploy: `vercel --prod` — fresh production deploy live, all 10 routes clean (Jun 15)
+- [x] Deploy: `vercel --prod` — production deploy live (Jun 15), all routes clean
 - [x] Merge dev → main — done
-- [ ] End-to-end test: login → dashboard → character select → chat → 5-message conversation — BLOCKED (see below)
-- [ ] Verify mascot responds in character voice (Socratic, K-1 language) — BLOCKED
-- [ ] Verify no console errors in browser — BLOCKED
+- [x] End-to-end test: login → dashboard → character select → chat → 5-message conversation ✅
+- [x] Verify mascot responds in character voice (Socratic, K-1 language) ✅
+- [x] Verify no console errors in browser ✅
 
-## Bugs Found During PR 1-15 Testing (Jun 15 session)
+## Bugs Found During PR 1-15 Testing (Jun 15 session — ALL RESOLVED)
 
 ### BUG 1 — FIXED ✅
 - **What**: `/dashboard` page did not exist → every successful login hit a 404
-- **Cause**: Dashboard was never created (Week 3 feature), but login always redirects to /dashboard
 - **Fix**: Created placeholder `src/app/(parent)/dashboard/page.tsx` with sign-out + start session buttons
 - **Commit**: `fix(parent-ui): add placeholder dashboard page so login redirect has a valid landing`
 
 ### BUG 2 — FIXED ✅
-- **What**: `POST /api/chat` returned 500 on every request — chat completely broken
-- **Cause**: `firebase-admin@14` uses `jwks-rsa@4` → `jose@6` (ESM-only). Vercel serverless bundler runs CommonJS and cannot `require()` ESM modules.
-- **Fix**: Downgraded to `firebase-admin@12` (uses `jwks-rsa@3` → `jose@4`, CJS-compatible). Also added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`.
-- **Commits**: 
-  - `fix(api): add firebase-admin to serverExternalPackages to fix ERR_REQUIRE_ESM in Vercel`
-  - `fix(api): downgrade firebase-admin to v12 to resolve ERR_REQUIRE_ESM from jose@6 in jwks-rsa`
+- **What**: `POST /api/chat` returned 500 — `firebase-admin@14` ESM incompatibility in Vercel serverless
+- **Fix**: Downgraded to `firebase-admin@12`; added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
 
-### BUG 3 — NOT YET FIXED ❌ ← NEXT SESSION STARTS HERE
-- **What**: Chat still shows "Hmm, let me think for a second... try asking me again!" after BUG 2 was fixed
-- **Cause**: Model `claude-3-5-haiku-20241022` reached end-of-life February 19, 2026. As of June 2026 it is fully retired. Anthropic API rejects every request with a deprecation warning. The stream error event triggers the child-safe error message.
-- **Fix needed**: Update model name in `src/app/api/chat/route.ts` from `claude-3-5-haiku-20241022` to a current Anthropic model (e.g. `claude-haiku-4-5` or equivalent current fast/cheap model).
-- **File to edit**: `src/app/api/chat/route.ts` line ~106: `model: 'claude-3-5-haiku-20241022'`
+### BUG 3 — FIXED ✅ (Jun 15)
+- **What**: Claude model `claude-3-5-haiku-20241022` retired Feb 19, 2026 — API rejected all chat requests
+- **Fix**: Updated `src/app/api/chat/route.ts` line 106 to `model: 'claude-haiku-4-5-20251001'`
+- **Commit**: `fix(api): update Claude model to claude-haiku-4-5-20251001 (claude-3-5-haiku-20241022 EOL Feb 2026)`
+- **Deployed**: Vercel production redeploy successful — all routes clean, zero build errors
 
-## Up Next (Next Session — in order)
-1. Fix BUG 3: update Claude model in `src/app/api/chat/route.ts` to a live model
-2. Re-deploy and test end-to-end: login → dashboard → character select → name → chat → 5 messages
-3. Check browser console for errors
-4. Mark PR 1-15 complete in ROADMAP and memory bank
-5. Then begin Week 2: PR 2-01 · Collect Source Documents (`feature/rag-source-docs`)
+## Up Next (Week 2 — in order)
+1. **PR 2-01** · Collect Source Documents — download K-1 Math + Reading/ELA OER docs to `/rag-sources/`
+2. **PR 2-02** · Firebase Vector Search Setup — enable extension, create `curriculum_chunks` collection
+3. **PR 2-03** · Document Chunking Utility — 200-400 word chunks with subject/grade metadata
+4. **PR 2-04** · Gemini Embedding Setup — `src/lib/gemini/client.ts` + `embed.ts`
+5. **PR 2-05** · Document Ingestion Script — full pipeline: chunk → embed → save to Firestore
+6. Continue through PR 2-10 (see ROADMAP.md Week 2 section)
 
 ## Active Branch
-`dev` — in sync with `main`
+`dev` — switch to `feature/rag-source-docs` for PR 2-01
 
 ## Known Issues / Blockers
-- BUG 3: Deprecated Claude model `claude-3-5-haiku-20241022` blocks all chat functionality
+- None — all Week 1 bugs resolved, chat fully functional
 
 ## Recent Decisions & Notes
 - Next.js 16.2.9 — Turbopack enabled by default in dev mode (acceptable)
@@ -78,5 +73,5 @@
 - Child UI uses custom components (NOT Shadcn) — large text (18px+), 48px+ touch targets, rounded-3xl, bright colors
 - Parent UI uses Shadcn components — clean, minimal, neutral palette
 
-## Known Issues / Blockers
-- `/dashboard` 404 was just fixed via hotfix — awaiting confirmation that login flow works end-to-end on live app
+## Current Status
+**Week 1 complete ✅ — beginning Week 2 RAG Layer**

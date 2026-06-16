@@ -227,13 +227,13 @@
 
 ---
 
-### PR 1-15 · Week 1 Integration Test & Deploy — ⚠️ BLOCKED
+### PR 1-15 · Week 1 Integration Test & Deploy ✅
 **Branch:** `dev` (merge all Week 1 features)
 
-- [ ] End-to-end test: sign up → select character → name it → have a 5-message conversation ← BLOCKED by BUG 3
-- [ ] Verify mascot responds in character voice (Socratic, K-1 language) ← BLOCKED by BUG 3
+- [x] End-to-end test: sign up → select character → name it → have a 5-message conversation ✅ (chat unblocked Jun 15 after BUG 3 fix)
+- [x] Verify mascot responds in character voice (Socratic, K-1 language) ✅
 - [x] Verify no TypeScript errors: `npx tsc --noEmit` — zero errors confirmed Jun 15
-- [ ] Verify no console errors in browser ← pending BUG 3 fix
+- [x] Verify no console errors in browser ✅
 - [x] Deploy to Vercel: `vercel --prod` — fresh production deploy Jun 15, all 10 routes building clean
 - [x] Merge `dev` → `main`
 - [x] Commit: `chore: week 1 complete — foundation and chat ui live`
@@ -258,14 +258,14 @@
 
 ---
 
-### BUG 3 · Deprecated Claude Model ❌ ← NEXT SESSION STARTS HERE
+### BUG 3 · Deprecated Claude Model ✅ FIXED Jun 15
 **File:** `src/app/api/chat/route.ts`
 
-- [ ] Model `claude-3-5-haiku-20241022` is retired (EOL was Feb 19, 2026) — Anthropic API rejects all chat requests
-- [ ] Update model name on line ~106 to a current Anthropic model (e.g. `claude-haiku-4-5` or latest equivalent)
-- [ ] Verify chat works end-to-end after model update
-- [ ] Re-run full PR 1-15 test checklist
-- [ ] Deploy fix to Vercel production
+- [x] Model `claude-3-5-haiku-20241022` is retired (EOL was Feb 19, 2026) — Anthropic API rejects all chat requests
+- [x] Updated model name to `claude-haiku-4-5-20251001` (current fast/cheap Haiku tier as of Jun 2026)
+- [x] Verify chat works end-to-end after model update
+- [x] Re-run full PR 1-15 test checklist — all passing
+- [x] Deployed fix to Vercel production — `fix(api): update Claude model to claude-haiku-4-5-20251001`
 
 ---
 
