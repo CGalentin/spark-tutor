@@ -181,7 +181,7 @@ export default function ChatPage() {
   if (character === undefined) return null;
 
   return (
-    <div className="flex h-screen w-full max-w-full flex-col overflow-x-hidden bg-gradient-to-b from-violet-50 to-white">
+    <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
       {/* Header: mascot identity + stars earned this session */}
       <header className="shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
         <MascotAvatar character={character} mascotName={mascotName} />

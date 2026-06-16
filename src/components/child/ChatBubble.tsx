@@ -25,21 +25,18 @@ export function ChatBubble({ message, mascotColorClass }: ChatBubbleProps) {
   const displayText = cleanDisplayText(message.content);
 
   return (
-    <div
-      className={cn(
-        'flex min-w-0 w-full',
-        isChild ? 'justify-end' : 'justify-start',
-      )}
-    >
+    <div className="flex w-full">
       <div
         className={cn(
-          // Layout + sizing
+          // Layout + sizing — ml-auto pushes child bubbles to the right,
+          // mr-auto keeps mascot bubbles on the left
           'max-w-[80%] rounded-3xl px-5 py-3',
+          isChild ? 'ml-auto' : 'mr-auto',
           // Typography — 18px minimum for K-1 readability
           'text-[18px] leading-relaxed font-medium',
-          // Child bubble: neutral light bg, dark text, right side
+          // Child bubble: neutral light bg, dark text
           isChild && 'rounded-br-md bg-slate-100 text-slate-800',
-          // Mascot bubble: character color bg, white text, left side
+          // Mascot bubble: character color bg, white text
           !isChild && cn('rounded-bl-md text-white', mascotColorClass),
         )}
       >
