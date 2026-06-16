@@ -27,7 +27,7 @@ export function ChatBubble({ message, mascotColorClass }: ChatBubbleProps) {
   return (
     <div
       className={cn(
-        'flex w-full',
+        'flex min-w-0 w-full',
         isChild ? 'justify-end' : 'justify-start',
       )}
     >
