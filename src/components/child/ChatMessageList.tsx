@@ -20,7 +20,7 @@ interface ChatMessageListProps {
 /** Three-dot typing indicator shown while the mascot generates a response. */
 function TypingIndicator({ colorClass }: { colorClass: string }) {
   return (
-    <div className="flex justify-start">
+    <div className="self-start">
       <div className={cn('flex items-center gap-1.5 rounded-3xl rounded-bl-md px-5 py-4', colorClass)}>
         {[0, 1, 2].map((i) => (
           <span

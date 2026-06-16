@@ -24,24 +24,20 @@ export function ChatBubble({ message, mascotColorClass }: ChatBubbleProps) {
   const isChild = message.role === 'child';
   const displayText = cleanDisplayText(message.content);
 
+  // align-self: flex-end places the child bubble on the RIGHT side of the
+  // flex-col list; align-self: flex-start keeps mascot bubbles on the LEFT.
+  // This avoids any reliance on parent-width calculations.
   return (
-    <div className="flex w-full">
-      <div
-        className={cn(
-          // Layout + sizing — ml-auto pushes child bubbles to the right,
-          // mr-auto keeps mascot bubbles on the left
-          'max-w-[80%] rounded-3xl px-5 py-3',
-          isChild ? 'ml-auto' : 'mr-auto',
-          // Typography — 18px minimum for K-1 readability
-          'text-[18px] leading-relaxed font-medium',
-          // Child bubble: neutral light bg, dark text
-          isChild && 'rounded-br-md bg-slate-100 text-slate-800',
-          // Mascot bubble: character color bg, white text
-          !isChild && cn('rounded-bl-md text-white', mascotColorClass),
-        )}
-      >
-        {displayText}
-      </div>
+    <div
+      className={cn(
+        'max-w-[75%] rounded-3xl px-5 py-3',
+        // Typography — 18px minimum for K-1 readability
+        'text-[18px] leading-relaxed font-medium',
+        // Positioning — self-end = right side, self-start = left side
+        isChild ? 'self-end rounded-br-md bg-slate-100 text-slate-800' : cn('self-start rounded-bl-md text-white', mascotColorClass),
+      )}
+    >
+      {displayText}
     </div>
   );
 }
