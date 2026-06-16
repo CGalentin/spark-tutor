@@ -34,7 +34,10 @@ export function ChatBubble({ message, mascotColorClass }: ChatBubbleProps) {
         // Typography — 18px minimum for K-1 readability
         'text-[18px] leading-relaxed font-medium',
         // Positioning — child messages centered, mascot messages left-aligned
-        isChild ? 'self-center rounded-3xl bg-slate-100 text-slate-800' : cn('self-start rounded-bl-md text-white', mascotColorClass),
+        // Child bubble uses a soft violet gradient to visually distinguish it from mascot bubbles
+        isChild
+          ? 'self-center rounded-3xl bg-gradient-to-br from-violet-100 to-indigo-100 text-indigo-900 shadow-sm'
+          : cn('self-start rounded-bl-md text-white', mascotColorClass),
       )}
     >
       {displayText}
