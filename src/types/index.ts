@@ -12,3 +12,5 @@ export type {
   SummaryRequest,
   SummaryResponse,
 } from './api';
+
+export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';
