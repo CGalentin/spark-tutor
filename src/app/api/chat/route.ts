@@ -124,8 +124,9 @@ export async function POST(request: NextRequest) {
         const starEarned = fullText.includes('[STAR EARNED]');
         controller.enqueue(sseEvent({ type: 'done', starEarned }));
         controller.close();
-      } catch {
-        // Mid-stream errors: send an error event so the client can show a friendly message
+      } catch (streamErr) {
+        // Log the real error so we can diagnose it in Vercel logs — remove after fix
+        console.error('[api/chat] Anthropic stream error:', streamErr);
         controller.enqueue(sseEvent({ type: 'error', error: 'AI response failed. Please try again.' }));
         controller.close();
       }
