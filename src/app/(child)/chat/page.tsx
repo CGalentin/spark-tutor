@@ -17,6 +17,7 @@ import { ChatMessageList } from '@/components/child/ChatMessageList';
 import { ChatInput } from '@/components/child/ChatInput';
 import { SubjectSelector } from '@/components/child/SubjectSelector';
 import { StarBurst } from '@/components/child/StarBurst';
+import { SessionProgressBar } from '@/components/child/SessionProgressBar';
 import type { Message, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
@@ -249,6 +250,11 @@ export default function ChatPage() {
         <SubjectSelector mascotName={mascotName} onSelect={handleSubjectSelect} />
       ) : (
         <>
+          {/* Session progress bar — fills over 10 messages, shows star count */}
+          <div className="shrink-0 border-b border-slate-100">
+            <SessionProgressBar />
+          </div>
+
           {/* Scrollable message list fills remaining vertical space */}
           <ChatMessageList
             messages={messages}
