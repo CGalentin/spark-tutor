@@ -42,3 +42,12 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# RAG source documents — large PDF/DOCX files are local-only, not committed
+# The README.md in rag-sources/ IS committed (lists all sources + licenses)
+rag-sources/math/*.pdf
+rag-sources/math/*.zip
+rag-sources/math/*.docx
+rag-sources/reading/*.pdf
+rag-sources/reading/*.zip
+rag-sources/reading/*.docx

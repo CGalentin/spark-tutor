@@ -1,19 +1,19 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 1 of 4 — Complete ✅ (15/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 2 of 4 — In Progress (3/10 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
 | Week 1 | Foundation & Chat UI | ✅ Complete |
-| Week 2 | RAG Layer | ⏳ Not Started |
+| Week 2 | RAG Layer | 🔄 In Progress (3/10 done) |
 | Week 3 | Parent Layer & Agentic Summary | ⏳ Not Started |
 | Week 4 | MCP Tool & Polish | ⏳ Not Started |
 
 ---
 
-## Week 1 — PR Checklist
+## Week 1 — PR Checklist (All Done)
 
 | PR | Title | Branch | Status |
 |---|---|---|---|
@@ -35,60 +35,46 @@
 
 ---
 
+## Week 2 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-01 | Collect Source Documents | `feature/rag-source-docs` | ✅ Done |
+| 2-02 | Firebase Vector Search Setup | `feature/vector-search-setup` | ✅ Done |
+| 2-03 | Document Chunking Utility | `feature/doc-chunking` | ✅ Done |
+| 2-04 | Gemini Embedding Setup | `feature/gemini-embeddings` | ⏳ Next |
+| 2-05 | Document Ingestion Script | `feature/ingestion-script` | ⏳ |
+| 2-06 | Ingest Reading Sources | `feature/ingest-reading` | ⏳ |
+| 2-07 | RAG Retrieval API Route | `feature/rag-retrieval` | ⏳ |
+| 2-08 | Wire RAG Into Chat | `feature/rag-in-chat` | ⏳ |
+| 2-09 | RAG Quality Check | `feature/rag-quality` | ⏳ |
+| 2-10 | Week 2 Integration Test & Deploy | `dev` | ⏳ |
+
+---
+
 ## What Works Right Now
-- Next.js 16.2.9 scaffolded — TypeScript strict mode, Tailwind v4, ESLint, App Router
-- Full `/src` folder structure: `components/child|parent|shared`, `lib/firebase|claude|gemini`, `store`, `types`, `constants`, `hooks`
-- Memory bank initialized in `memory-bank/`
-- All npm dependencies installed and verified (zero TypeScript errors)
-- Shadcn UI initialized — `Card`, `Badge`, `Button`, `Input` components in `src/components/ui/`
-- `src/lib/utils.ts` — `cn()` utility for Tailwind class merging
-- `src/lib/firebase/config.ts` — Firebase singleton init (auth + db exported)
-- `src/lib/firebase/auth.ts` — signIn, signUp, signOut, onAuthChange
-- `src/lib/firebase/firestore.ts` — getSession, getSessions, saveSummary
-- `src/types/` — CharacterConfig, Session, Message, ApiResult<T>, all shared types exported from index.ts
-- `src/constants/characters.ts` — all 6 Spark Squad characters with voicePrompts
-- `src/constants/prompts.ts` — BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
-- `src/constants/subjects.ts` — Subject, GradeBand, MAX_SESSION_STARS, TARGET_SESSION_MESSAGES
-- `src/store/useChildStore.ts` — character selection state
-- `src/store/useSessionStore.ts` — active session state
-- `src/store/useAuthStore.ts` — auth state mirror
-- Firebase project `spark-tutor-96f9c`: Auth (Email/Password) + Firestore (Standard, production mode) live
-- All `.env.local` keys filled (Firebase client + admin, Anthropic, Gemini)
-- GitHub: https://github.com/CGalentin/spark-tutor — branches: main, dev, all feature branches
-- `src/app/(auth)/layout.tsx` — centered auth layout with Spark Tutor branding + privacy footer
-- `src/app/(auth)/login/page.tsx` + `src/components/parent/LoginForm.tsx` — parent login with Firebase signIn, friendly error messages, link to /signup
-- `src/app/(auth)/signup/page.tsx` + `src/components/parent/SignupForm.tsx` — parent signup with Firebase signUp, confirm password, friendly error messages
-- Root `src/app/page.tsx` redirects to `/login`
-- `src/components/shared/AuthProvider.tsx` — Firebase onAuthStateChanged listener, hydrates useAuthStore
-- `src/components/shared/AuthRouteGuard.tsx` — redirects authenticated parents away from /login and /signup
-- `src/components/shared/LoadingSpinner.tsx` — reusable full-screen loading state
-- `src/hooks/useAuth.ts` — reads auth state from useAuthStore with individual selectors
-- `src/app/(parent)/layout.tsx` — protected layout: unauthenticated users redirected to /login
-- Root `src/app/layout.tsx` wraps all pages in AuthProvider
 
-## What Works Right Now (Week 1 additions)
-- `src/components/child/ChatInput.tsx` — large input + 🚀 send button, 48px touch targets, Enter-key support
-- `src/components/child/SubjectSelector.tsx` — Math 🔢 / Reading 📖 picker, 80px touch targets
-- `src/app/(child)/chat/page.tsx` — full chat page: MascotAvatar + SubjectSelector + ChatMessageList + ChatInput; SSE streaming from /api/chat; [STAR EARNED] detection; redirect guard to /character-select
-- Vercel deployment live: https://spark-tutor-app.vercel.app (all 11 env vars set, zero build errors, publicly accessible)
-- dev → main merged for Week 1 milestone
+### Week 1 (complete)
+- Next.js 16.2.9, TypeScript strict mode, Tailwind v4, App Router
+- Full `/src` folder structure established
+- Firebase Auth (Email/Password) + Firestore live (`spark-tutor-96f9c`)
+- All 6 Spark Squad characters (Blip🤖 Finn🦊 Zorro🐲 Luna🐰 Pip🧚 Nova🦉)
+- Zustand stores: `useChildStore`, `useSessionStore`, `useAuthStore`
+- Auth flow: signup → login → dashboard (placeholder) → character select → name → subject
+- Claude chat route (`/api/chat`): SSE streaming, `[STAR EARNED]` detection, model `claude-haiku-4-5-20251001`
+- Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
+- Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
 
-## Hotfixes Applied (Jun 15 — during PR 1-15 testing)
-- ✅ `fix(parent-ui)`: Added placeholder `/dashboard` page — login redirect was 404ing since Week 1
-- ✅ `fix(api)`: Added `serverExternalPackages: ['firebase-admin']` to `next.config.ts`
-- ✅ `fix(api)`: Downgraded `firebase-admin@14` → `firebase-admin@12` to fix `ERR_REQUIRE_ESM` crash in Vercel serverless (jose@6 ESM incompatibility via jwks-rsa)
-
-## What Works Right Now (added Jun 15 — all bugs fixed)
-- ✅ **CHAT FULLY WORKING** — model `claude-haiku-4-5-20251001`, SSE streaming, Socratic responses in character voice
-- ✅ Full end-to-end flow: login → dashboard → character select → name → subject → 5-message conversation
-- ✅ Child message bubbles: centered, soft violet-to-indigo gradient, visually distinct from mascot bubbles
-- ✅ Mascot bubbles: left-aligned, character color, white text
-- ✅ All 5 bugs from PR 1-15 testing resolved and deployed to production
+### Week 2 — In Progress
+- **RAG source documents** — 17 PDFs downloaded locally to `rag-sources/` (9 math, 8 reading), CC-licensed, gitignored
+- **CurriculumChunk types** — `src/types/rag.ts` (`CurriculumChunk`, `RankedChunk`, `GradeBand`)
+- **vectorSearch.ts** — `saveChunk()`, `chunkExists()`, `queryByEmbedding()` (cosine similarity), `countChunks()`
+- **chunkDocument.ts** — PDF → text extraction → 200–400 word chunks with 50-word overlap + full metadata
 
 ## What Does Not Work Yet
-- No parent dashboard (placeholder only — full dashboard is Week 3)
-- No RAG layer (Week 2 — not started)
-- No Firestore session persistence (session ID is client-side only until PR 2-xx)
+- RAG layer not wired to chat (PRs 2-04 through 2-08 remaining)
+- No parent dashboard (placeholder only — Week 3)
+- No Firestore session persistence (client-side only — Week 3)
 - No agentic session summary (Week 3)
 - No MCP math tool (Week 4)
 

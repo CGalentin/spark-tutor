@@ -28,6 +28,20 @@ export interface ChatResponse {
   starEarned: boolean;
 }
 
+/** Request body sent to POST /api/rag. */
+export interface RagRequest {
+  /** The child's question or message — embedded with Gemini to find relevant chunks. */
+  query: string;
+  /** Subject filter — only chunks with a matching subject are returned. */
+  subject: Subject;
+}
+
+/** Successful response from POST /api/rag. */
+export interface RagResponse {
+  /** Top-3 curriculum chunks relevant to the query, as plain text strings. */
+  chunks: string[];
+}
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;
