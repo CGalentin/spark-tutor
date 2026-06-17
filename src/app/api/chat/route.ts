@@ -17,6 +17,8 @@ import { type NextRequest } from 'next/server';
 import { adminAuth } from '@/lib/firebase/admin';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
+import { embedText } from '@/lib/gemini/embed';
+import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
 import type { ChatRequest, Message } from '@/types';
 
 /** Maps our internal MessageRole to the role format Claude expects. */
@@ -72,10 +74,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 3. Build the composable system prompt ────────────────────────────────
+  // ── 3. Retrieve curriculum context via RAG ───────────────────────────────
+  // Embed the child's message and fetch the top-3 most relevant curriculum chunks.
+  // If RAG fails for any reason, we proceed without context (graceful fallback).
+  let ragContext: string | undefined;
+  try {
+    const queryEmbedding = await embedText(message.trim());
+    const rankedChunks = await queryByEmbedding(queryEmbedding, subject, 3);
+    if (rankedChunks.length > 0) {
+      ragContext = rankedChunks.map((chunk) => chunk.text).join('\n\n---\n\n');
+    }
+  } catch {
+    // RAG failure is non-fatal — Claude still gives a useful response without it
+    ragContext = undefined;
+  }
+
+  // ── 4. Build the composable system prompt ────────────────────────────────
   let systemPrompt: string;
   try {
-    systemPrompt = buildSystemPrompt({ characterId, subject });
+    systemPrompt = buildSystemPrompt({ characterId, subject, ragContext });
   } catch (err) {
     return Response.json(
       { success: false, error: (err as Error).message },
@@ -83,7 +100,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 4. Map conversation history to Claude's role format ──────────────────
+  // ── 5. Map conversation history to Claude's role format ──────────────────
   // Conversation history (mascot/child) + the current child message appended last
   const priorMessages = Array.isArray(messages) ? messages : [];
   const claudeMessages = [
@@ -94,7 +111,7 @@ export async function POST(request: NextRequest) {
     { role: 'user' as const, content: message.trim() },
   ];
 
-  // ── 5. Stream Claude response as SSE ─────────────────────────────────────
+  // ── 6. Stream Claude response as SSE ─────────────────────────────────────
   const anthropic = getAnthropicClient();
 
   const stream = new ReadableStream({
