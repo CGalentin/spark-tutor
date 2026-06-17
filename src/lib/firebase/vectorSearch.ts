@@ -92,7 +92,7 @@ export async function chunkExists(source: string, chunkIndex: number): Promise<b
  *   2. Rank by cosine similarity against queryEmbedding (in-memory).
  *   3. Return the top `limit` ranked chunks.
  *
- * @param queryEmbedding - 768-dimension vector from Gemini embedContent
+ * @param queryEmbedding - 3072-dimension vector from Gemini embedContent (gemini-embedding-001)
  * @param subject        - 'math' | 'reading' — used to pre-filter chunks
  * @param limit          - number of top results to return (default 3)
  */
