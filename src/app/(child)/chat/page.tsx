@@ -18,6 +18,8 @@ import { ChatInput } from '@/components/child/ChatInput';
 import { SubjectSelector } from '@/components/child/SubjectSelector';
 import { StarBurst } from '@/components/child/StarBurst';
 import { SessionProgressBar } from '@/components/child/SessionProgressBar';
+import { EndSessionButton } from '@/components/child/EndSessionButton';
+import { WellDoneScreen } from '@/components/child/WellDoneScreen';
 import type { Message, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
@@ -41,10 +43,14 @@ export default function ChatPage() {
 
   // ── Session (from store) ──────────────────────────────────────────────────
   const sessionId = useSessionStore((s) => s.sessionId);
+  const messageCount = useSessionStore((s) => s.messageCount);
   const isChatLoading = useSessionStore((s) => s.isChatLoading);
+  const isSessionEnding = useSessionStore((s) => s.isSessionEnding);
   const startSession = useSessionStore((s) => s.startSession);
   const setIsChatLoading = useSessionStore((s) => s.setIsChatLoading);
+  const setIsSessionEnding = useSessionStore((s) => s.setIsSessionEnding);
   const incrementMessageCount = useSessionStore((s) => s.incrementMessageCount);
+  const endSession = useSessionStore((s) => s.endSession);
 
   // ── Stars (hook handles local state + Firestore sync) ─────────────────────
   const { starsEarned, awardStar } = useStars();
@@ -55,6 +61,8 @@ export default function ChatPage() {
   const [chatError, setChatError] = useState<string | null>(null);
   // starBurstTriggered flips to true for one render cycle to trigger the animation
   const [starBurstTriggered, setStarBurstTriggered] = useState(false);
+  // sessionEnded drives the WellDoneScreen — stays true until the user navigates away
+  const [sessionEnded, setSessionEnded] = useState(false);
 
   const handleStarBurstComplete = useCallback(() => setStarBurstTriggered(false), []);
 
@@ -111,6 +119,33 @@ export default function ChatPage() {
     } catch {
       // Fall back to a client-side ID so the child can still chat even if the API fails
       startSession(createMessageId(), chosen);
+    }
+  }
+
+  // ── End the session and show the WellDone screen ─────────────────────────
+  async function handleEndSession() {
+    if (sessionId === null || isSessionEnding) return;
+
+    setIsSessionEnding(true);
+
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      if (token !== undefined && token !== '') {
+        await fetch('/api/session/end', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ sessionId, starsEarned, messageCount }),
+        });
+      }
+    } catch {
+      // End-session failure must not block the child from seeing the WellDone screen
+    } finally {
+      setSessionEnded(true);
+      endSession();
+      setIsSessionEnding(false);
     }
   }
 
@@ -222,6 +257,11 @@ export default function ChatPage() {
   // Render nothing while the redirect to /character-select is in flight
   if (character === undefined) return null;
 
+  // Show the celebration screen after the session ends
+  if (sessionEnded) {
+    return <WellDoneScreen mascotName={mascotName} starsEarned={starsEarned} />;
+  }
+
   return (
     <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
       {/* Star burst overlay — triggered once per star earned */}
@@ -274,6 +314,14 @@ export default function ChatPage() {
           {/* Chat input pinned to the bottom */}
           <div className="shrink-0">
             <ChatInput onSend={handleSend} disabled={isChatLoading} />
+          </div>
+
+          {/* End session button below chat input */}
+          <div className="shrink-0 px-4 pb-4">
+            <EndSessionButton
+              disabled={isChatLoading || isSessionEnding}
+              onEndSession={handleEndSession}
+            />
           </div>
         </>
       )}
