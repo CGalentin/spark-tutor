@@ -5,16 +5,18 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase/config';
 import { useChildStore } from '@/store/useChildStore';
 import { useSessionStore } from '@/store/useSessionStore';
+import { useStars } from '@/hooks/useStars';
 import { getCharacterById } from '@/constants/characters';
 import { MascotAvatar } from '@/components/child/MascotAvatar';
 import { ChatMessageList } from '@/components/child/ChatMessageList';
 import { ChatInput } from '@/components/child/ChatInput';
 import { SubjectSelector } from '@/components/child/SubjectSelector';
+import { StarBurst } from '@/components/child/StarBurst';
 import type { Message, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
@@ -38,17 +40,22 @@ export default function ChatPage() {
 
   // ── Session (from store) ──────────────────────────────────────────────────
   const sessionId = useSessionStore((s) => s.sessionId);
-  const starsEarned = useSessionStore((s) => s.starsEarned);
   const isChatLoading = useSessionStore((s) => s.isChatLoading);
-  const addStar = useSessionStore((s) => s.addStar);
   const startSession = useSessionStore((s) => s.startSession);
   const setIsChatLoading = useSessionStore((s) => s.setIsChatLoading);
   const incrementMessageCount = useSessionStore((s) => s.incrementMessageCount);
+
+  // ── Stars (hook handles local state + Firestore sync) ─────────────────────
+  const { starsEarned, awardStar } = useStars();
 
   // ── Local state ───────────────────────────────────────────────────────────
   const [messages, setMessages] = useState<Message[]>([]);
   const [subject, setSubject] = useState<Subject | null>(null);
   const [chatError, setChatError] = useState<string | null>(null);
+  // starBurstTriggered flips to true for one render cycle to trigger the animation
+  const [starBurstTriggered, setStarBurstTriggered] = useState(false);
+
+  const handleStarBurstComplete = useCallback(() => setStarBurstTriggered(false), []);
 
   // ── Guard: send child back if they arrived without picking a character ─────
   useEffect(() => {
@@ -192,8 +199,11 @@ export default function ChatPage() {
             };
             setMessages((prev) => [...prev, mascotMessage]);
 
-            // Claude embeds [STAR EARNED] in the text when the child nails an answer
-            if (event.starEarned) addStar();
+                    // Claude embeds [STAR EARNED] in the text when the child nails an answer
+                    if (event.starEarned) {
+                      setStarBurstTriggered(true);
+                      await awardStar();
+                    }
             break streamLoop;
           } else if (event.type === 'error') {
             throw new Error(event.error);
@@ -213,6 +223,8 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
+      {/* Star burst overlay — triggered once per star earned */}
+      <StarBurst triggered={starBurstTriggered} onComplete={handleStarBurstComplete} />
       {/* Header: mascot identity + stars earned this session */}
       <header className="shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
         <MascotAvatar character={character} mascotName={mascotName} />
