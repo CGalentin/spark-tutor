@@ -27,33 +27,50 @@ Browser (Child or Parent)
    │  Gemini (Google)    — embeddings only      │
    │  Firebase Auth      — parent auth          │
    │  Firestore          — sessions + summaries │
-   │  Firebase Vector    — RAG chunk storage    │
+   │  Firestore (curriculum_chunks) — RAG store  │
    └───────────────────────────────────────────┘
 ```
 
 ## Key Architectural Patterns
 
-### 1. Composable System Prompt (3 Layers)
-Every Claude chat call builds the system prompt from three separate layers:
+### 1. Composable System Prompt (4 Layers)
+Every Claude chat call builds the system prompt from four layers (Layer 4 only injected when RAG returns results):
 ```
 Layer 1: BASE_TUTOR_RULES    — never changes; enforces K-1 safety + Socratic method
 Layer 2: CHARACTER_VOICE     — loaded from constants/characters.ts by selected character id
-Layer 3: RAG_CONTEXT         — top 3 curriculum chunks from Firebase Vector Search
+Layer 3: SUBJECT_CONTEXT     — which subject (math vs reading) this session covers
+Layer 4: RAG_CONTEXT         — top 3 curriculum chunks via in-memory cosine similarity on Firestore
+                               (omitted if RAG retrieval fails — graceful fallback)
 ```
 This lets us swap or update any layer without touching the others.
+Implemented in: `src/lib/claude/buildSystemPrompt.ts`
 
-### 2. Dual-LLM Pattern
+### 2. RAG Pipeline
+```
+Offline (ingestion scripts — run once, not in the app):
+  scripts/rag/chunkDocument.ts   → PDF → overlapping 200-400 word chunks + metadata
+  scripts/rag/ingestDocuments.ts → chunk → embedText() → saveChunk() to Firestore
+                                   (dedup via chunkExists(); safe to re-run)
+
+Online (per child message in /api/chat):
+  child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 4
+```
+Corpus: 202 math chunks + 334 reading chunks = 536 total in `curriculum_chunks` Firestore collection.
+Cosine similarity is computed in-memory (all subject-filtered chunks fetched, ranked, top-3 returned).
+Why not Firebase Vector Search extension? Corpus < 1 000 chunks; no index config needed; upgrade later if needed.
+
+### 3. Dual-LLM Pattern
 - **Claude** → all conversation generation (chat + session summaries)
 - **Gemini** → embeddings only (never generates text for users)
 This separation is intentional: Claude has stronger safety controls and character voice consistency; Gemini is cost-efficient for embedding at scale.
 
-### 3. MCP Tool Pattern
+### 4. MCP Tool Pattern
 The math problem generator is a Next.js API route that Claude can "call" during a session:
 - Input: `{ grade, topic, difficulty }`
 - Output to Claude: `{ problem, hint }` — the `answer` field is NEVER sent to client
 - Claude receives the problem and hint, then guides the child Socratically toward the answer
 
-### 4. Firestore Data Structure
+### 5. Firestore Data Structure
 ```
 users/{parentUID}/
   sessions/{sessionID}/
@@ -72,7 +89,7 @@ users/{parentUID}/
 ```
 All child session data lives under the parent UID — no child accounts exist.
 
-### 5. API Response Shape
+### 6. API Response Shape
 Every API route returns this consistent shape:
 ```typescript
 type ApiResult<T> =
@@ -80,17 +97,17 @@ type ApiResult<T> =
   | { success: false; error: string };
 ```
 
-### 6. Client vs Server Components Rule
+### 7. Client vs Server Components Rule
 - Default to Server Components
 - Only add `'use client'` when needed: `useState`, `useEffect`, event handlers, Zustand, Firebase listeners
 - Keep client components as small (leaf node) as possible
 
-### 7. Firestore Access Pattern
+### 8. Firestore Access Pattern
 - Components NEVER write to Firestore directly
 - All reads/writes go through service functions in `/src/lib/firebase/`
 - Real-time data (parent dashboard) uses `onSnapshot` with cleanup in `useEffect`
 
-### 8. Error Handling Pattern
+### 9. Error Handling Pattern
 - Every async function wrapped in `try/catch`
 - Child-facing: mascot says warm message, retry button shown
 - Parent-facing: plain English with retry action
