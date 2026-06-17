@@ -10,7 +10,7 @@
 | UI Components | Shadcn UI | 4.11.0 | Parent dashboard + auth screens only |
 | State Management | Zustand | Latest | Global state (auth, session, character) |
 | Auth + DB | Firebase Auth + Firestore | Latest | Parent accounts, session storage |
-| Vector Search | Firebase Vector Search | Extension | RAG curriculum chunk storage + retrieval |
+| Vector Search | Firestore (in-memory cosine sim) | — | RAG chunk storage + retrieval (no extension needed at current corpus size) |
 | Chat LLM | Claude (Anthropic) | API | Mascot voice, Socratic Q&A, session summaries |
 | Embedding LLM | Gemini (Google AI Studio) | API | Embeddings only — never generates user-facing text |
 | Deployment | Vercel | — | Hosting, edge functions, environment variables |
@@ -20,11 +20,16 @@
 firebase                ← client SDK (browser)
 firebase-admin          ← Admin SDK (server-side only)
 @anthropic-ai/sdk       ← Claude API client
-@google/generative-ai   ← Gemini embedding client
+@google/generative-ai   ← Gemini embedding client (^0.24.1)
 zustand                 ← state management
 clsx                    ← conditional classnames
 tailwind-merge          ← merge Tailwind classes without conflicts
 shadcn/ui (4.11.0)      ← component library (Card, Badge, Button, Input installed)
+
+# devDependencies (scripts only — not bundled into the app)
+pdf-parse@1.1.1         ← PDF text extraction (pinned — v2 changed the API)
+ts-node                 ← run TypeScript scripts outside the Next.js bundler
+dotenv                  ← load .env.local in scripts
 ```
 
 ## Environment Variables
@@ -64,26 +69,56 @@ GEMINI_API_KEY                      ✅ filled
 
 ## Key File Locations
 ```
-src/lib/firebase/config.ts      ← Firebase singleton init, exports auth + db
-src/lib/firebase/auth.ts        ← signIn, signUp, signOut, onAuthChange
-src/lib/firebase/firestore.ts   ← getSession, getSessions, saveSummary
-src/lib/utils.ts                ← cn() utility (from Shadcn)
-src/types/index.ts              ← central re-export for all shared types
-src/constants/characters.ts     ← all 6 Spark Squad character configs
-src/constants/prompts.ts        ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
-src/constants/subjects.ts       ← Subject, GradeBand, MAX_SESSION_STARS
-src/store/useChildStore.ts      ← character selection state
-src/store/useSessionStore.ts    ← active session state
-src/store/useAuthStore.ts       ← auth state mirror
-src/components/ui/              ← Shadcn components (do not edit)
+# Firebase
+src/lib/firebase/config.ts        ← Firebase singleton init, exports auth + db
+src/lib/firebase/admin.ts         ← Firebase Admin SDK init, exports adminAuth
+src/lib/firebase/auth.ts          ← signIn, signUp, signOut, onAuthChange
+src/lib/firebase/firestore.ts     ← getSession, getSessions, saveSummary
+src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbedding(), countChunks()
+
+# Gemini (embedding only)
+src/lib/gemini/client.ts          ← GoogleGenerativeAI singleton
+src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
+
+# Claude
+src/lib/claude/client.ts          ← Anthropic SDK singleton
+src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer
+
+# Types
+src/types/index.ts                ← central re-export for all shared types
+src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand
+src/types/api.ts                  ← ApiResult<T>, ChatRequest, RagRequest, RagResponse, etc.
+
+# Constants + State
+src/constants/characters.ts       ← all 6 Spark Squad character configs
+src/constants/prompts.ts          ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
+src/constants/subjects.ts         ← Subject, GradeBand, MAX_SESSION_STARS
+src/store/useChildStore.ts        ← character selection state
+src/store/useSessionStore.ts      ← active session state
+src/store/useAuthStore.ts         ← auth state mirror
+src/components/ui/                ← Shadcn components (do not edit)
+
+# Scripts (ts-node, not bundled)
+tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts
+scripts/rag/chunkDocument.ts      ← PDF → overlapping text chunks
+scripts/rag/ingestDocuments.ts    ← full ingestion pipeline (chunk → embed → Firestore)
+scripts/rag/testEmbed.ts          ← smoke test for Gemini embedding
+scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8/10)
 ```
 
 ## Claude API Settings
+- Model: `claude-haiku-4-5-20251001` (current fast/cheap Haiku — updated Jun 15 after 3-5-haiku EOL)
 - Child chat: `max_tokens: 300`, `temperature: 0.7`
 - Session summary: `max_tokens: 600`
-- Always stream responses for child chat
-- System prompt = BASE_TUTOR_RULES + CHARACTER_VOICE + RAG_CONTEXT (3 layers)
+- Always stream responses for child chat via SSE
+- System prompt = BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT + RAG_CONTEXT (4 layers; Layer 4 optional)
 - `[STAR EARNED]` in Claude response = award a star to the child
+
+## Gemini API Settings
+- Model: `gemini-embedding-001` — current stable embedding model as of Jun 2026
+- Output: 3072-dimension vectors (NOTE: `text-embedding-004` is retired — do not use)
+- Used only for: embedding curriculum chunks at ingestion time, and embedding child queries at chat time
+- Never generates user-facing text
 
 ## Component Rules
 - Child UI: custom components ONLY — NO Shadcn. Min 18px text, 48px touch targets, rounded-3xl, bright colors

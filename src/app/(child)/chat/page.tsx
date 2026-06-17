@@ -5,16 +5,21 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase/config';
 import { useChildStore } from '@/store/useChildStore';
 import { useSessionStore } from '@/store/useSessionStore';
+import { useStars } from '@/hooks/useStars';
 import { getCharacterById } from '@/constants/characters';
 import { MascotAvatar } from '@/components/child/MascotAvatar';
 import { ChatMessageList } from '@/components/child/ChatMessageList';
 import { ChatInput } from '@/components/child/ChatInput';
 import { SubjectSelector } from '@/components/child/SubjectSelector';
+import { StarBurst } from '@/components/child/StarBurst';
+import { SessionProgressBar } from '@/components/child/SessionProgressBar';
+import { EndSessionButton } from '@/components/child/EndSessionButton';
+import { WellDoneScreen } from '@/components/child/WellDoneScreen';
 import type { Message, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
@@ -38,17 +43,28 @@ export default function ChatPage() {
 
   // ── Session (from store) ──────────────────────────────────────────────────
   const sessionId = useSessionStore((s) => s.sessionId);
-  const starsEarned = useSessionStore((s) => s.starsEarned);
+  const messageCount = useSessionStore((s) => s.messageCount);
   const isChatLoading = useSessionStore((s) => s.isChatLoading);
-  const addStar = useSessionStore((s) => s.addStar);
+  const isSessionEnding = useSessionStore((s) => s.isSessionEnding);
   const startSession = useSessionStore((s) => s.startSession);
   const setIsChatLoading = useSessionStore((s) => s.setIsChatLoading);
+  const setIsSessionEnding = useSessionStore((s) => s.setIsSessionEnding);
   const incrementMessageCount = useSessionStore((s) => s.incrementMessageCount);
+  const endSession = useSessionStore((s) => s.endSession);
+
+  // ── Stars (hook handles local state + Firestore sync) ─────────────────────
+  const { starsEarned, awardStar } = useStars();
 
   // ── Local state ───────────────────────────────────────────────────────────
   const [messages, setMessages] = useState<Message[]>([]);
   const [subject, setSubject] = useState<Subject | null>(null);
   const [chatError, setChatError] = useState<string | null>(null);
+  // starBurstTriggered flips to true for one render cycle to trigger the animation
+  const [starBurstTriggered, setStarBurstTriggered] = useState(false);
+  // sessionEnded drives the WellDoneScreen — stays true until the user navigates away
+  const [sessionEnded, setSessionEnded] = useState(false);
+
+  const handleStarBurstComplete = useCallback(() => setStarBurstTriggered(false), []);
 
   // ── Guard: send child back if they arrived without picking a character ─────
   useEffect(() => {
@@ -68,11 +84,69 @@ export default function ChatPage() {
       : '';
 
   // ── Handle subject selection ──────────────────────────────────────────────
-  function handleSubjectSelect(chosen: Subject) {
-    // Generate a client-side session ID; replaced by Firestore ID in a later PR
-    const newSessionId = createMessageId();
-    startSession(newSessionId, chosen);
+  // Calls /api/session/start to create a Firestore session doc and get the real sessionId.
+  async function handleSubjectSelect(chosen: Subject) {
+    if (character === undefined) return;
+
     setSubject(chosen);
+
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      if (token === undefined || token === '') {
+        throw new Error('Not authenticated.');
+      }
+
+      const response = await fetch('/api/session/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          characterType: character.id,
+          characterName: characterName.trim(),
+          subject: chosen,
+        }),
+      });
+
+      const result = (await response.json()) as { success: boolean; data?: { sessionId: string } };
+
+      if (!result.success || result.data === undefined) {
+        throw new Error('Failed to start session.');
+      }
+
+      startSession(result.data.sessionId, chosen);
+    } catch {
+      // Fall back to a client-side ID so the child can still chat even if the API fails
+      startSession(createMessageId(), chosen);
+    }
+  }
+
+  // ── End the session and show the WellDone screen ─────────────────────────
+  async function handleEndSession() {
+    if (sessionId === null || isSessionEnding) return;
+
+    setIsSessionEnding(true);
+
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      if (token !== undefined && token !== '') {
+        await fetch('/api/session/end', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ sessionId, starsEarned, messageCount, messages }),
+        });
+      }
+    } catch {
+      // End-session failure must not block the child from seeing the WellDone screen
+    } finally {
+      setSessionEnded(true);
+      endSession();
+      setIsSessionEnding(false);
+    }
   }
 
   // ── Send a message and stream the mascot's response via SSE ───────────────
@@ -161,8 +235,11 @@ export default function ChatPage() {
             };
             setMessages((prev) => [...prev, mascotMessage]);
 
-            // Claude embeds [STAR EARNED] in the text when the child nails an answer
-            if (event.starEarned) addStar();
+                    // Claude embeds [STAR EARNED] in the text when the child nails an answer
+                    if (event.starEarned) {
+                      setStarBurstTriggered(true);
+                      await awardStar();
+                    }
             break streamLoop;
           } else if (event.type === 'error') {
             throw new Error(event.error);
@@ -180,8 +257,15 @@ export default function ChatPage() {
   // Render nothing while the redirect to /character-select is in flight
   if (character === undefined) return null;
 
+  // Show the celebration screen after the session ends
+  if (sessionEnded) {
+    return <WellDoneScreen mascotName={mascotName} starsEarned={starsEarned} />;
+  }
+
   return (
     <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
+      {/* Star burst overlay — triggered once per star earned */}
+      <StarBurst triggered={starBurstTriggered} onComplete={handleStarBurstComplete} />
       {/* Header: mascot identity + stars earned this session */}
       <header className="shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
         <MascotAvatar character={character} mascotName={mascotName} />
@@ -206,6 +290,11 @@ export default function ChatPage() {
         <SubjectSelector mascotName={mascotName} onSelect={handleSubjectSelect} />
       ) : (
         <>
+          {/* Session progress bar — fills over 10 messages, shows star count */}
+          <div className="shrink-0 border-b border-slate-100">
+            <SessionProgressBar />
+          </div>
+
           {/* Scrollable message list fills remaining vertical space */}
           <ChatMessageList
             messages={messages}
@@ -225,6 +314,14 @@ export default function ChatPage() {
           {/* Chat input pinned to the bottom */}
           <div className="shrink-0">
             <ChatInput onSend={handleSend} disabled={isChatLoading} />
+          </div>
+
+          {/* End session button below chat input */}
+          <div className="shrink-0 px-4 pb-4">
+            <EndSessionButton
+              disabled={isChatLoading || isSessionEnding}
+              onEndSession={handleEndSession}
+            />
           </div>
         </>
       )}
