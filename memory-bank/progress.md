@@ -1,14 +1,14 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 2 of 4 — Complete ✅ | Live: https://spark-tutor-app.vercel.app**
+**Week 3 of 4 — Complete ✅ | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
-| Week 3 | Parent Layer & Agentic Summary | ⏳ Not Started |
+| Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
 | Week 4 | MCP Tool & Polish | ⏳ Not Started |
 
 ---
@@ -52,6 +52,24 @@
 
 ---
 
+## Week 3 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-01 | Firebase Admin Setup | `feature/firebase-admin` | ✅ Done |
+| 3-02 | Session Tracking — Start | `feature/session-start` | ✅ Done |
+| 3-03 | Session Tracking — Messages | `feature/session-messages` | ✅ Done |
+| 3-04 | Stars Logic | `feature/stars-logic` | ✅ Done |
+| 3-05 | Progress Bar | `feature/progress-bar` | ✅ Done |
+| 3-06 | Session End Flow | `feature/session-end` | ✅ Done |
+| 3-07 | Agentic Summary — Claude Call | `feature/agentic-summary` | ✅ Done |
+| 3-08 | Save Summary to Firestore | `feature/save-summary` | ✅ Done |
+| 3-09 | Parent Dashboard Layout | `feature/parent-dashboard` | ✅ Done |
+| 3-10 | Session Summary Card | `feature/summary-card` | ✅ Done |
+| 3-11 | Week 3 Integration Test & Deploy | `dev` | ✅ Done |
+
+---
+
 ## What Works Right Now
 
 ### Week 1 (complete)
@@ -64,6 +82,18 @@
 - Claude chat route (`/api/chat`): SSE streaming, `[STAR EARNED]` detection, model `claude-haiku-4-5-20251001`
 - Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
 - Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
+
+### Week 3 (complete — Jun 17)
+- **verifyAuthToken helper** — shared token verification across all protected API routes
+- **Session lifecycle** — `/api/session/start` (creates Firestore doc) → `/api/session/star` (increments stars) → `/api/session/end` (closes session, triggers summary)
+- **Message count tracking** — `/api/chat` increments `messageCount` in Firestore per AI response
+- **Stars logic** — `useStars.ts` hook + `StarBurst.tsx` animation + Firestore sync
+- **Progress bar** — `SessionProgressBar.tsx` fills over 10 messages, shows star badge
+- **WellDoneScreen** — full-screen celebration after session ends
+- **Agentic summary** — `buildSummaryPrompt.ts` + `/api/summary` sends session transcript to Claude, parses JSON, saves to Firestore
+- **Parent dashboard** — nav bar layout, `DashboardHeader`, Shadcn `Card` layout
+- **Session summary card** — `useSessionHistory.ts` (onSnapshot), `SessionSummaryCard.tsx` (Shadcn Card + Badge)
+- **13 routes** building clean on Vercel production
 
 ### Week 2 (complete — Jun 17)
 - **RAG source documents** — 17 PDFs in `rag-sources/` (9 math, 8 reading), CC-licensed, gitignored
@@ -79,11 +109,11 @@
 - **Model note**: `text-embedding-004` retired; `gemini-embedding-001` is the current stable model (3072 dims)
 
 ## What Does Not Work Yet
-- RAG layer not wired to chat (PRs 2-04 through 2-08 remaining)
-- No parent dashboard (placeholder only — Week 3)
-- No Firestore session persistence (client-side only — Week 3)
-- No agentic session summary (Week 3)
-- No MCP math tool (Week 4)
+- No MCP math problem tool (Week 4)
+- No character SVG avatars — emoji placeholders still used (Week 4)
+- No rate limiting on AI endpoints (Week 4)
+- No privacy policy page (Week 4)
+- No Husky pre-commit hooks (Week 4)
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete

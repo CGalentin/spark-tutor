@@ -71,9 +71,9 @@ GEMINI_API_KEY                      ✅ filled
 ```
 # Firebase
 src/lib/firebase/config.ts        ← Firebase singleton init, exports auth + db
-src/lib/firebase/admin.ts         ← Firebase Admin SDK init, exports adminAuth
+src/lib/firebase/admin.ts         ← Firebase Admin SDK init; exports adminAuth, adminDb, verifyAuthToken()
 src/lib/firebase/auth.ts          ← signIn, signUp, signOut, onAuthChange
-src/lib/firebase/firestore.ts     ← getSession, getSessions, saveSummary
+src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessions() (onSnapshot)
 src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbedding(), countChunks()
 
 # Gemini (embedding only)
@@ -82,21 +82,47 @@ src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
-src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer
+src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer (child chat)
+src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
+
+# API Routes
+src/app/api/chat/route.ts         ← SSE streaming chat; uses verifyAuthToken; increments messageCount
+src/app/api/rag/route.ts          ← Gemini embed + cosine search; returns top-3 chunks
+src/app/api/session/start/route.ts ← creates Firestore session doc, returns sessionId
+src/app/api/session/star/route.ts ← increments starsEarned in Firestore
+src/app/api/session/end/route.ts  ← writes endedAt; fire-and-forgets /api/summary
+src/app/api/summary/route.ts      ← sends transcript to Claude; saves summary.* to session doc
 
 # Types
 src/types/index.ts                ← central re-export for all shared types
+src/types/session.ts              ← Subject, Message, Session, SessionSummary
 src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand
-src/types/api.ts                  ← ApiResult<T>, ChatRequest, RagRequest, RagResponse, etc.
+src/types/api.ts                  ← ApiResult<T>, ChatRequest, SessionStartRequest/Response,
+                                     SessionEndRequest/Response, SummaryRequest/Response, etc.
 
 # Constants + State
 src/constants/characters.ts       ← all 6 Spark Squad character configs
 src/constants/prompts.ts          ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
 src/constants/subjects.ts         ← Subject, GradeBand, MAX_SESSION_STARS
 src/store/useChildStore.ts        ← character selection state
-src/store/useSessionStore.ts      ← active session state
-src/store/useAuthStore.ts         ← auth state mirror
-src/components/ui/                ← Shadcn components (do not edit)
+src/store/useSessionStore.ts      ← active session state (sessionId, subject, stars, messageCount)
+src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthenticated)
+
+# Hooks
+src/hooks/useAuth.ts              ← reads from useAuthStore
+src/hooks/useStars.ts             ← awardStar() — updates store + syncs to Firestore
+src/hooks/useSessionHistory.ts    ← onSnapshot subscription to parent's session list
+
+# Child UI components
+src/components/child/StarBurst.tsx         ← CSS keyframe pop animation overlay
+src/components/child/SessionProgressBar.tsx ← gradient progress bar + star count badge
+src/components/child/EndSessionButton.tsx  ← "All Done!" CTA
+src/components/child/WellDoneScreen.tsx    ← post-session celebration screen
+src/components/ui/                         ← Shadcn components (do not edit)
+
+# Parent UI components
+src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
+src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, stars, topics, encouragement
 
 # Scripts (ts-node, not bundled)
 tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts
