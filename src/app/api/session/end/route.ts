@@ -30,7 +30,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  const { sessionId, starsEarned, messageCount } = body;
+  const { sessionId, starsEarned, messageCount, messages } = body;
 
   if (typeof sessionId !== 'string' || sessionId.trim().length === 0) {
     return Response.json(
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         'Content-Type': 'application/json',
         Authorization: authHeader,
       },
-      body: JSON.stringify({ sessionId, parentUID }),
+      body: JSON.stringify({ sessionId, parentUID, messages: messages ?? [] }),
     }).catch(() => {
       // Summary generation failure must not affect the session end response
     });

@@ -64,6 +64,8 @@ export interface SessionEndRequest {
   parentUID: string;
   starsEarned: number;
   messageCount: number;
+  /** Full conversation history — forwarded to /api/summary for the agentic summary. */
+  messages?: Message[];
 }
 
 /** Successful response from POST /api/session/end. */
