@@ -26,3 +26,18 @@ const adminApp = getAdminApp();
 
 /** Firebase Admin Auth — use to verify ID tokens in API routes. */
 export const adminAuth: Auth = getAuth(adminApp);
+
+/**
+ * Verifies a Firebase ID token from an Authorization header and returns the parent UID.
+ * Throws an error (with a user-facing message) if the header is missing, malformed, or invalid.
+ * Use this in every protected API route so token verification stays in one place.
+ */
+export async function verifyAuthToken(authHeader: string | null): Promise<string> {
+  if (authHeader === null || !authHeader.startsWith('Bearer ')) {
+    throw new Error('Missing or malformed Authorization header.');
+  }
+
+  const idToken = authHeader.slice(7);
+  const decoded = await adminAuth.verifyIdToken(idToken);
+  return decoded.uid;
+}
