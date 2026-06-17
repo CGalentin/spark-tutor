@@ -68,11 +68,42 @@ export default function ChatPage() {
       : '';
 
   // ── Handle subject selection ──────────────────────────────────────────────
-  function handleSubjectSelect(chosen: Subject) {
-    // Generate a client-side session ID; replaced by Firestore ID in a later PR
-    const newSessionId = createMessageId();
-    startSession(newSessionId, chosen);
+  // Calls /api/session/start to create a Firestore session doc and get the real sessionId.
+  async function handleSubjectSelect(chosen: Subject) {
+    if (character === undefined) return;
+
     setSubject(chosen);
+
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      if (token === undefined || token === '') {
+        throw new Error('Not authenticated.');
+      }
+
+      const response = await fetch('/api/session/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          characterType: character.id,
+          characterName: characterName.trim(),
+          subject: chosen,
+        }),
+      });
+
+      const result = (await response.json()) as { success: boolean; data?: { sessionId: string } };
+
+      if (!result.success || result.data === undefined) {
+        throw new Error('Failed to start session.');
+      }
+
+      startSession(result.data.sessionId, chosen);
+    } catch {
+      // Fall back to a client-side ID so the child can still chat even if the API fails
+      startSession(createMessageId(), chosen);
+    }
   }
 
   // ── Send a message and stream the mascot's response via SSE ───────────────

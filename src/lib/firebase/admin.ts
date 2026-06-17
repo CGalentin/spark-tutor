@@ -1,9 +1,10 @@
 // Firebase Admin SDK initialization — server-side only.
-// Used by API routes to verify Firebase Auth ID tokens.
+// Used by API routes to verify Firebase Auth ID tokens and write to Firestore.
 // Never import this file in any client-side component or hook.
 
 import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
 import { getAuth, type Auth } from 'firebase-admin/auth';
+import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 
 /** Initializes the Admin SDK once and returns the app — safe to call repeatedly. */
 function getAdminApp(): App {
@@ -26,6 +27,9 @@ const adminApp = getAdminApp();
 
 /** Firebase Admin Auth — use to verify ID tokens in API routes. */
 export const adminAuth: Auth = getAuth(adminApp);
+
+/** Firebase Admin Firestore — use for server-side Firestore reads/writes in API routes. */
+export const adminDb: Firestore = getFirestore(adminApp);
 
 /**
  * Verifies a Firebase ID token from an Authorization header and returns the parent UID.
