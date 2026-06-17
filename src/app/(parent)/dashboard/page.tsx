@@ -1,61 +1,37 @@
-// Parent dashboard page — placeholder for Week 3.
-// Displays a welcome message and sign-out link so the auth flow has a valid landing page.
-// Full session history and agentic summaries will be added in Week 3.
+// Parent dashboard — shows session history and agentic summaries.
+// Auth protection is handled by the parent layout.
+// Session list and summary cards are rendered by components added in PR 3-10.
 
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { signOut } from '@/lib/firebase/auth';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { DashboardHeader } from '@/components/parent/DashboardHeader';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-/** Placeholder parent dashboard — Week 3 will add session history and summaries. */
+/** Parent dashboard page — entry point for all parent-facing session data. */
 export default function DashboardPage() {
-  const router = useRouter();
   const { parentEmail } = useAuth();
 
-  async function handleSignOut() {
-    await signOut();
-    router.replace('/login');
-  }
-
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-lg flex flex-col gap-6">
-        {/* Header */}
-        <div className="text-center">
-          <p className="text-4xl mb-2">⭐</p>
-          <h1 className="text-2xl font-bold text-slate-800">Spark Tutor</h1>
-          <p className="text-slate-500 text-sm mt-1">{parentEmail}</p>
-        </div>
+    <div className="flex flex-col gap-6">
+      {/* Welcome banner with start-session CTA */}
+      <DashboardHeader parentEmail={parentEmail} />
 
-        {/* Placeholder card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Parent Dashboard</CardTitle>
-            <CardDescription>
-              Session summaries and progress reports are coming in Week 3. For now, head to
-              the tutoring session to get started!
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <Button
-              onClick={() => router.push('/character-select')}
-              className="w-full"
-            >
-              Start a Tutoring Session 🚀
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleSignOut}
-              className="w-full"
-            >
-              Sign Out
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Session history — populated by SessionSummaryCard list in PR 3-10 */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Sessions</CardTitle>
+          <CardDescription>
+            Each session your child completes will appear here with an AI-generated summary.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* SessionHistoryList component added in PR 3-10 */}
+          <p className="py-8 text-center text-sm text-slate-400">
+            No sessions yet — start a tutoring session to see summaries here!
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
