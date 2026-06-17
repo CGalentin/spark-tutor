@@ -9,6 +9,8 @@ export type {
   ApiResult,
   ChatRequest,
   ChatResponse,
+  RagRequest,
+  RagResponse,
   SummaryRequest,
   SummaryResponse,
 } from './api';
