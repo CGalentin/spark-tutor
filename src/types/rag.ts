@@ -15,7 +15,7 @@ export interface CurriculumChunk {
   id: string;
   /** The raw text content of this chunk (200–400 words). */
   text: string;
-  /** Gemini text-embedding-004 vector — 768 dimensions. */
+  /** Gemini gemini-embedding-001 vector — 3072 dimensions. */
   embedding: number[];
   /** Subject area: math or reading. Used as a pre-filter before similarity ranking. */
   subject: Subject;
