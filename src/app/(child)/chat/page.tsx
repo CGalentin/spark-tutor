@@ -137,7 +137,7 @@ export default function ChatPage() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ sessionId, starsEarned, messageCount }),
+          body: JSON.stringify({ sessionId, starsEarned, messageCount, messages }),
         });
       }
     } catch {
