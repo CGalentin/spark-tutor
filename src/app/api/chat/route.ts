@@ -14,7 +14,8 @@
 //     -d '{"message":"What is 2 + 2?","characterId":"blip","subject":"math","messages":[]}'
 
 import { type NextRequest } from 'next/server';
-import { adminAuth } from '@/lib/firebase/admin';
+import { FieldValue } from 'firebase-admin/firestore';
+import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
 import { embedText } from '@/lib/gemini/embed';
@@ -33,19 +34,12 @@ function sseEvent(payload: Record<string, unknown>): Uint8Array {
 
 export async function POST(request: NextRequest) {
   // ── 1. Verify Firebase Auth token ────────────────────────────────────────
-  const authHeader = request.headers.get('Authorization');
-  if (authHeader === null || !authHeader.startsWith('Bearer ')) {
-    return Response.json(
-      { success: false, error: 'Missing or malformed Authorization header.' },
-      { status: 401 },
-    );
-  }
-
+  let parentUID: string;
   try {
-    await adminAuth.verifyIdToken(authHeader.slice(7));
-  } catch {
+    parentUID = await verifyAuthToken(request.headers.get('Authorization'));
+  } catch (err) {
     return Response.json(
-      { success: false, error: 'Invalid or expired Firebase ID token.' },
+      { success: false, error: (err as Error).message },
       { status: 401 },
     );
   }
@@ -61,7 +55,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { message, characterId, subject, messages } = body;
+  const { message, sessionId, characterId, subject, messages } = body;
 
   if (
     typeof message !== 'string' || message.trim().length === 0 ||
@@ -135,6 +129,20 @@ export async function POST(request: NextRequest) {
 
         // Await the full response so we can check starEarned before closing
         await claudeStream.finalMessage();
+
+        // Increment the session message count in Firestore (non-fatal if it fails)
+        if (typeof sessionId === 'string' && sessionId.length > 0) {
+          try {
+            const sessionRef = adminDb
+              .collection('users')
+              .doc(parentUID)
+              .collection('sessions')
+              .doc(sessionId);
+            await sessionRef.update({ messageCount: FieldValue.increment(1) });
+          } catch {
+            // Firestore write failure must not break the chat stream
+          }
+        }
 
         // Signal completion and whether a star was earned
         // The child UI listens for [STAR EARNED] to trigger the star animation
