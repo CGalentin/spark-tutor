@@ -42,6 +42,35 @@ export interface RagResponse {
   chunks: string[];
 }
 
+/** Request body sent to POST /api/session/start. */
+export interface SessionStartRequest {
+  /** The character type (e.g. 'robot', 'fox') the child selected. */
+  characterType: string;
+  /** The fictional name the child gave their mascot. */
+  characterName: string;
+  /** The subject the child chose for this session. */
+  subject: Subject;
+}
+
+/** Successful response from POST /api/session/start. */
+export interface SessionStartResponse {
+  /** The Firestore document ID of the newly created session. */
+  sessionId: string;
+}
+
+/** Request body sent to POST /api/session/end. */
+export interface SessionEndRequest {
+  sessionId: string;
+  parentUID: string;
+  starsEarned: number;
+  messageCount: number;
+}
+
+/** Successful response from POST /api/session/end. */
+export interface SessionEndResponse {
+  sessionId: string;
+}
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;

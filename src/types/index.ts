@@ -11,6 +11,10 @@ export type {
   ChatResponse,
   RagRequest,
   RagResponse,
+  SessionStartRequest,
+  SessionStartResponse,
+  SessionEndRequest,
+  SessionEndResponse,
   SummaryRequest,
   SummaryResponse,
 } from './api';
