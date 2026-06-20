@@ -28,7 +28,7 @@ export default function CharacterSelectPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-violet-100 to-white px-4 py-10">
+    <main className="flex min-h-dvh flex-col items-center bg-gradient-to-b from-violet-100 to-white px-4 py-10">
       {/* Header */}
       <div className="mb-2 text-5xl" aria-hidden="true">
         ✨

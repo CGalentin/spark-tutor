@@ -278,7 +278,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
+    <div className="flex h-dvh flex-col bg-gradient-to-b from-violet-50 to-white">
       {/* Star burst overlay — triggered once per star earned */}
       <StarBurst triggered={starBurstTriggered} onComplete={handleStarBurstComplete} />
       {/* Header: mascot identity + stars earned this session */}
@@ -332,7 +332,7 @@ export default function ChatPage() {
           </div>
 
           {/* End session button below chat input */}
-          <div className="shrink-0 px-4 pb-4">
+          <div className="shrink-0 px-4 pb-[max(16px,env(safe-area-inset-bottom))]">
             <EndSessionButton
               disabled={isChatLoading || isSessionEnding}
               onEndSession={handleEndSession}
