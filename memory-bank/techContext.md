@@ -25,6 +25,8 @@ zustand                 ← state management
 clsx                    ← conditional classnames
 tailwind-merge          ← merge Tailwind classes without conflicts
 shadcn/ui (4.11.0)      ← component library (Card, Badge, Button, Input installed)
+@upstash/ratelimit      ← sliding window rate limiter for AI endpoints
+@upstash/redis          ← Upstash Redis REST client (used by ratelimit)
 
 # devDependencies (scripts only — not bundled into the app)
 pdf-parse@1.1.1         ← PDF text extraction (pinned — v2 changed the API)
@@ -53,6 +55,10 @@ FIREBASE_ADMIN_PRIVATE_KEY          ✅ filled
 # AI APIs (server-side only)
 ANTHROPIC_API_KEY                   ✅ filled
 GEMINI_API_KEY                      ✅ filled
+
+# Upstash Redis (server-side only — rate limiting)
+UPSTASH_REDIS_REST_URL              ⚠️ needs value (create free DB at console.upstash.com)
+UPSTASH_REDIS_REST_TOKEN            ⚠️ needs value
 ```
 
 ## Firebase Project

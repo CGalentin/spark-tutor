@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (9/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (10/15 PRs done)**
 
 ---
 
@@ -56,7 +56,14 @@
 
 ## Up Next — Week 4 (continued)
 
-10. **PR 4-10** · Rate Limiting (`feature/rate-limiting`) ← START HERE
+- [x] PR 4-10 · Rate Limiting (`feature/rate-limiting`)
+  - `src/lib/upstash/ratelimit.ts` — `chatRatelimit` (30 req/user/hr) + `summaryRatelimit` (10 req/user/hr)
+  - Fail-open design: null when env vars absent (local dev safe, no crash)
+  - `/api/chat` step 2: rate check before body parse; 429 with child-friendly message
+  - `/api/summary` step 2: rate check before body parse; 429 with plain-English message
+  - ⚠️ Upstash credentials still needed in `.env.local` + Vercel env vars
+
+11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`) ← START HERE
 11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`)
 12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`)
 13. **PR 4-13** · Final End-to-End Test (`dev`)
@@ -66,7 +73,7 @@
 ---
 
 ## Active Branch
-`dev` — create `feature/rate-limiting` next
+`dev` — create `feature/code-quality` next
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

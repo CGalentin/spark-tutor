@@ -653,15 +653,18 @@
 
 ---
 
-### PR 4-10 · Rate Limiting
+### PR 4-10 · Rate Limiting ✅
 **Branch:** `feature/rate-limiting`
 
-- [ ] Install Upstash rate limiter: `npm install @upstash/ratelimit @upstash/redis`
-- [ ] Add Upstash credentials to `.env.local` and `.env.example`
-- [ ] Add rate limiting to `/api/chat` — max 30 requests per user per hour
-- [ ] Add rate limiting to `/api/summary` — max 10 per user per hour
-- [ ] Return `429 Too Many Requests` with friendly message when limit hit
-- [ ] Commit: `feat(api): add rate limiting to ai endpoints with upstash`
+- [x] Installed `@upstash/ratelimit` and `@upstash/redis` (4 packages added)
+- [x] Created `src/lib/upstash/ratelimit.ts` — `chatRatelimit` (30 req/user/hour) + `summaryRatelimit` (10 req/user/hour); fail-open design when env vars absent (safe for local dev)
+- [x] Added `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` placeholders to `.env.example` and `.env.local`
+- [x] Applied `chatRatelimit` to `/api/chat` as step 2 (after auth verify, before body parse) — returns 429 with child-friendly message
+- [x] Applied `summaryRatelimit` to `/api/summary` as step 2 — returns 429 with plain-English message
+- [x] 429 responses are caught by existing client error handling (`response.ok` check triggers warm mascot fallback)
+- [x] `npx tsc --noEmit` — zero errors ✅
+- [x] Commit: `feat(api): add rate limiting to ai endpoints with upstash`
+- ⚠️ **Action required:** Create a free Upstash database at https://console.upstash.com/ and fill in `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in `.env.local` and Vercel env vars before deploying
 
 ---
 
