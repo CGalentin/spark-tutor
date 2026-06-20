@@ -139,7 +139,7 @@ export function SignupForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="justify-center">
+      <CardFooter className="flex flex-col items-center gap-2">
         <p className="text-sm text-muted-foreground">
           Already have an account?{' '}
           <Link
@@ -148,6 +148,16 @@ export function SignupForm() {
           >
             Sign in
           </Link>
+        </p>
+        <p className="text-xs text-muted-foreground">
+          By creating an account you agree to our{' '}
+          <Link
+            href="/privacy"
+            className="underline-offset-4 hover:underline"
+          >
+            Privacy Policy
+          </Link>
+          .
         </p>
       </CardFooter>
     </Card>
