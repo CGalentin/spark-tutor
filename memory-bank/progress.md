@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — In Progress (8/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (9/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -83,7 +83,7 @@
 - Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
 - Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
 
-### Week 4 (in progress — Jun 20)
+### Week 4 (in progress — Jun 20, 9/15 done)
 - **MCP math tool** — `/api/mcp/math-problem` generates grade-appropriate problems; answer never returned to client
 - **MCP routing in chat** — `detectsProblemRequest()` triggers MCP before RAG when child asks for a practice problem
 - **SVG avatars** — 6 geometric SVG components (`BlipAvatar`, `FinnAvatar`, `ZorroAvatar`, `LunaAvatar`, `PipAvatar`, `NovaAvatar`)
@@ -92,6 +92,7 @@
 - **CharacterCard + MascotAvatar** — emoji placeholders replaced with SVG avatars; thinking/celebrating wired to chat state
 - **Mobile polish (child)** — `h-dvh`, safe-area insets, touch targets verified, font sizes 16px+
 - **Mobile polish (parent)** — `min-h-dvh`, nav spacing, `SessionSummaryCard` header wraps on narrow screens
+- **Error & loading UI** — `ErrorMessage.tsx` (child + parent variants); `loading.tsx` + `error.tsx` for both chat and dashboard routes
 
 ### Week 3 (complete — Jun 17)
 - **verifyAuthToken helper** — shared token verification across all protected API routes
@@ -130,7 +131,7 @@
 | 4-06 | Mobile Polish — Child UI | `feature/mobile-polish-child` | ✅ Done |
 | 4-07 | Mobile Polish — Parent UI | `feature/mobile-polish-parent` | ✅ Done |
 | 4-08 | Privacy Policy Page | `feature/privacy-policy` | ✅ Done |
-| 4-09 | Error States & Loading UI | `feature/error-and-loading` | ⏳ Pending |
+| 4-09 | Error States & Loading UI | `feature/error-and-loading` | ✅ Done |
 | 4-10 | Rate Limiting | `feature/rate-limiting` | ⏳ Pending |
 | 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ⏳ Pending |
 | 4-12 | Husky Pre-commit Hook | `feature/husky` | ⏳ Pending |
@@ -141,7 +142,6 @@
 ---
 
 ## What Does Not Work Yet
-- No error boundary pages (PR 4-09)
 - No rate limiting on AI endpoints (PR 4-10)
 - No Prettier config or Husky pre-commit hooks (PRs 4-11, 4-12)
 

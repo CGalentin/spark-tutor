@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (8/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (9/15 PRs done)**
 
 ---
 
@@ -44,12 +44,19 @@
   - COPPA callout box, third-party services section, 30-day deletion SLA, contact email
   - Privacy link in auth layout footer (both login + signup) + "agree to Privacy Policy" in SignupForm footer
 
+- [x] PR 4-09 · Error States & Loading UI (`feature/error-and-loading`)
+  - `ErrorMessage.tsx` — two variants: `child` (bright/emoji/big button) and `parent` (plain-English/neutral Shadcn-aligned)
+  - `src/app/(child)/chat/loading.tsx` — wraps LoadingSpinner in violet gradient `h-dvh` container
+  - `src/app/(child)/chat/error.tsx` — `'use client'` Next.js error boundary; child-friendly message + reset
+  - `src/app/(parent)/dashboard/loading.tsx` — LoadingSpinner with "Loading your dashboard..."
+  - `src/app/(parent)/dashboard/error.tsx` — `'use client'` Next.js error boundary; parent-friendly message + reset
+  - Verified chat/page.tsx line 266 already has warm mascot fallback for API failures
+
 ---
 
 ## Up Next — Week 4 (continued)
 
-9. **PR 4-09** · Error States & Loading UI (`feature/error-and-loading`) ← START HERE
-10. **PR 4-10** · Rate Limiting (`feature/rate-limiting`)
+10. **PR 4-10** · Rate Limiting (`feature/rate-limiting`) ← START HERE
 11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`)
 12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`)
 13. **PR 4-13** · Final End-to-End Test (`dev`)
@@ -59,7 +66,7 @@
 ---
 
 ## Active Branch
-`dev` — create `feature/error-and-loading` next
+`dev` — create `feature/rate-limiting` next
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

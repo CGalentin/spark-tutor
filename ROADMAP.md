@@ -638,16 +638,18 @@
 
 ---
 
-### PR 4-09 · Error States & Loading UI
+### PR 4-09 · Error States & Loading UI ✅
 **Branch:** `feature/error-and-loading`
 
-- [ ] Create `/src/components/shared/LoadingSpinner.tsx` — fun spinning star for child UI
-- [ ] Create `/src/components/shared/ErrorMessage.tsx` — child-friendly error with retry button
-- [ ] Add `loading.tsx` to `/app/(child)/chat/` route segment
-- [ ] Add `error.tsx` to `/app/(child)/chat/` route segment
-- [ ] Add `loading.tsx` to `/app/(parent)/dashboard/` route segment
-- [ ] Verify mascot shows friendly message on API failure (not a raw error)
-- [ ] Commit: `feat(shared): add loading and error state components for child and parent`
+- [x] `LoadingSpinner.tsx` already existed at `src/components/shared/` — not recreated
+- [x] Created `src/components/shared/ErrorMessage.tsx` — child variant (bright, emoji, big retry button) + parent variant (plain-English, Shadcn-aligned neutral style)
+- [x] Added `src/app/(child)/chat/loading.tsx` — wraps `LoadingSpinner` in `h-dvh` violet gradient container
+- [x] Added `src/app/(child)/chat/error.tsx` — Next.js `'use client'` error boundary; uses `ErrorMessage` variant="child" with reset callback
+- [x] Added `src/app/(parent)/dashboard/loading.tsx` — wraps `LoadingSpinner` with "Loading your dashboard..." message
+- [x] Added `src/app/(parent)/dashboard/error.tsx` — Next.js `'use client'` error boundary; uses `ErrorMessage` variant="parent" with reset callback
+- [x] Verified: `chat/page.tsx` line 266 already shows `"Hmm, let me think for a second... try asking me again! 🤔"` on API failure ✅
+- [x] `npx tsc --noEmit` — zero errors ✅
+- [x] Commit: `feat(shared): add loading and error state components for child and parent`
 
 ---
 
