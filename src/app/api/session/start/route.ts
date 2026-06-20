@@ -36,14 +36,16 @@ export async function POST(request: NextRequest): Promise<Response> {
   const { characterType, characterName, subject } = body;
 
   if (
-    typeof characterType !== 'string' || characterType.trim().length === 0 ||
+    typeof characterType !== 'string' ||
+    characterType.trim().length === 0 ||
     typeof characterName !== 'string' ||
     (subject !== 'math' && subject !== 'reading')
   ) {
     return Response.json(
       {
         success: false,
-        error: 'Required fields: characterType (string), characterName (string), subject ("math"|"reading").',
+        error:
+          'Required fields: characterType (string), characterName (string), subject ("math"|"reading").',
       } satisfies ApiResult<never>,
       { status: 400 },
     );
@@ -67,8 +69,11 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
 
     const responseData: SessionStartResponse = { sessionId: sessionRef.id };
-    return Response.json({ success: true, data: responseData } satisfies ApiResult<SessionStartResponse>);
-  } catch (err) {
+    return Response.json({
+      success: true,
+      data: responseData,
+    } satisfies ApiResult<SessionStartResponse>);
+  } catch {
     return Response.json(
       { success: false, error: 'Failed to create session.' } satisfies ApiResult<never>,
       { status: 500 },

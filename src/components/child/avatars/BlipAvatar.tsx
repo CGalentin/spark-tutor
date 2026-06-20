@@ -33,7 +33,13 @@ export function BlipAvatar({ animationClass = '', size = 120 }: BlipAvatarProps)
       <circle cx="46" cy="41" r="4" fill="#1E40AF" />
       <circle cx="74" cy="41" r="4" fill="#1E40AF" />
       {/* Smile */}
-      <path d="M44 56 Q60 66 76 56" stroke="#BFDBFE" strokeWidth="3" strokeLinecap="round" fill="none" />
+      <path
+        d="M44 56 Q60 66 76 56"
+        stroke="#BFDBFE"
+        strokeWidth="3"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Antenna */}
       <line x1="60" y1="22" x2="60" y2="8" stroke="#2563EB" strokeWidth="4" strokeLinecap="round" />
       <circle cx="60" cy="6" r="5" fill="#60A5FA" />

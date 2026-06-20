@@ -21,7 +21,9 @@ interface ChatMessageListProps {
 function TypingIndicator({ colorClass }: { colorClass: string }) {
   return (
     <div className="self-start">
-      <div className={cn('flex items-center gap-1.5 rounded-3xl rounded-bl-md px-5 py-4', colorClass)}>
+      <div
+        className={cn('flex items-center gap-1.5 rounded-3xl rounded-bl-md px-5 py-4', colorClass)}
+      >
         {[0, 1, 2].map((i) => (
           <span
             key={i}
@@ -38,11 +40,7 @@ function TypingIndicator({ colorClass }: { colorClass: string }) {
 }
 
 /** Renders the full conversation as a scrollable list of ChatBubbles. */
-export function ChatMessageList({
-  messages,
-  mascotColorClass,
-  isTyping,
-}: ChatMessageListProps) {
+export function ChatMessageList({ messages, mascotColorClass, isTyping }: ChatMessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Scroll to the newest message whenever messages update or typing state changes
@@ -53,17 +51,11 @@ export function ChatMessageList({
   return (
     <div className="flex flex-1 flex-col gap-3 overflow-x-hidden overflow-y-auto px-4 py-4">
       {messages.length === 0 && (
-        <p className="text-center text-lg text-slate-400 mt-8">
-          Say hi to start learning! 👋
-        </p>
+        <p className="text-center text-lg text-slate-400 mt-8">Say hi to start learning! 👋</p>
       )}
 
       {messages.map((message) => (
-        <ChatBubble
-          key={message.id}
-          message={message}
-          mascotColorClass={mascotColorClass}
-        />
+        <ChatBubble key={message.id} message={message} mascotColorClass={mascotColorClass} />
       ))}
 
       {isTyping && <TypingIndicator colorClass={mascotColorClass} />}

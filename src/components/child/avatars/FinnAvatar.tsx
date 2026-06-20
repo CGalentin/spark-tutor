@@ -40,7 +40,13 @@ export function FinnAvatar({ animationClass = '', size = 120 }: FinnAvatarProps)
       {/* Nose */}
       <ellipse cx="60" cy="56" rx="3" ry="2" fill="#92400E" />
       {/* Smile */}
-      <path d="M52 62 Q60 68 68 62" stroke="#92400E" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path
+        d="M52 62 Q60 68 68 62"
+        stroke="#92400E"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Tail */}
       <ellipse cx="88" cy="100" rx="14" ry="10" fill="#F97316" transform="rotate(-30 88 100)" />
       <ellipse cx="88" cy="100" rx="7" ry="5" fill="#FED7AA" transform="rotate(-30 88 100)" />

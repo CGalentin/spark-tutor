@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 
 /** Section heading with consistent styling. */
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="mb-3 mt-8 text-xl font-bold text-slate-800 first:mt-0">{children}</h2>
-  );
+  return <h2 className="mb-3 mt-8 text-xl font-bold text-slate-800 first:mt-0">{children}</h2>;
 }
 
 /** Styled bullet list. */
@@ -47,7 +45,9 @@ export default function PrivacyPage() {
           >
             ← Back to Sign In
           </Link>
-          <div className="mb-3 text-4xl" aria-hidden="true">🔒</div>
+          <div className="mb-3 text-4xl" aria-hidden="true">
+            🔒
+          </div>
           <h1 className="text-3xl font-bold text-slate-900">Privacy Policy</h1>
           <p className="mt-2 text-slate-500">
             Last updated: June {currentYear} &middot; Spark Tutor
@@ -95,9 +95,9 @@ export default function PrivacyPage() {
             items={[
               "Your child's real name — we never ask for it.",
               "Your child's age, grade level, school, or location.",
-              "Photos, voice recordings, or videos of any kind.",
-              "Device identifiers, advertising IDs, or tracking cookies.",
-              "Any personal information from a child — ever.",
+              'Photos, voice recordings, or videos of any kind.',
+              'Device identifiers, advertising IDs, or tracking cookies.',
+              'Any personal information from a child — ever.',
               'Credit card or payment information — Spark Tutor is free.',
             ]}
           />
@@ -116,9 +116,9 @@ export default function PrivacyPage() {
           {/* Data retention */}
           <SectionHeading>Data Retention</SectionHeading>
           <p className="text-slate-600">
-            Session data is stored until you delete your parent account. You can request deletion
-            of all your data at any time by emailing us (see contact below). We will permanently
-            delete your account and all associated session data within 30 days of your request.
+            Session data is stored until you delete your parent account. You can request deletion of
+            all your data at any time by emailing us (see contact below). We will permanently delete
+            your account and all associated session data within 30 days of your request.
           </p>
 
           {/* Third-party services */}

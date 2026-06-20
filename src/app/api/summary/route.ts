@@ -187,7 +187,5 @@ export async function POST(request: NextRequest): Promise<Response> {
     encouragementNote: summaryData.encouragementNote,
   };
 
-  return Response.json(
-    { success: true, data: responseData } satisfies ApiResult<SummaryResponse>,
-  );
+  return Response.json({ success: true, data: responseData } satisfies ApiResult<SummaryResponse>);
 }

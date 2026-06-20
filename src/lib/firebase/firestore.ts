@@ -4,7 +4,6 @@
 import {
   doc,
   getDoc,
-  updateDoc,
   collection,
   query,
   orderBy,
@@ -31,7 +30,6 @@ export async function getSession(
 
     return { id: sessionSnap.id, ...sessionSnap.data() };
   } catch (error) {
-    console.error('Error fetching session:', error);
     throw error;
   }
 }
@@ -45,7 +43,6 @@ export async function getSessions(parentUID: string): Promise<DocumentData[]> {
 
     return querySnap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
   } catch (error) {
-    console.error('Error fetching sessions:', error);
     throw error;
   }
 }
@@ -74,7 +71,8 @@ export function subscribeToSessions(
           characterType: (data['characterType'] as string | undefined) ?? '',
           characterName: (data['characterName'] as string | undefined) ?? '',
           subject: data['subject'] as Session['subject'],
-          startedAt: (data['startedAt'] as { toDate: () => Date } | undefined)?.toDate() ?? new Date(),
+          startedAt:
+            (data['startedAt'] as { toDate: () => Date } | undefined)?.toDate() ?? new Date(),
           endedAt: (data['endedAt'] as { toDate: () => Date } | undefined)?.toDate(),
           messageCount: (data['messageCount'] as number | undefined) ?? 0,
           starsEarned: (data['starsEarned'] as number | undefined) ?? 0,
@@ -84,8 +82,9 @@ export function subscribeToSessions(
                 areasForPractice: (data['summary']['areasForPractice'] as string[]) ?? [],
                 encouragementNote: (data['summary']['encouragementNote'] as string) ?? '',
                 generatedAt:
-                  (data['summary']['generatedAt'] as { toDate: () => Date } | undefined)?.toDate() ??
-                  new Date(),
+                  (
+                    data['summary']['generatedAt'] as { toDate: () => Date } | undefined
+                  )?.toDate() ?? new Date(),
               }
             : undefined,
         } satisfies Session;

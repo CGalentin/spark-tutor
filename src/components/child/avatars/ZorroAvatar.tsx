@@ -42,7 +42,13 @@ export function ZorroAvatar({ animationClass = '', size = 120 }: ZorroAvatarProp
       <circle cx="48" cy="42" r="2" fill="white" />
       <circle cx="76" cy="42" r="2" fill="white" />
       {/* Smile */}
-      <path d="M50 66 Q60 74 70 66" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path
+        d="M50 66 Q60 74 70 66"
+        stroke="#16A34A"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Spines on head */}
       <polygon points="56,22 52,12 60,18" fill="#16A34A" />
       <polygon points="64,22 60,12 68,18" fill="#16A34A" />

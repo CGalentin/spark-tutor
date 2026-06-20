@@ -19,15 +19,10 @@ export function DashboardHeader({ parentEmail }: DashboardHeaderProps) {
     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="text-2xl font-bold text-slate-800">Parent Dashboard</h1>
-        {parentEmail !== null && (
-          <p className="mt-0.5 text-sm text-slate-500">{parentEmail}</p>
-        )}
+        {parentEmail !== null && <p className="mt-0.5 text-sm text-slate-500">{parentEmail}</p>}
       </div>
 
-      <Button
-        onClick={() => router.push('/character-select')}
-        className="mt-3 sm:mt-0"
-      >
+      <Button onClick={() => router.push('/character-select')} className="mt-3 sm:mt-0">
         Start a Session 🚀
       </Button>
     </div>

@@ -12,11 +12,7 @@ interface ErrorMessageProps {
 }
 
 /** Displays an error state with an optional retry action. */
-export function ErrorMessage({
-  message,
-  onRetry,
-  variant = 'parent',
-}: ErrorMessageProps) {
+export function ErrorMessage({ message, onRetry, variant = 'parent' }: ErrorMessageProps) {
   if (variant === 'child') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gradient-to-b from-violet-50 to-white px-6 text-center">

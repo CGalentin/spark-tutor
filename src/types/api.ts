@@ -5,9 +5,7 @@ import type { Message, Subject } from './session';
 
 /** Standard API response wrapper used by all /app/api routes.
  *  Discriminated union makes it easy to check success before accessing data. */
-export type ApiResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+export type ApiResult<T> = { success: true; data: T } | { success: false; error: string };
 
 /** Request body sent to POST /api/chat. */
 export interface ChatRequest {

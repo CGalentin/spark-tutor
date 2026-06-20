@@ -32,7 +32,9 @@ export function buildSystemPrompt({
   const character = getCharacterById(characterId);
 
   if (character === undefined) {
-    throw new Error(`Unknown characterId: "${characterId}". Check CHARACTERS in constants/characters.ts.`);
+    throw new Error(
+      `Unknown characterId: "${characterId}". Check CHARACTERS in constants/characters.ts.`,
+    );
   }
 
   const subjectFocus =
@@ -48,9 +50,7 @@ export function buildSystemPrompt({
 
   // Layer 4 — RAG curriculum chunks (omitted when MCP context is present)
   if (ragContext !== undefined && ragContext.trim().length > 0) {
-    layers.push(
-      `CURRICULUM CONTEXT (ground your responses in this material):\n${ragContext}`,
-    );
+    layers.push(`CURRICULUM CONTEXT (ground your responses in this material):\n${ragContext}`);
   }
 
   // Layer 5 — MCP math problem (replaces RAG when child requests a practice problem)

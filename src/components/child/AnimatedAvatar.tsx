@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getAvatarComponent } from './avatars';
 
 /** The three avatar animation states. */
@@ -43,6 +43,9 @@ export function AnimatedAvatar({
   const [currentClass, setCurrentClass] = useState<string>(getAnimationClass(animationState));
 
   useEffect(() => {
+    // currentClass is internal animation-cycle state that also needs a delayed timer
+    // revert for celebration → idle. useEffect + setState is the correct pattern here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentClass(getAnimationClass(animationState));
 
     if (animationState === 'celebrating') {
@@ -56,7 +59,7 @@ export function AnimatedAvatar({
     return undefined;
   }, [animationState]);
 
-  const AvatarComponent = getAvatarComponent(characterId);
+  const AvatarComponent = useMemo(() => getAvatarComponent(characterId), [characterId]);
 
   if (AvatarComponent === null) {
     return (
@@ -69,5 +72,6 @@ export function AnimatedAvatar({
     );
   }
 
+  // eslint-disable-next-line react-hooks/static-components
   return <AvatarComponent animationClass={currentClass} size={size} />;
 }

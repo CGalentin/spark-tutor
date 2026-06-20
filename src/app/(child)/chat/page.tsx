@@ -77,9 +77,12 @@ export default function ChatPage() {
   }, [selectedCharacterId, router]);
 
   // ── Sync mascot animation to loading state ────────────────────────────────
-  // The avatar thinks while the AI is generating a response
+  // The avatar thinks while the AI is generating a response.
+  // avatarState cannot be purely derived from isChatLoading: it also transitions to
+  // 'celebrating' via handleSend on star events, so a useEffect sync is the right pattern.
   useEffect(() => {
     if (isChatLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAvatarState('thinking');
     } else if (avatarState === 'thinking') {
       setAvatarState('idle');
@@ -249,12 +252,12 @@ export default function ChatPage() {
             };
             setMessages((prev) => [...prev, mascotMessage]);
 
-                    // Claude embeds [STAR EARNED] in the text when the child nails an answer
-                    if (event.starEarned) {
-                      setStarBurstTriggered(true);
-                      setAvatarState('celebrating');
-                      await awardStar();
-                    }
+            // Claude embeds [STAR EARNED] in the text when the child nails an answer
+            if (event.starEarned) {
+              setStarBurstTriggered(true);
+              setAvatarState('celebrating');
+              await awardStar();
+            }
             break streamLoop;
           } else if (event.type === 'error') {
             throw new Error(event.error);
@@ -263,7 +266,7 @@ export default function ChatPage() {
       }
     } catch {
       // Show a warm, child-safe message — never expose technical error details
-      setChatError("Hmm, let me think for a second... try asking me again! 🤔");
+      setChatError('Hmm, let me think for a second... try asking me again! 🤔');
     } finally {
       setIsChatLoading(false);
     }

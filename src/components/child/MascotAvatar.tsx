@@ -15,7 +15,11 @@ interface MascotAvatarProps {
 }
 
 /** Displays the selected mascot with animated SVG and the child's chosen name. */
-export function MascotAvatar({ character, mascotName, animationState = 'idle' }: MascotAvatarProps) {
+export function MascotAvatar({
+  character,
+  mascotName,
+  animationState = 'idle',
+}: MascotAvatarProps) {
   const displayName = mascotName.trim().length > 0 ? mascotName : character.name;
 
   return (
@@ -28,11 +32,7 @@ export function MascotAvatar({ character, mascotName, animationState = 'idle' }:
         )}
         aria-label={`${displayName} the ${character.type}`}
       >
-        <AnimatedAvatar
-          characterId={character.id}
-          animationState={animationState}
-          size={96}
-        />
+        <AnimatedAvatar characterId={character.id} animationState={animationState} size={96} />
       </div>
 
       {/* Mascot name badge */}

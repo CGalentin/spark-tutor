@@ -18,10 +18,42 @@ export function PipAvatar({ animationClass = '', size = 120 }: PipAvatarProps) {
       className={animationClass}
     >
       {/* Wings */}
-      <ellipse cx="26" cy="60" rx="20" ry="28" fill="#DDD6FE" opacity="0.85" transform="rotate(15 26 60)" />
-      <ellipse cx="94" cy="60" rx="20" ry="28" fill="#DDD6FE" opacity="0.85" transform="rotate(-15 94 60)" />
-      <ellipse cx="30" cy="80" rx="12" ry="18" fill="#EDE9FE" opacity="0.7" transform="rotate(20 30 80)" />
-      <ellipse cx="90" cy="80" rx="12" ry="18" fill="#EDE9FE" opacity="0.7" transform="rotate(-20 90 80)" />
+      <ellipse
+        cx="26"
+        cy="60"
+        rx="20"
+        ry="28"
+        fill="#DDD6FE"
+        opacity="0.85"
+        transform="rotate(15 26 60)"
+      />
+      <ellipse
+        cx="94"
+        cy="60"
+        rx="20"
+        ry="28"
+        fill="#DDD6FE"
+        opacity="0.85"
+        transform="rotate(-15 94 60)"
+      />
+      <ellipse
+        cx="30"
+        cy="80"
+        rx="12"
+        ry="18"
+        fill="#EDE9FE"
+        opacity="0.7"
+        transform="rotate(20 30 80)"
+      />
+      <ellipse
+        cx="90"
+        cy="80"
+        rx="12"
+        ry="18"
+        fill="#EDE9FE"
+        opacity="0.7"
+        transform="rotate(-20 90 80)"
+      />
       {/* Body */}
       <ellipse cx="60" cy="88" rx="18" ry="16" fill="#A855F7" />
       {/* Dress sparkle */}
@@ -41,9 +73,23 @@ export function PipAvatar({ animationClass = '', size = 120 }: PipAvatarProps) {
       <ellipse cx="40" cy="55" rx="6" ry="4" fill="#F0ABFC" opacity="0.6" />
       <ellipse cx="80" cy="55" rx="6" ry="4" fill="#F0ABFC" opacity="0.6" />
       {/* Smile */}
-      <path d="M50 58 Q60 66 70 58" stroke="#7E22CE" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path
+        d="M50 58 Q60 66 70 58"
+        stroke="#7E22CE"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Wand */}
-      <line x1="90" y1="30" x2="104" y2="16" stroke="#FBBF24" strokeWidth="3" strokeLinecap="round" />
+      <line
+        x1="90"
+        y1="30"
+        x2="104"
+        y2="16"
+        stroke="#FBBF24"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
       <polygon points="104,8 107,16 99,14 106,20 98,18" fill="#FBBF24" />
       {/* Sparkles */}
       <circle cx="16" cy="28" r="3" fill="#FDE68A" />

@@ -89,9 +89,10 @@ export async function POST(request: NextRequest): Promise<Response> {
   const { grade, topic, difficulty } = body;
 
   if (
-    grade !== 'K' && grade !== '1' ||
-    typeof topic !== 'string' || topic.trim().length === 0 ||
-    difficulty !== 'easy' && difficulty !== 'medium'
+    (grade !== 'K' && grade !== '1') ||
+    typeof topic !== 'string' ||
+    topic.trim().length === 0 ||
+    (difficulty !== 'easy' && difficulty !== 'medium')
   ) {
     return Response.json(
       {
@@ -125,7 +126,10 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     if (parsed === null) {
       return Response.json(
-        { success: false, error: 'Failed to parse problem from Claude.' } satisfies ApiResult<never>,
+        {
+          success: false,
+          error: 'Failed to parse problem from Claude.',
+        } satisfies ApiResult<never>,
         { status: 500 },
       );
     }
@@ -136,9 +140,10 @@ export async function POST(request: NextRequest): Promise<Response> {
       hint: parsed.hint,
     };
 
-    return Response.json(
-      { success: true, data: responseData } satisfies ApiResult<MathProblemResponse>,
-    );
+    return Response.json({
+      success: true,
+      data: responseData,
+    } satisfies ApiResult<MathProblemResponse>);
   } catch {
     return Response.json(
       { success: false, error: 'Failed to generate math problem.' } satisfies ApiResult<never>,

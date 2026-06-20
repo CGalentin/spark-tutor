@@ -40,10 +40,7 @@ export async function POST(request: NextRequest) {
   try {
     parentUID = await verifyAuthToken(request.headers.get('Authorization'));
   } catch (err) {
-    return Response.json(
-      { success: false, error: (err as Error).message },
-      { status: 401 },
-    );
+    return Response.json({ success: false, error: (err as Error).message }, { status: 401 });
   }
 
   // ── 2. Rate limit — 30 requests per user per hour ────────────────────────
@@ -76,12 +73,18 @@ export async function POST(request: NextRequest) {
   const { message, sessionId, characterId, subject, messages } = body;
 
   if (
-    typeof message !== 'string' || message.trim().length === 0 ||
-    typeof characterId !== 'string' || characterId.trim().length === 0 ||
+    typeof message !== 'string' ||
+    message.trim().length === 0 ||
+    typeof characterId !== 'string' ||
+    characterId.trim().length === 0 ||
     (subject !== 'math' && subject !== 'reading')
   ) {
     return Response.json(
-      { success: false, error: 'Required fields: message (string), characterId (string), subject ("math"|"reading").' },
+      {
+        success: false,
+        error:
+          'Required fields: message (string), characterId (string), subject ("math"|"reading").',
+      },
       { status: 400 },
     );
   }
@@ -126,10 +129,7 @@ export async function POST(request: NextRequest) {
   try {
     systemPrompt = buildSystemPrompt({ characterId, subject, ragContext, mcpContext });
   } catch (err) {
-    return Response.json(
-      { success: false, error: (err as Error).message },
-      { status: 400 },
-    );
+    return Response.json({ success: false, error: (err as Error).message }, { status: 400 });
   }
 
   // ── 6. Map conversation history to Claude's role format ──────────────────
@@ -189,7 +189,9 @@ export async function POST(request: NextRequest) {
         controller.close();
       } catch {
         // Mid-stream errors: send an error event so the client can show a friendly message
-        controller.enqueue(sseEvent({ type: 'error', error: 'AI response failed. Please try again.' }));
+        controller.enqueue(
+          sseEvent({ type: 'error', error: 'AI response failed. Please try again.' }),
+        );
         controller.close();
       }
     },

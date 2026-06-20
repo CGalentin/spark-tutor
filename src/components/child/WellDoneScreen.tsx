@@ -13,21 +13,24 @@ interface WellDoneScreenProps {
 
 /** Full-screen celebration card shown after the child ends their session. */
 export function WellDoneScreen({ mascotName, starsEarned }: WellDoneScreenProps) {
-  const starRow = starsEarned > 0
-    ? Array.from({ length: Math.min(starsEarned, 10) }).map((_, i) => (
-        <span key={i} className="text-4xl" aria-hidden="true">⭐</span>
-      ))
-    : null;
+  const starRow =
+    starsEarned > 0
+      ? Array.from({ length: Math.min(starsEarned, 10) }).map((_, i) => (
+          <span key={i} className="text-4xl" aria-hidden="true">
+            ⭐
+          </span>
+        ))
+      : null;
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-b from-emerald-50 to-white px-6 py-12 text-center">
-      <div className="mb-4 text-7xl" aria-hidden="true">🎉</div>
+      <div className="mb-4 text-7xl" aria-hidden="true">
+        🎉
+      </div>
 
       <h1 className="mb-3 text-4xl font-extrabold text-slate-800">Great job today!</h1>
 
-      <p className="mb-6 text-xl text-slate-500">
-        You and {mascotName} did amazing work together!
-      </p>
+      <p className="mb-6 text-xl text-slate-500">You and {mascotName} did amazing work together!</p>
 
       {starRow !== null && (
         <div

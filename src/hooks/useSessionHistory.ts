@@ -24,6 +24,7 @@ export function useSessionHistory(): UseSessionHistoryReturn {
 
   useEffect(() => {
     if (parentUID === null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
       return;
     }

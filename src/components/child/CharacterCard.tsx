@@ -41,6 +41,7 @@ export function CharacterCard({ character, isSelected, onSelect }: CharacterCard
     >
       {/* SVG avatar — falls back to emoji if component not found */}
       {AvatarComponent !== null ? (
+        // eslint-disable-next-line react-hooks/static-components
         <AvatarComponent animationClass={avatarClass} size={72} />
       ) : (
         <span className="text-5xl leading-none" role="img" aria-hidden="true">
@@ -48,9 +49,7 @@ export function CharacterCard({ character, isSelected, onSelect }: CharacterCard
         </span>
       )}
 
-      <span className="text-lg font-bold text-white drop-shadow-sm">
-        {character.name}
-      </span>
+      <span className="text-lg font-bold text-white drop-shadow-sm">{character.name}</span>
     </button>
   );
 }

@@ -40,7 +40,13 @@ export function LunaAvatar({ animationClass = '', size = 120 }: LunaAvatarProps)
       {/* Nose */}
       <ellipse cx="60" cy="61" rx="4" ry="3" fill="#BE185D" />
       {/* Smile */}
-      <path d="M52 66 Q60 74 68 66" stroke="#BE185D" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path
+        d="M52 66 Q60 74 68 66"
+        stroke="#BE185D"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
       {/* Little paws */}
       <ellipse cx="36" cy="106" rx="10" ry="7" fill="#F9A8D4" />
       <ellipse cx="84" cy="106" rx="10" ry="7" fill="#F9A8D4" />
