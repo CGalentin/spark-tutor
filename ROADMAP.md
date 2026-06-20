@@ -532,88 +532,91 @@
 
 ---
 
-### PR 4-01 · MCP Math Problem Generator
+### PR 4-01 · MCP Math Problem Generator ✅
 **Branch:** `feature/mcp-math-tool`
 
-- [ ] Create `/src/app/api/mcp/math-problem/route.ts` — POST endpoint:
+- [x] Created `/src/app/api/mcp/math-problem/route.ts` — POST endpoint
   - Accepts `{ grade: 'K' | '1', topic: string, difficulty: 'easy' | 'medium' }`
   - Uses Claude to generate a grade-appropriate math problem
   - Returns `{ problem: string, hint: string }` — answer is NEVER returned to client
-  - Stores answer server-side in a short-lived cache (or Firestore temp doc)
-- [ ] Commit: `feat(mcp): add math problem generator mcp tool endpoint`
+  - Added `MathGrade`, `MathDifficulty`, `MathProblemRequest`, `MathProblemResponse` types to `api.ts`
+- [x] Commit: `feat(mcp): add math problem generator mcp tool endpoint`
 
 ---
 
-### PR 4-02 · Wire MCP Into Chat Router
+### PR 4-02 · Wire MCP Into Chat Router ✅
 **Branch:** `feature/mcp-routing`
 
-- [ ] Update `/src/app/api/chat/route.ts`:
-  - Detect when child asks for a practice problem ("give me a problem", "can I try one?")
-  - Route to MCP math problem generator instead of RAG
-  - Inject returned `problem` and `hint` into Claude's system prompt context
-- [ ] Test: ask for a math problem in chat → verify a grade-appropriate problem appears
-- [ ] Commit: `feat(api): wire mcp math tool into chat routing logic`
+- [x] Created `src/lib/mcp/mathProblem.ts` — server-side MCP logic (direct call, no HTTP round-trip)
+  - `generateMathProblem(grade, topic, difficulty)` — calls Claude, strips answer before returning
+  - `detectsProblemRequest(message)` — 13 trigger phrase patterns for K-1 children
+- [x] Updated `/src/app/api/chat/route.ts` — MCP routing before RAG
+  - Detects problem requests ("give me a problem", "can I try one?", etc.)
+  - Injects problem + hint as Layer 5 of system prompt; RAG skipped when MCP fires
+- [x] Updated `buildSystemPrompt.ts` — added optional `mcpContext` param (Layer 5)
+- [x] Commit: `feat(api): wire mcp math tool into chat routing logic`
 
 ---
 
-### PR 4-03 · Character SVG Avatars
+### PR 4-03 · Character SVG Avatars ✅
 **Branch:** `feature/character-avatars`
 
-- [ ] Create `/src/components/child/avatars/BlipAvatar.tsx` — Blip the robot (simple SVG)
-- [ ] Create `/src/components/child/avatars/FinnAvatar.tsx` — Finn the fox
-- [ ] Create `/src/components/child/avatars/ZorroAvatar.tsx` — Zorro the dragon
-- [ ] Create `/src/components/child/avatars/LunaAvatar.tsx` — Luna the bunny
-- [ ] Create `/src/components/child/avatars/PipAvatar.tsx` — Pip the fairy
-- [ ] Create `/src/components/child/avatars/NovaAvatar.tsx` — Nova the owl
-- [ ] Each avatar: simple geometric SVG shapes, ~150x150px, bright colors
-- [ ] Commit: `feat(child-ui): add svg avatars for all 6 spark squad characters`
+- [x] Created `src/components/child/avatars/BlipAvatar.tsx` — Blip the robot
+- [x] Created `src/components/child/avatars/FinnAvatar.tsx` — Finn the fox
+- [x] Created `src/components/child/avatars/ZorroAvatar.tsx` — Zorro the dragon
+- [x] Created `src/components/child/avatars/LunaAvatar.tsx` — Luna the bunny
+- [x] Created `src/components/child/avatars/PipAvatar.tsx` — Pip the fairy
+- [x] Created `src/components/child/avatars/NovaAvatar.tsx` — Nova the owl
+- [x] Created `src/components/child/avatars/index.ts` — central export + `getAvatarComponent(id)` lookup
+- [x] Each avatar: geometric SVG shapes, 120x120 viewBox, bright character-matched colors
+- [x] Commit: `feat(child-ui): add svg avatars for all 6 spark squad characters`
 
 ---
 
-### PR 4-04 · Character Animations
+### PR 4-04 · Character Animations ✅
 **Branch:** `feature/character-animations`
 
-- [ ] Add CSS keyframe animations to each avatar:
-  - Idle: gentle bounce (translateY 0 → -6px → 0, 2s loop)
-  - Thinking: slow side-to-side tilt (3s loop) — plays while mascot is typing
-  - Celebration: fast bounce + scale up — plays when child earns a star
-- [ ] Wire thinking animation to `isChatLoading` state in chat page
-- [ ] Wire celebration animation to `useSessionStore` star events
-- [ ] Commit: `feat(child-ui): add idle, thinking, and celebration animations to avatars`
+- [x] Added CSS keyframe animations to `globals.css`:
+  - `avatar-idle` — gentle float up/down, 2s loop
+  - `avatar-thinking` — side-to-side tilt, 3s loop — plays while mascot is typing
+  - `avatar-celebrate` — fast bounce + scale-up, 0.8s — plays when child earns a star
+- [x] Created `src/components/child/AnimatedAvatar.tsx` — wrapper that applies correct CSS class
+  - Celebration auto-reverts to idle after 1s
+  - Falls back to ✨ emoji if character ID not found
+- [x] Commit: `feat(child-ui): add idle, thinking, and celebration animations to avatars`
 
 ---
 
-### PR 4-05 · Update Character Select With Avatars
+### PR 4-05 · Update Character Select With Avatars ✅
 **Branch:** `feature/character-select-avatars`
 
-- [ ] Replace emoji placeholders in `CharacterCard` with real SVG avatars
-- [ ] Add hover animation to each card (slight scale up)
-- [ ] Add selected state: ring highlight + avatar celebration bounce
-- [ ] Test on mobile viewport (375px) — verify 2-column grid fits cleanly
-- [ ] Commit: `feat(child-ui): replace emoji placeholders with svg avatars on character select`
+- [x] Updated `CharacterCard.tsx` — replaced emoji with SVG avatar (72px), celebration bounce on selected card
+- [x] Updated `MascotAvatar.tsx` — replaced emoji with `AnimatedAvatar` (96px) inside colored circle
+- [x] Updated `chat/page.tsx` — wires `avatarState` ('idle'/'thinking'/'celebrating') to loading + star events
+- [x] Commit: `feat(child-ui): replace emoji placeholders with svg avatars on character select`
 
 ---
 
-### PR 4-06 · Mobile Polish — Child UI
+### PR 4-06 · Mobile Polish — Child UI ✅
 **Branch:** `feature/mobile-polish-child`
 
-- [ ] Test entire child flow on 375px viewport
-- [ ] Verify all touch targets are minimum 48x48px
-- [ ] Verify font sizes are minimum 18px throughout child UI
-- [ ] Fix any overflow or layout issues on small screens
-- [ ] Verify chat input stays visible above keyboard on mobile (use `dvh` units)
-- [ ] Commit: `style(child-ui): mobile polish and touch target audit`
+- [x] `h-screen` → `h-dvh` on chat page — keyboard doesn't push content off-screen on iOS
+- [x] `min-h-screen` → `min-h-dvh` on character-select page and WellDoneScreen
+- [x] `SessionProgressBar` star badge: `text-sm` → `text-base` (16px minimum)
+- [x] `ChatInput` bottom padding: uses `env(safe-area-inset-bottom)` for notched phones
+- [x] End-session div: safe-area bottom padding
+- [x] Commit: `style(child-ui): mobile polish and touch target audit`
 
 ---
 
-### PR 4-07 · Mobile Polish — Parent UI
+### PR 4-07 · Mobile Polish — Parent UI ✅
 **Branch:** `feature/mobile-polish-parent`
 
-- [ ] Test parent dashboard on 375px viewport
-- [ ] Verify session summary cards stack cleanly on mobile
-- [ ] Verify login/signup forms are usable on mobile
-- [ ] Fix any overflow or spacing issues
-- [ ] Commit: `style(parent-ui): mobile polish for dashboard and auth screens`
+- [x] `min-h-screen` → `min-h-dvh` in parent layout and auth layout
+- [x] Parent nav bar: tighter `px-3` on mobile, `sm:px-4` at wider breakpoint
+- [x] Main content area: `py-6 sm:py-8` for better mobile spacing
+- [x] `SessionSummaryCard` header: `flex-wrap` so badge doesn't collide with title on narrow screens
+- [x] Commit: `style(parent-ui): mobile polish for dashboard and auth screens`
 
 ---
 

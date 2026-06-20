@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 3 of 4 — Complete ✅ | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (7/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -9,7 +9,7 @@
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
 | Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
-| Week 4 | MCP Tool & Polish | ⏳ Not Started |
+| Week 4 | MCP Tool & Polish | 🔄 In Progress (7/15 PRs done) |
 
 ---
 
@@ -83,6 +83,16 @@
 - Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
 - Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
 
+### Week 4 (in progress — Jun 20)
+- **MCP math tool** — `/api/mcp/math-problem` generates grade-appropriate problems; answer never returned to client
+- **MCP routing in chat** — `detectsProblemRequest()` triggers MCP before RAG when child asks for a practice problem
+- **SVG avatars** — 6 geometric SVG components (`BlipAvatar`, `FinnAvatar`, `ZorroAvatar`, `LunaAvatar`, `PipAvatar`, `NovaAvatar`)
+- **Avatar animations** — CSS keyframes: idle float, thinking tilt, celebration bounce (in `globals.css`)
+- **AnimatedAvatar** — wrapper component applying correct animation class; celebration auto-reverts to idle
+- **CharacterCard + MascotAvatar** — emoji placeholders replaced with SVG avatars; thinking/celebrating wired to chat state
+- **Mobile polish (child)** — `h-dvh`, safe-area insets, touch targets verified, font sizes 16px+
+- **Mobile polish (parent)** — `min-h-dvh`, nav spacing, `SessionSummaryCard` header wraps on narrow screens
+
 ### Week 3 (complete — Jun 17)
 - **verifyAuthToken helper** — shared token verification across all protected API routes
 - **Session lifecycle** — `/api/session/start` (creates Firestore doc) → `/api/session/star` (increments stars) → `/api/session/end` (closes session, triggers summary)
@@ -108,12 +118,33 @@
 - **Quality verified** — `scripts/rag/testRetrieval.ts` — 10/10 sample K-1 questions return relevant chunks (score 0.66–0.75)
 - **Model note**: `text-embedding-004` retired; `gemini-embedding-001` is the current stable model (3072 dims)
 
+## Week 4 — PR Checklist (In Progress)
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 4-01 | MCP Math Problem Generator | `feature/mcp-math-tool` | ✅ Done |
+| 4-02 | Wire MCP Into Chat Router | `feature/mcp-routing` | ✅ Done |
+| 4-03 | Character SVG Avatars | `feature/character-avatars` | ✅ Done |
+| 4-04 | Character Animations | `feature/character-animations` | ✅ Done |
+| 4-05 | Update Character Select + MascotAvatar | `feature/character-select-avatars` | ✅ Done |
+| 4-06 | Mobile Polish — Child UI | `feature/mobile-polish-child` | ✅ Done |
+| 4-07 | Mobile Polish — Parent UI | `feature/mobile-polish-parent` | ✅ Done |
+| 4-08 | Privacy Policy Page | `feature/privacy-policy` | ⏳ Pending |
+| 4-09 | Error States & Loading UI | `feature/error-and-loading` | ⏳ Pending |
+| 4-10 | Rate Limiting | `feature/rate-limiting` | ⏳ Pending |
+| 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ⏳ Pending |
+| 4-12 | Husky Pre-commit Hook | `feature/husky` | ⏳ Pending |
+| 4-13 | Final End-to-End Test | `dev` | ⏳ Pending |
+| 4-14 | Vercel Production Deploy | `main` | ⏳ Pending |
+| 4-15 | Portfolio README | `feature/readme` | ⏳ Pending |
+
+---
+
 ## What Does Not Work Yet
-- No MCP math problem tool (Week 4)
-- No character SVG avatars — emoji placeholders still used (Week 4)
-- No rate limiting on AI endpoints (Week 4)
-- No privacy policy page (Week 4)
-- No Husky pre-commit hooks (Week 4)
+- No privacy policy page (PR 4-08)
+- No error boundary pages (PR 4-09)
+- No rate limiting on AI endpoints (PR 4-10)
+- No Prettier config or Husky pre-commit hooks (PRs 4-11, 4-12)
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete

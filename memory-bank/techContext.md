@@ -86,12 +86,13 @@ src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer (child ch
 src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
 
 # API Routes
-src/app/api/chat/route.ts         ← SSE streaming chat; uses verifyAuthToken; increments messageCount
-src/app/api/rag/route.ts          ← Gemini embed + cosine search; returns top-3 chunks
-src/app/api/session/start/route.ts ← creates Firestore session doc, returns sessionId
-src/app/api/session/star/route.ts ← increments starsEarned in Firestore
-src/app/api/session/end/route.ts  ← writes endedAt; fire-and-forgets /api/summary
-src/app/api/summary/route.ts      ← sends transcript to Claude; saves summary.* to session doc
+src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
+src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
+src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
+src/app/api/session/start/route.ts     ← creates Firestore session doc, returns sessionId
+src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
+src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
+src/app/api/summary/route.ts           ← sends transcript to Claude; saves summary.* to session doc
 
 # Types
 src/types/index.ts                ← central re-export for all shared types
@@ -114,11 +115,16 @@ src/hooks/useStars.ts             ← awardStar() — updates store + syncs to F
 src/hooks/useSessionHistory.ts    ← onSnapshot subscription to parent's session list
 
 # Child UI components
-src/components/child/StarBurst.tsx         ← CSS keyframe pop animation overlay
-src/components/child/SessionProgressBar.tsx ← gradient progress bar + star count badge
-src/components/child/EndSessionButton.tsx  ← "All Done!" CTA
-src/components/child/WellDoneScreen.tsx    ← post-session celebration screen
-src/components/ui/                         ← Shadcn components (do not edit)
+src/components/child/StarBurst.tsx               ← CSS keyframe pop animation overlay
+src/components/child/SessionProgressBar.tsx      ← gradient progress bar + star count badge
+src/components/child/EndSessionButton.tsx        ← "All Done!" CTA
+src/components/child/WellDoneScreen.tsx          ← post-session celebration screen
+src/components/child/AnimatedAvatar.tsx          ← SVG avatar wrapper with idle/thinking/celebrating states
+src/components/child/avatars/                    ← 6 SVG avatar components + index.ts with getAvatarComponent()
+src/components/ui/                               ← Shadcn components (do not edit)
+
+# MCP
+src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
 
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
