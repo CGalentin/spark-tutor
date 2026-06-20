@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (7/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (8/15 PRs done)**
 
 ---
 
@@ -39,14 +39,16 @@
   - Tighter nav padding on mobile (`px-3 sm:px-4`)
   - SessionSummaryCard header uses `flex-wrap` to avoid overflow
 
+- [x] PR 4-08 · Privacy Policy Page (`feature/privacy-policy`)
+  - `/app/privacy/page.tsx` — plain-English COPPA page (what IS and IS NOT collected)
+  - COPPA callout box, third-party services section, 30-day deletion SLA, contact email
+  - Privacy link in auth layout footer (both login + signup) + "agree to Privacy Policy" in SignupForm footer
+
 ---
 
 ## Up Next — Week 4 (continued)
 
-8. **PR 4-08** · Privacy Policy Page (`feature/privacy-policy`) ← START HERE
-   - `/app/privacy/page.tsx` — COPPA content (what IS and IS NOT collected)
-   - Link already in auth layout footer — needs the page to exist
-9. **PR 4-09** · Error States & Loading UI (`feature/error-and-loading`)
+9. **PR 4-09** · Error States & Loading UI (`feature/error-and-loading`) ← START HERE
 10. **PR 4-10** · Rate Limiting (`feature/rate-limiting`)
 11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`)
 12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`)
@@ -57,7 +59,7 @@
 ---
 
 ## Active Branch
-`dev` — create `feature/privacy-policy` from `dev` at start of next session
+`dev` — create `feature/error-and-loading` next
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

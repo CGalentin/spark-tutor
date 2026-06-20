@@ -620,18 +620,21 @@
 
 ---
 
-### PR 4-08 · Privacy Policy Page
+### PR 4-08 · Privacy Policy Page ✅
 **Branch:** `feature/privacy-policy`
 
-- [ ] Create `/src/app/privacy/page.tsx`
-- [ ] Content must cover:
-  - [ ] What is collected: parent email, session activity data
-  - [ ] What is NOT collected: child's real name, age, photo, location, or any PII
-  - [ ] How data is used: only to show session summaries to the parent
-  - [ ] Data retention: sessions stored until parent deletes account
-  - [ ] Contact email for data requests
-- [ ] Add privacy policy link to login/signup pages
-- [ ] Commit: `docs: add privacy policy page covering coppa data practices`
+- [x] Created `/src/app/privacy/page.tsx` — plain-English COPPA policy with:
+  - What IS collected: parent email, session activity data, fictional character name
+  - What is NOT collected: child real name, age, photo, location, any PII
+  - How data is used: only to display session summaries to the parent
+  - Data retention: stored until parent deletes account (30-day deletion SLA)
+  - Third-party services: Firebase, Anthropic Claude, Vercel
+  - Contact: privacy@spark-tutor.app
+  - COPPA callout box prominently placed at the top
+- [x] Privacy link already in auth layout footer (shared by login + signup)
+- [x] Added "By creating an account you agree to our Privacy Policy" to `SignupForm` footer
+- [x] `npx tsc --noEmit` — zero errors ✅
+- [x] Commit: `docs: add privacy policy page covering coppa data practices`
 
 ---
 

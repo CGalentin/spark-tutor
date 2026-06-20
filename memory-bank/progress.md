@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — In Progress (7/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (8/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -9,7 +9,7 @@
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
 | Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
-| Week 4 | MCP Tool & Polish | 🔄 In Progress (7/15 PRs done) |
+| Week 4 | MCP Tool & Polish | 🔄 In Progress (8/15 PRs done) |
 
 ---
 
@@ -129,7 +129,7 @@
 | 4-05 | Update Character Select + MascotAvatar | `feature/character-select-avatars` | ✅ Done |
 | 4-06 | Mobile Polish — Child UI | `feature/mobile-polish-child` | ✅ Done |
 | 4-07 | Mobile Polish — Parent UI | `feature/mobile-polish-parent` | ✅ Done |
-| 4-08 | Privacy Policy Page | `feature/privacy-policy` | ⏳ Pending |
+| 4-08 | Privacy Policy Page | `feature/privacy-policy` | ✅ Done |
 | 4-09 | Error States & Loading UI | `feature/error-and-loading` | ⏳ Pending |
 | 4-10 | Rate Limiting | `feature/rate-limiting` | ⏳ Pending |
 | 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ⏳ Pending |
@@ -141,7 +141,6 @@
 ---
 
 ## What Does Not Work Yet
-- No privacy policy page (PR 4-08)
 - No error boundary pages (PR 4-09)
 - No rate limiting on AI endpoints (PR 4-10)
 - No Prettier config or Husky pre-commit hooks (PRs 4-11, 4-12)
