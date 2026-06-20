@@ -37,7 +37,7 @@ export function SessionSummaryCard({ session }: SessionSummaryCardProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
             <CardTitle className="text-base">
               {session.characterName.trim().length > 0

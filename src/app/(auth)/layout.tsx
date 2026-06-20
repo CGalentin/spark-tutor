@@ -18,7 +18,7 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <AuthRouteGuard>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12">
+      <div className="flex min-h-dvh flex-col items-center justify-center bg-slate-50 px-4 py-12">
         {/* Spark Tutor brand header */}
         <div className="mb-8 text-center">
           <div className="mb-3 text-5xl" aria-hidden="true">
