@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (10/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (11/15 PRs done)**
 
 ---
 
@@ -63,7 +63,15 @@
   - `/api/summary` step 2: rate check before body parse; 429 with plain-English message
   - ⚠️ Upstash credentials still needed in `.env.local` + Vercel env vars
 
-11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`) ← START HERE
+- [x] PR 4-11 · Prettier & Lint Cleanup (`feature/code-quality`)
+  - `.prettierrc` created (semi, singleQuote, tabWidth 2, trailingComma all, printWidth 100)
+  - `npx prettier --write src/` — 30 files reformatted
+  - Removed 3 `console.error` calls; removed unused `updateDoc` import from `firestore.ts`
+  - Fixed 8 ESLint errors across 6 files (static-components, set-state-in-effect, unused vars)
+  - `npx eslint src/ --ext .ts,.tsx` → 0 errors, 0 warnings ✅
+  - `npx tsc --noEmit` → 0 errors ✅
+
+12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`) ← START HERE
 11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`)
 12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`)
 13. **PR 4-13** · Final End-to-End Test (`dev`)
@@ -73,7 +81,7 @@
 ---
 
 ## Active Branch
-`dev` — create `feature/code-quality` next
+`dev` — create `feature/husky` next
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — In Progress (10/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (11/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -94,6 +94,7 @@
 - **Mobile polish (parent)** — `min-h-dvh`, nav spacing, `SessionSummaryCard` header wraps on narrow screens
 - **Error & loading UI** — `ErrorMessage.tsx` (child + parent variants); `loading.tsx` + `error.tsx` for both chat and dashboard routes
 - **Rate limiting** — `src/lib/upstash/ratelimit.ts`; `chatRatelimit` (30/hr) on `/api/chat`, `summaryRatelimit` (10/hr) on `/api/summary`; fail-open when env vars absent
+- **Code quality** — `.prettierrc` created; Prettier run over all 80 src files; all ESLint errors + warnings resolved; 3 `console.error` calls removed; unused imports removed
 
 ### Week 3 (complete — Jun 17)
 - **verifyAuthToken helper** — shared token verification across all protected API routes
@@ -134,7 +135,7 @@
 | 4-08 | Privacy Policy Page | `feature/privacy-policy` | ✅ Done |
 | 4-09 | Error States & Loading UI | `feature/error-and-loading` | ✅ Done |
 | 4-10 | Rate Limiting | `feature/rate-limiting` | ✅ Done |
-| 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ⏳ Pending |
+| 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ✅ Done |
 | 4-12 | Husky Pre-commit Hook | `feature/husky` | ⏳ Pending |
 | 4-13 | Final End-to-End Test | `dev` | ⏳ Pending |
 | 4-14 | Vercel Production Deploy | `main` | ⏳ Pending |
@@ -144,7 +145,7 @@
 
 ## What Does Not Work Yet
 - Rate limiting requires Upstash credentials in `.env.local` + Vercel env vars to activate (currently fail-open)
-- No Prettier config or Husky pre-commit hooks (PRs 4-11, 4-12)
+- No Husky pre-commit hook yet (PR 4-12)
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete
