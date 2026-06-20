@@ -21,6 +21,7 @@ import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
 import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
 import { detectsProblemRequest, generateMathProblem } from '@/lib/mcp/mathProblem';
+import { chatRatelimit } from '@/lib/upstash/ratelimit';
 import type { ChatRequest, Message } from '@/types';
 
 /** Maps our internal MessageRole to the role format Claude expects. */
@@ -45,7 +46,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 2. Parse and validate request body ───────────────────────────────────
+  // ── 2. Rate limit — 30 requests per user per hour ────────────────────────
+  // chatRatelimit is null when Upstash env vars are absent (fail-open for local dev)
+  if (chatRatelimit !== null) {
+    const { success } = await chatRatelimit.limit(parentUID);
+    if (!success) {
+      return Response.json(
+        {
+          success: false,
+          error:
+            "You've sent a lot of messages today! Take a short break and try again in a little while. 🌟",
+        },
+        { status: 429 },
+      );
+    }
+  }
+
+  // ── 3. Parse and validate request body ───────────────────────────────────
   let body: ChatRequest;
   try {
     body = (await request.json()) as ChatRequest;
@@ -69,7 +86,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 3. MCP routing — detect problem requests before falling through to RAG ──
+  // ── 4. MCP routing — detect problem requests before falling through to RAG ──
   // When the child asks for a practice problem, generate one via the MCP tool.
   // If MCP succeeds, skip RAG and inject the problem as Layer 5 instead.
   // If MCP fails, fall through to RAG as normal.
@@ -90,7 +107,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // ── 4a. RAG retrieval — only when MCP didn't supply a problem ────────────
+  // ── 5a. RAG retrieval — only when MCP didn't supply a problem ────────────
   if (mcpContext === undefined) {
     try {
       const queryEmbedding = await embedText(message.trim());
@@ -104,7 +121,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // ── 4b. Build the composable system prompt ───────────────────────────────
+  // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
   try {
     systemPrompt = buildSystemPrompt({ characterId, subject, ragContext, mcpContext });
@@ -115,7 +132,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // ── 5. Map conversation history to Claude's role format ──────────────────
+  // ── 6. Map conversation history to Claude's role format ──────────────────
   // Conversation history (mascot/child) + the current child message appended last
   const priorMessages = Array.isArray(messages) ? messages : [];
   const claudeMessages = [
@@ -126,7 +143,7 @@ export async function POST(request: NextRequest) {
     { role: 'user' as const, content: message.trim() },
   ];
 
-  // ── 6. Stream Claude response as SSE ─────────────────────────────────────
+  // ── 7. Stream Claude response as SSE ─────────────────────────────────────
   const anthropic = getAnthropicClient();
 
   const stream = new ReadableStream({
