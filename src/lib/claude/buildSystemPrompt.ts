@@ -15,6 +15,8 @@ interface BuildSystemPromptOptions {
   subject: Subject;
   /** Curriculum chunks retrieved from Firebase Vector Search — added in PR 2-05. */
   ragContext?: string;
+  /** MCP-generated math problem + hint — injected instead of RAG when present. */
+  mcpContext?: string;
 }
 
 /**
@@ -25,6 +27,7 @@ export function buildSystemPrompt({
   characterId,
   subject,
   ragContext,
+  mcpContext,
 }: BuildSystemPromptOptions): string {
   const character = getCharacterById(characterId);
 
@@ -43,11 +46,16 @@ export function buildSystemPrompt({
     `CURRENT SESSION:\n${subjectFocus}`,
   ];
 
-  // Layer 4 — injected only when RAG retrieval is available (PR 2-05)
+  // Layer 4 — RAG curriculum chunks (omitted when MCP context is present)
   if (ragContext !== undefined && ragContext.trim().length > 0) {
     layers.push(
       `CURRICULUM CONTEXT (ground your responses in this material):\n${ragContext}`,
     );
+  }
+
+  // Layer 5 — MCP math problem (replaces RAG when child requests a practice problem)
+  if (mcpContext !== undefined && mcpContext.trim().length > 0) {
+    layers.push(mcpContext);
   }
 
   return layers.join('\n\n---\n\n');
