@@ -140,3 +140,39 @@
     opacity: 1;
   }
 }
+
+/* ── Avatar animations ─────────────────────────────────────────────────────── */
+
+/* Idle: gentle float up and down on a 2-second loop */
+@keyframes avatar-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Thinking: slow side-to-side tilt while the mascot is typing */
+@keyframes avatar-thinking {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-8deg); }
+  70% { transform: rotate(8deg); }
+}
+
+/* Celebration: fast bounce + scale-up when the child earns a star */
+@keyframes avatar-celebrate {
+  0%, 100% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-12px) scale(1.15); }
+  40% { transform: translateY(0) scale(1); }
+  60% { transform: translateY(-8px) scale(1.1); }
+  80% { transform: translateY(0) scale(1); }
+}
+
+.avatar-idle {
+  animation: avatar-idle 2s ease-in-out infinite;
+}
+
+.avatar-thinking {
+  animation: avatar-thinking 3s ease-in-out infinite;
+}
+
+.avatar-celebrate {
+  animation: avatar-celebrate 0.8s ease-in-out;
+}
