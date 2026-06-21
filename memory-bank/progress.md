@@ -96,6 +96,7 @@
 - **Rate limiting** — `src/lib/upstash/ratelimit.ts`; `chatRatelimit` (30/hr) on `/api/chat`, `summaryRatelimit` (10/hr) on `/api/summary`; fail-open when env vars absent
 - **Code quality** — `.prettierrc` created; Prettier run over all 80 src files; all ESLint errors + warnings resolved; 3 `console.error` calls removed; unused imports removed
 - **Husky pre-commit hook** — `husky@9` + `lint-staged@16` installed; `.husky/pre-commit` runs `tsc --noEmit && prettier --check && eslint`; `lint-staged` config in package.json; hook verified firing on commit
+- **Integration test fixes** — Upstash fail-open extended to bad credentials (try/catch); `WellDoneScreen` "Play Again!" button added; Firestore security rules fixed (client reads now allowed); `firestore.rules` committed to repo
 
 ### Week 3 (complete — Jun 17)
 - **verifyAuthToken helper** — shared token verification across all protected API routes

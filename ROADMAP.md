@@ -705,7 +705,14 @@
 - [x] `npx tsc --noEmit` — **0 errors** ✅
 - [x] `npm run build` — **17/17 pages generated, 0 errors** ✅ (all 15 routes compile clean)
 - [x] Verified routes: `/` `/_not-found` `/character-select` `/chat` `/dashboard` `/login` `/signup` `/privacy` + all 7 API routes
-- [x] Commit: `test: final integration test pass — tsc and build both clean`
+- [x] Manual 10-test flow (T-01 → T-10) — all passed on localhost:3000
+- [x] **Bug fix**: Upstash `WRONGPASS` error now caught with try/catch → chat no longer crashes when credentials are invalid (fail-open extended to bad creds, not just missing)
+- [x] **Bug fix**: `WellDoneScreen` had no navigation — added "Play Again! 🌟" button → routes to `/character-select`
+- [x] **Bug fix**: Firestore security rules were blocking client reads → updated rules in Firebase Console + committed `firestore.rules` to repo
+- [x] `npx tsc --noEmit` — 0 errors after fixes ✅
+- [x] `npx prettier --check src/` — all clean after fixes ✅
+- [x] `npx eslint src/ --ext .ts,.tsx` — 0 errors after fixes ✅
+- [x] Commit: `fix: upstash fail-open on bad creds, play again button, firestore rules`
 
 ---
 

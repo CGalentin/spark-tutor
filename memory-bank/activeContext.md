@@ -78,7 +78,7 @@
   - `npx eslint src/ --ext .ts,.tsx` → 0 errors, 0 warnings ✅
   - `npx tsc --noEmit` → 0 errors ✅
 
-14. **PR 4-14** · Vercel Production Deploy (`main`) ← START HERE
+14. **PR 4-14** · Vercel Production Deploy (`main`) ← START HERE — push dev → main
 15. **PR 4-15** · Portfolio Case Study & README (`feature/readme`)
 
 ---
