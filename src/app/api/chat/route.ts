@@ -44,18 +44,23 @@ export async function POST(request: NextRequest) {
   }
 
   // ── 2. Rate limit — 30 requests per user per hour ────────────────────────
-  // chatRatelimit is null when Upstash env vars are absent (fail-open for local dev)
+  // chatRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks chat.
   if (chatRatelimit !== null) {
-    const { success } = await chatRatelimit.limit(parentUID);
-    if (!success) {
-      return Response.json(
-        {
-          success: false,
-          error:
-            "You've sent a lot of messages today! Take a short break and try again in a little while. 🌟",
-        },
-        { status: 429 },
-      );
+    try {
+      const { success } = await chatRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "You've sent a lot of messages today! Take a short break and try again in a little while. 🌟",
+          },
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
     }
   }
 

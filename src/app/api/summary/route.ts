@@ -62,17 +62,22 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   // ── 2. Rate limit — 10 requests per user per hour ────────────────────────
-  // summaryRatelimit is null when Upstash env vars are absent (fail-open for local dev)
+  // summaryRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks summary.
   if (summaryRatelimit !== null) {
-    const { success } = await summaryRatelimit.limit(parentUID);
-    if (!success) {
-      return Response.json(
-        {
-          success: false,
-          error: 'Too many summary requests. Please wait before ending another session.',
-        } satisfies ApiResult<never>,
-        { status: 429 },
-      );
+    try {
+      const { success } = await summaryRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error: 'Too many summary requests. Please wait before ending another session.',
+          } satisfies ApiResult<never>,
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
     }
   }
 

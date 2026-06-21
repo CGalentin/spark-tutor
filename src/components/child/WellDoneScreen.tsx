@@ -4,6 +4,8 @@
 
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 interface WellDoneScreenProps {
   /** Fictional mascot name the child chose. */
   mascotName: string;
@@ -13,6 +15,8 @@ interface WellDoneScreenProps {
 
 /** Full-screen celebration card shown after the child ends their session. */
 export function WellDoneScreen({ mascotName, starsEarned }: WellDoneScreenProps) {
+  const router = useRouter();
+
   const starRow =
     starsEarned > 0
       ? Array.from({ length: Math.min(starsEarned, 10) }).map((_, i) => (
@@ -47,9 +51,17 @@ export function WellDoneScreen({ mascotName, starsEarned }: WellDoneScreenProps)
         </p>
       )}
 
-      <p className="max-w-xs text-lg text-slate-400">
+      <p className="mb-8 max-w-xs text-lg text-slate-400">
         Your grown-up can see what you learned today on their screen.
       </p>
+
+      {/* Play again — routes back to character select so the child can start a new session */}
+      <button
+        onClick={() => router.push('/character-select')}
+        className="min-h-[56px] rounded-3xl bg-emerald-400 px-10 py-3 text-xl font-extrabold text-white shadow-md transition-all hover:bg-emerald-300 active:scale-95"
+      >
+        Play Again! 🌟
+      </button>
     </div>
   );
 }
