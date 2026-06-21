@@ -57,8 +57,8 @@ ANTHROPIC_API_KEY                   ✅ filled
 GEMINI_API_KEY                      ✅ filled
 
 # Upstash Redis (server-side only — rate limiting)
-UPSTASH_REDIS_REST_URL              ⚠️ needs value (create free DB at console.upstash.com)
-UPSTASH_REDIS_REST_TOKEN            ⚠️ needs value
+UPSTASH_REDIS_REST_URL              ✅ filled (Vercel: Production + Preview; local: .env.local)
+UPSTASH_REDIS_REST_TOKEN            ✅ filled (Vercel: Production + Preview; local: .env.local)
 ```
 
 ## Firebase Project

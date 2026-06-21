@@ -61,7 +61,7 @@
   - Fail-open design: null when env vars absent (local dev safe, no crash)
   - `/api/chat` step 2: rate check before body parse; 429 with child-friendly message
   - `/api/summary` step 2: rate check before body parse; 429 with plain-English message
-  - ⚠️ Upstash credentials still needed in `.env.local` + Vercel env vars
+  - ✅ Upstash credentials filled in `.env.local` and Vercel (Production + Preview)
 
 - [x] PR 4-11 · Prettier & Lint Cleanup (`feature/code-quality`)
   - `.prettierrc` created (semi, singleQuote, tabWidth 2, trailingComma all, printWidth 100)

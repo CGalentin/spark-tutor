@@ -144,7 +144,7 @@
 ---
 
 ## What Does Not Work Yet
-- Rate limiting requires Upstash credentials in `.env.local` + Vercel env vars to activate (currently fail-open)
+- Rate limiting is ACTIVE — Upstash credentials filled in `.env.local` and Vercel (Production + Preview)
 - No Husky pre-commit hook yet (PR 4-12)
 
 ## Completion Checklist (Final MVP Gate)
