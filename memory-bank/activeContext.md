@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (11/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (12/15 PRs done)**
 
 ---
 
@@ -64,6 +64,13 @@
   - ✅ Upstash credentials filled in `.env.local` and Vercel (Production + Preview)
 
 - [x] PR 4-11 · Prettier & Lint Cleanup (`feature/code-quality`)
+
+- [x] PR 4-12 · Husky Pre-commit Hook (`feature/husky`)
+  - Installed `husky@^9.1.7` + `lint-staged@^16.4.0` as devDependencies
+  - `npx husky init` → created `.husky/` + added `"prepare": "husky"` to package.json
+  - `.husky/pre-commit`: `npx tsc --noEmit && npx prettier --check src/ && npx eslint src/ --ext .ts,.tsx`
+  - Added `lint-staged` block to package.json (`prettier --write` + `eslint --fix` on staged `src/**/*.{ts,tsx}`)
+  - Hook fired during commit — all 3 checks passed ✅
   - `.prettierrc` created (semi, singleQuote, tabWidth 2, trailingComma all, printWidth 100)
   - `npx prettier --write src/` — 30 files reformatted
   - Removed 3 `console.error` calls; removed unused `updateDoc` import from `firestore.ts`
@@ -71,17 +78,14 @@
   - `npx eslint src/ --ext .ts,.tsx` → 0 errors, 0 warnings ✅
   - `npx tsc --noEmit` → 0 errors ✅
 
-12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`) ← START HERE
-11. **PR 4-11** · Prettier & Lint Cleanup (`feature/code-quality`)
-12. **PR 4-12** · Husky Pre-commit Hook (`feature/husky`)
-13. **PR 4-13** · Final End-to-End Test (`dev`)
+13. **PR 4-13** · Final End-to-End Test (`dev`) ← START HERE
 14. **PR 4-14** · Vercel Production Deploy (`main`)
 15. **PR 4-15** · Portfolio Case Study & README (`feature/readme`)
 
 ---
 
 ## Active Branch
-`dev` — create `feature/husky` next
+`dev` — PR 4-13 runs on dev (no feature branch needed)
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

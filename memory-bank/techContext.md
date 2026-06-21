@@ -32,6 +32,8 @@ shadcn/ui (4.11.0)      ← component library (Card, Badge, Button, Input instal
 pdf-parse@1.1.1         ← PDF text extraction (pinned — v2 changed the API)
 ts-node                 ← run TypeScript scripts outside the Next.js bundler
 dotenv                  ← load .env.local in scripts
+husky@^9.1.7            ← pre-commit hook runner; "prepare": "husky" in scripts
+lint-staged@^16.4.0     ← runs formatters/linters only on staged files
 ```
 
 ## Environment Variables

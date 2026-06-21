@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — In Progress (11/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (12/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -9,7 +9,7 @@
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
 | Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
-| Week 4 | MCP Tool & Polish | 🔄 In Progress (8/15 PRs done) |
+| Week 4 | MCP Tool & Polish | 🔄 In Progress (12/15 PRs done) |
 
 ---
 
@@ -83,7 +83,7 @@
 - Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
 - Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
 
-### Week 4 (in progress — Jun 20, 9/15 done)
+### Week 4 (in progress — Jun 21, 12/15 done)
 - **MCP math tool** — `/api/mcp/math-problem` generates grade-appropriate problems; answer never returned to client
 - **MCP routing in chat** — `detectsProblemRequest()` triggers MCP before RAG when child asks for a practice problem
 - **SVG avatars** — 6 geometric SVG components (`BlipAvatar`, `FinnAvatar`, `ZorroAvatar`, `LunaAvatar`, `PipAvatar`, `NovaAvatar`)
@@ -95,6 +95,7 @@
 - **Error & loading UI** — `ErrorMessage.tsx` (child + parent variants); `loading.tsx` + `error.tsx` for both chat and dashboard routes
 - **Rate limiting** — `src/lib/upstash/ratelimit.ts`; `chatRatelimit` (30/hr) on `/api/chat`, `summaryRatelimit` (10/hr) on `/api/summary`; fail-open when env vars absent
 - **Code quality** — `.prettierrc` created; Prettier run over all 80 src files; all ESLint errors + warnings resolved; 3 `console.error` calls removed; unused imports removed
+- **Husky pre-commit hook** — `husky@9` + `lint-staged@16` installed; `.husky/pre-commit` runs `tsc --noEmit && prettier --check && eslint`; `lint-staged` config in package.json; hook verified firing on commit
 
 ### Week 3 (complete — Jun 17)
 - **verifyAuthToken helper** — shared token verification across all protected API routes
@@ -144,8 +145,7 @@
 ---
 
 ## What Does Not Work Yet
-- Rate limiting is ACTIVE — Upstash credentials filled in `.env.local` and Vercel (Production + Preview)
-- No Husky pre-commit hook yet (PR 4-12)
+- Nothing blocking — all tooling in place; PRs 4-13 through 4-15 are final testing + deploy + docs
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete
