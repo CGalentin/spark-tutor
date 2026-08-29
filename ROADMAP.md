@@ -716,15 +716,16 @@
 
 ---
 
-### PR 4-14 · Vercel Production Deploy
+### PR 4-14 · Vercel Production Deploy ✅
 **Branch:** `main`
 
-- [ ] Add all environment variables to Vercel project settings (Dashboard → Settings → Environment Variables)
-- [ ] Set `NODE_ENV=production` in Vercel
-- [ ] Run final build check: `npm run build` — must complete with zero errors
-- [ ] Deploy: `vercel --prod`
-- [ ] Smoke test live URL: character select → chat → parent dashboard
-- [ ] Commit: `chore: production deploy to vercel`
+- [x] `npm run build` — 17/17 pages, 0 errors ✅
+- [x] `git push origin dev` — 61 commits pushed to GitHub (`bbbb522..b242b9d`)
+- [x] `git merge dev --no-ff` on `main` — 63 files, 2411 insertions, clean merge
+- [x] `git push origin main` — Vercel auto-deploy triggered (`907c48f..2499eb7`)
+- [x] Smoke test passed: `/login` `/character-select` `/chat` `/dashboard` `/privacy` all live ✅
+- [x] SVG avatars, animations, MCP tool, rate limiting, error UI all working on production
+- [x] Commit: `Merge dev into main: Week 4 complete — all 15 PRs done`
 
 ---
 

@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — In Progress (13/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (14/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
@@ -9,7 +9,7 @@
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
 | Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
-| Week 4 | MCP Tool & Polish | 🔄 In Progress (13/15 PRs done) |
+| Week 4 | MCP Tool & Polish | 🔄 In Progress (14/15 PRs done) |
 
 ---
 

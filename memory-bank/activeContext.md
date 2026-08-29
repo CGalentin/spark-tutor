@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (13/15 PRs done)**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (14/15 PRs done)**
 
 ---
 
@@ -78,13 +78,12 @@
   - `npx eslint src/ --ext .ts,.tsx` → 0 errors, 0 warnings ✅
   - `npx tsc --noEmit` → 0 errors ✅
 
-14. **PR 4-14** · Vercel Production Deploy (`main`) ← START HERE — push dev → main
-15. **PR 4-15** · Portfolio Case Study & README (`feature/readme`)
+15. **PR 4-15** · Portfolio README (`feature/readme`) ← START HERE
 
 ---
 
 ## Active Branch
-`dev` → merge to `main` for PR 4-14 (Vercel production deploy)
+`dev` — create `feature/readme` for PR 4-15
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
