@@ -20,6 +20,8 @@ import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
 import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
+import { detectsProblemRequest, generateMathProblem } from '@/lib/mcp/mathProblem';
+import { chatRatelimit } from '@/lib/upstash/ratelimit';
 import type { ChatRequest, Message } from '@/types';
 
 /** Maps our internal MessageRole to the role format Claude expects. */
@@ -38,13 +40,31 @@ export async function POST(request: NextRequest) {
   try {
     parentUID = await verifyAuthToken(request.headers.get('Authorization'));
   } catch (err) {
-    return Response.json(
-      { success: false, error: (err as Error).message },
-      { status: 401 },
-    );
+    return Response.json({ success: false, error: (err as Error).message }, { status: 401 });
   }
 
-  // ── 2. Parse and validate request body ───────────────────────────────────
+  // ── 2. Rate limit — 30 requests per user per hour ────────────────────────
+  // chatRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks chat.
+  if (chatRatelimit !== null) {
+    try {
+      const { success } = await chatRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "You've sent a lot of messages today! Take a short break and try again in a little while. 🌟",
+          },
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
+    }
+  }
+
+  // ── 3. Parse and validate request body ───────────────────────────────────
   let body: ChatRequest;
   try {
     body = (await request.json()) as ChatRequest;
@@ -58,43 +78,66 @@ export async function POST(request: NextRequest) {
   const { message, sessionId, characterId, subject, messages } = body;
 
   if (
-    typeof message !== 'string' || message.trim().length === 0 ||
-    typeof characterId !== 'string' || characterId.trim().length === 0 ||
+    typeof message !== 'string' ||
+    message.trim().length === 0 ||
+    typeof characterId !== 'string' ||
+    characterId.trim().length === 0 ||
     (subject !== 'math' && subject !== 'reading')
   ) {
     return Response.json(
-      { success: false, error: 'Required fields: message (string), characterId (string), subject ("math"|"reading").' },
+      {
+        success: false,
+        error:
+          'Required fields: message (string), characterId (string), subject ("math"|"reading").',
+      },
       { status: 400 },
     );
   }
 
-  // ── 3. Retrieve curriculum context via RAG ───────────────────────────────
-  // Embed the child's message and fetch the top-3 most relevant curriculum chunks.
-  // If RAG fails for any reason, we proceed without context (graceful fallback).
+  // ── 4. MCP routing — detect problem requests before falling through to RAG ──
+  // When the child asks for a practice problem, generate one via the MCP tool.
+  // If MCP succeeds, skip RAG and inject the problem as Layer 5 instead.
+  // If MCP fails, fall through to RAG as normal.
   let ragContext: string | undefined;
-  try {
-    const queryEmbedding = await embedText(message.trim());
-    const rankedChunks = await queryByEmbedding(queryEmbedding, subject, 3);
-    if (rankedChunks.length > 0) {
-      ragContext = rankedChunks.map((chunk) => chunk.text).join('\n\n---\n\n');
+  let mcpContext: string | undefined;
+
+  const isMathProblemRequest = subject === 'math' && detectsProblemRequest(message.trim());
+
+  if (isMathProblemRequest) {
+    const mcpResult = await generateMathProblem('K', 'math', 'easy');
+    if (mcpResult !== null) {
+      mcpContext = [
+        `PRACTICE PROBLEM (present this to the child and guide them Socratically):`,
+        `Problem: ${mcpResult.problem}`,
+        `Hint to use if they're stuck: ${mcpResult.hint}`,
+        `Do NOT reveal the answer — ask guiding questions to help the child figure it out.`,
+      ].join('\n');
     }
-  } catch {
-    // RAG failure is non-fatal — Claude still gives a useful response without it
-    ragContext = undefined;
   }
 
-  // ── 4. Build the composable system prompt ────────────────────────────────
+  // ── 5a. RAG retrieval — only when MCP didn't supply a problem ────────────
+  if (mcpContext === undefined) {
+    try {
+      const queryEmbedding = await embedText(message.trim());
+      const rankedChunks = await queryByEmbedding(queryEmbedding, subject, 3);
+      if (rankedChunks.length > 0) {
+        ragContext = rankedChunks.map((chunk) => chunk.text).join('\n\n---\n\n');
+      }
+    } catch {
+      // RAG failure is non-fatal — Claude still gives a useful response without it
+      ragContext = undefined;
+    }
+  }
+
+  // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
   try {
-    systemPrompt = buildSystemPrompt({ characterId, subject, ragContext });
+    systemPrompt = buildSystemPrompt({ characterId, subject, ragContext, mcpContext });
   } catch (err) {
-    return Response.json(
-      { success: false, error: (err as Error).message },
-      { status: 400 },
-    );
+    return Response.json({ success: false, error: (err as Error).message }, { status: 400 });
   }
 
-  // ── 5. Map conversation history to Claude's role format ──────────────────
+  // ── 6. Map conversation history to Claude's role format ──────────────────
   // Conversation history (mascot/child) + the current child message appended last
   const priorMessages = Array.isArray(messages) ? messages : [];
   const claudeMessages = [
@@ -105,7 +148,7 @@ export async function POST(request: NextRequest) {
     { role: 'user' as const, content: message.trim() },
   ];
 
-  // ── 6. Stream Claude response as SSE ─────────────────────────────────────
+  // ── 7. Stream Claude response as SSE ─────────────────────────────────────
   const anthropic = getAnthropicClient();
 
   const stream = new ReadableStream({
@@ -151,7 +194,9 @@ export async function POST(request: NextRequest) {
         controller.close();
       } catch {
         // Mid-stream errors: send an error event so the client can show a friendly message
-        controller.enqueue(sseEvent({ type: 'error', error: 'AI response failed. Please try again.' }));
+        controller.enqueue(
+          sseEvent({ type: 'error', error: 'AI response failed. Please try again.' }),
+        );
         controller.close();
       }
     },

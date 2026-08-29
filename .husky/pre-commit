@@ -1,0 +1,1 @@
+npx tsc --noEmit && npx prettier --check src/ && npx eslint src/ --ext .ts,.tsx

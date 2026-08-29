@@ -60,9 +60,7 @@ function cosineSimilarity(a: number[], b: number[]): number {
  * Returns the auto-generated document ID.
  * Call this from the ingestion script — never from a user-facing API route.
  */
-export async function saveChunk(
-  chunk: Omit<CurriculumChunk, 'id'>,
-): Promise<string> {
+export async function saveChunk(chunk: Omit<CurriculumChunk, 'id'>): Promise<string> {
   const db = getAdminFirestore();
   const ref = await db.collection(COLLECTION).add(chunk);
   return ref.id;
@@ -103,10 +101,7 @@ export async function queryByEmbedding(
 ): Promise<RankedChunk[]> {
   const db = getAdminFirestore();
 
-  const snapshot = await db
-    .collection(COLLECTION)
-    .where('subject', '==', subject)
-    .get();
+  const snapshot = await db.collection(COLLECTION).where('subject', '==', subject).get();
 
   if (snapshot.empty) return [];
 
@@ -131,11 +126,7 @@ export async function queryByEmbedding(
  */
 export async function countChunks(subject: 'math' | 'reading'): Promise<number> {
   const db = getAdminFirestore();
-  const snapshot = await db
-    .collection(COLLECTION)
-    .where('subject', '==', subject)
-    .count()
-    .get();
+  const snapshot = await db.collection(COLLECTION).where('subject', '==', subject).count().get();
 
   return snapshot.data().count;
 }

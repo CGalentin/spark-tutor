@@ -23,7 +23,10 @@ export async function POST(request: NextRequest): Promise<Response> {
   const authHeader = request.headers.get('Authorization');
   if (authHeader === null || !authHeader.startsWith('Bearer ')) {
     return Response.json(
-      { success: false, error: 'Missing or malformed Authorization header.' } satisfies ApiResult<never>,
+      {
+        success: false,
+        error: 'Missing or malformed Authorization header.',
+      } satisfies ApiResult<never>,
       { status: 401 },
     );
   }
@@ -52,14 +55,20 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   if (typeof query !== 'string' || query.trim().length === 0) {
     return Response.json(
-      { success: false, error: 'Field "query" must be a non-empty string.' } satisfies ApiResult<never>,
+      {
+        success: false,
+        error: 'Field "query" must be a non-empty string.',
+      } satisfies ApiResult<never>,
       { status: 400 },
     );
   }
 
   if (subject !== 'math' && subject !== 'reading') {
     return Response.json(
-      { success: false, error: 'Field "subject" must be "math" or "reading".' } satisfies ApiResult<never>,
+      {
+        success: false,
+        error: 'Field "subject" must be "math" or "reading".',
+      } satisfies ApiResult<never>,
       { status: 400 },
     );
   }
@@ -73,10 +82,12 @@ export async function POST(request: NextRequest): Promise<Response> {
     const chunks = rankedChunks.map((chunk) => chunk.text);
 
     return Response.json({ success: true, data: { chunks } } satisfies ApiResult<RagResponse>);
-  } catch (err) {
-    console.error('[/api/rag] Retrieval error:', err);
+  } catch {
     return Response.json(
-      { success: false, error: 'RAG retrieval failed. Continuing without curriculum context.' } satisfies ApiResult<never>,
+      {
+        success: false,
+        error: 'RAG retrieval failed. Continuing without curriculum context.',
+      } satisfies ApiResult<never>,
       { status: 500 },
     );
   }

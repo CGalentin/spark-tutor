@@ -37,7 +37,7 @@ export function SessionProgressBar() {
       {/* Star count badge — only visible after the first star is earned */}
       {starsEarned > 0 && (
         <div
-          className="flex shrink-0 items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-sm font-bold text-yellow-700"
+          className="flex shrink-0 items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-base font-bold text-yellow-700"
           aria-label={`${starsEarned} star${starsEarned === 1 ? '' : 's'} earned`}
         >
           <span aria-hidden="true">⭐</span>

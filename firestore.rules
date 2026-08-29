@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Parents can read and write their own session data only.
+    // All child session data lives under the parent UID — no child accounts exist (COPPA).
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // curriculum_chunks are written exclusively by the Admin SDK ingestion scripts.
+    // The client never reads them directly — retrieval goes through /api/rag server-side.
+    match /curriculum_chunks/{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,99 +1,96 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Week 2 — RAG Layer — COMPLETE ✅ (10/10 PRs done)**
-**Week 3 — Parent Layer & Agentic Summary — NOT STARTED ← START HERE**
+**Week 4 — MCP Tool, Characters & Polish — IN PROGRESS (13/15 PRs done)**
 
 ---
 
-## Completed This Session (Jun 17)
+## Completed This Session (Jun 20)
 
-- [x] PR 2-04 · Gemini Embedding Setup (`feature/gemini-embeddings`)
-  - `src/lib/gemini/client.ts` — GoogleGenerativeAI singleton
-  - `src/lib/gemini/embed.ts` — `embedText(text)` using `gemini-embedding-001` (3072 dims)
-  - `scripts/rag/testEmbed.ts` — smoke test confirming vector length = 3072
-  - **Model change**: `text-embedding-004` is retired — `gemini-embedding-001` (3072 dims) is the current stable model
+- [x] PR 4-01 · MCP Math Problem Generator (`feature/mcp-math-tool`)
+  - `/api/mcp/math-problem` POST endpoint — accepts `{ grade, topic, difficulty }`, returns `{ problem, hint }` (answer stripped server-side)
+  - Added `MathGrade`, `MathDifficulty`, `MathProblemRequest`, `MathProblemResponse` types to `api.ts`
 
-- [x] PR 2-05 · Document Ingestion Script (`feature/ingestion-script`)
-  - `scripts/rag/ingestDocuments.ts` — full pipeline: chunk → embed → save to Firestore
-  - 9 math PDFs → 202 chunks saved to Firestore
-  - Deduplication via `chunkExists()` — safe to re-run
+- [x] PR 4-02 · Wire MCP Into Chat Router (`feature/mcp-routing`)
+  - `src/lib/mcp/mathProblem.ts`: `generateMathProblem()` (direct Claude call) + `detectsProblemRequest()` (13 trigger phrases)
+  - `/api/chat` now routes to MCP before RAG when child asks for a practice problem
+  - `buildSystemPrompt.ts` accepts optional `mcpContext` as Layer 5
 
-- [x] PR 2-06 · Ingest Reading Sources (`feature/ingest-reading`)
-  - 8 reading PDFs → 334 chunks saved to Firestore
-  - **Total corpus**: 202 math + 334 reading = 536 chunks in `curriculum_chunks`
+- [x] PR 4-03 · Character SVG Avatars (`feature/character-avatars`)
+  - 6 SVG components in `src/components/child/avatars/` (BlipAvatar, FinnAvatar, ZorroAvatar, LunaAvatar, PipAvatar, NovaAvatar)
+  - `index.ts` exports all + `getAvatarComponent(id)` lookup map
 
-- [x] PR 2-07 · RAG Retrieval API Route (`feature/rag-retrieval`)
-  - `src/app/api/rag/route.ts` — POST `{ query, subject }` → embed → cosine search → top-3 texts
-  - Added `RagRequest`, `RagResponse` types to `src/types/api.ts`; exported from `src/types/index.ts`
+- [x] PR 4-04 · Character Animations (`feature/character-animations`)
+  - CSS keyframes in `globals.css`: `avatar-idle` (2s float), `avatar-thinking` (3s tilt), `avatar-celebrate` (0.8s bounce)
+  - `AnimatedAvatar.tsx` wrapper — applies class, auto-reverts celebration → idle after 1s
 
-- [x] PR 2-08 · Wire RAG Into Chat (`feature/rag-in-chat`)
-  - `src/app/api/chat/route.ts` updated — embeds child message, fetches top-3 chunks, injects into Layer 3
-  - Graceful fallback: if RAG fails, chat continues without curriculum context
+- [x] PR 4-05 · Update Character Select With Avatars (`feature/character-select-avatars`)
+  - `CharacterCard.tsx` — SVG at 72px, celebration bounce on selected card
+  - `MascotAvatar.tsx` — SVG at 96px via `AnimatedAvatar`
+  - `chat/page.tsx` — `avatarState` wired to `isChatLoading` (thinking) and star events (celebrating)
 
-- [x] PR 2-09 · RAG Quality Check (`feature/rag-quality`)
-  - `scripts/rag/testRetrieval.ts` — 10 sample K-1 questions, all 10/10 PASS
-  - Similarity scores: 0.66–0.75; correct topic labels and sources surfaced
+- [x] PR 4-06 · Mobile Polish — Child UI (`feature/mobile-polish-child`)
+  - `h-dvh` on chat page, `min-h-dvh` on character-select and WellDoneScreen
+  - Safe-area inset padding on ChatInput and End Session div
+  - Progress bar star badge bumped to `text-base` (16px)
 
-- [x] PR 2-10 · Week 2 Integration Test & Deploy (`dev`)
-  - `npx tsc --noEmit` — zero errors ✅
-  - `npm run build` — zero errors, 9 routes building (incl. `/api/rag`) ✅
-  - Deployed to Vercel production: https://spark-tutor-app.vercel.app ✅
-  - `dev` → `main` merged ✅
+- [x] PR 4-07 · Mobile Polish — Parent UI (`feature/mobile-polish-parent`)
+  - `min-h-dvh` on parent layout and auth layout
+  - Tighter nav padding on mobile (`px-3 sm:px-4`)
+  - SessionSummaryCard header uses `flex-wrap` to avoid overflow
+
+- [x] PR 4-08 · Privacy Policy Page (`feature/privacy-policy`)
+  - `/app/privacy/page.tsx` — plain-English COPPA page (what IS and IS NOT collected)
+  - COPPA callout box, third-party services section, 30-day deletion SLA, contact email
+  - Privacy link in auth layout footer (both login + signup) + "agree to Privacy Policy" in SignupForm footer
+
+- [x] PR 4-09 · Error States & Loading UI (`feature/error-and-loading`)
+  - `ErrorMessage.tsx` — two variants: `child` (bright/emoji/big button) and `parent` (plain-English/neutral Shadcn-aligned)
+  - `src/app/(child)/chat/loading.tsx` — wraps LoadingSpinner in violet gradient `h-dvh` container
+  - `src/app/(child)/chat/error.tsx` — `'use client'` Next.js error boundary; child-friendly message + reset
+  - `src/app/(parent)/dashboard/loading.tsx` — LoadingSpinner with "Loading your dashboard..."
+  - `src/app/(parent)/dashboard/error.tsx` — `'use client'` Next.js error boundary; parent-friendly message + reset
+  - Verified chat/page.tsx line 266 already has warm mascot fallback for API failures
 
 ---
 
-## Up Next — Week 3: Parent Layer & Agentic Summary
+## Up Next — Week 4 (continued)
 
-1. **PR 3-01** · Firebase Admin Setup (`feature/firebase-admin`) ← START HERE
-   - `src/lib/firebase/admin.ts` — Firebase Admin SDK init + `verifyAuthToken` helper
-   - Note: admin.ts may already exist from PR 1-12 (`adminAuth`); check before creating
+- [x] PR 4-10 · Rate Limiting (`feature/rate-limiting`)
+  - `src/lib/upstash/ratelimit.ts` — `chatRatelimit` (30 req/user/hr) + `summaryRatelimit` (10 req/user/hr)
+  - Fail-open design: null when env vars absent (local dev safe, no crash)
+  - `/api/chat` step 2: rate check before body parse; 429 with child-friendly message
+  - `/api/summary` step 2: rate check before body parse; 429 with plain-English message
+  - ✅ Upstash credentials filled in `.env.local` and Vercel (Production + Preview)
 
-2. **PR 3-02** · Session Tracking — Start (`feature/session-start`)
-   - `src/app/api/session/start/route.ts` — creates Firestore session under `users/{parentUID}/sessions/{sessionID}`
+- [x] PR 4-11 · Prettier & Lint Cleanup (`feature/code-quality`)
 
-3. **PR 3-03** · Session Tracking — Messages (`feature/session-messages`)
-   - Update `/api/chat` to accept `sessionId`, increment `messagesCount` in Firestore
+- [x] PR 4-12 · Husky Pre-commit Hook (`feature/husky`)
+  - Installed `husky@^9.1.7` + `lint-staged@^16.4.0` as devDependencies
+  - `npx husky init` → created `.husky/` + added `"prepare": "husky"` to package.json
+  - `.husky/pre-commit`: `npx tsc --noEmit && npx prettier --check src/ && npx eslint src/ --ext .ts,.tsx`
+  - Added `lint-staged` block to package.json (`prettier --write` + `eslint --fix` on staged `src/**/*.{ts,tsx}`)
+  - Hook fired during commit — all 3 checks passed ✅
+  - `.prettierrc` created (semi, singleQuote, tabWidth 2, trailingComma all, printWidth 100)
+  - `npx prettier --write src/` — 30 files reformatted
+  - Removed 3 `console.error` calls; removed unused `updateDoc` import from `firestore.ts`
+  - Fixed 8 ESLint errors across 6 files (static-components, set-state-in-effect, unused vars)
+  - `npx eslint src/ --ext .ts,.tsx` → 0 errors, 0 warnings ✅
+  - `npx tsc --noEmit` → 0 errors ✅
 
-4. **PR 3-04** · Stars Logic (`feature/stars-logic`)
-   - `src/hooks/useStars.ts`, sync star count to Firestore, `StarBurst.tsx` animation
-
-5. **PR 3-05** · Progress Bar (`feature/progress-bar`)
-   - `SessionProgressBar.tsx` — fills over 10-message session, shows stars
-
-6. **PR 3-06** · Session End Flow (`feature/session-end`)
-   - `EndSessionButton.tsx`, `/api/session/end/route.ts`, triggers agentic summary
-
-7. **PR 3-07** · Agentic Summary — Claude Call (`feature/agentic-summary`)
-   - `src/app/api/summary/route.ts` — sends conversation to Claude, gets structured summary
-
-8. **PR 3-08** · Save Summary to Firestore (`feature/save-summary`)
-   - Save summary to `users/{parentUID}/sessions/{sessionID}/summary`
-
-9. **PR 3-09** · Parent Dashboard Layout (`feature/parent-dashboard`)
-   - Real dashboard with Shadcn Card layout, DashboardHeader
-
-10. **PR 3-10** · Session Summary Card (`feature/summary-card`)
-    - `SessionSummaryCard.tsx`, `useSessionHistory.ts` with `onSnapshot`
-
-11. **PR 3-11** · Week 3 Integration Test & Deploy (`dev`)
+14. **PR 4-14** · Vercel Production Deploy (`main`) ← START HERE — push dev → main
+15. **PR 4-15** · Portfolio Case Study & README (`feature/readme`)
 
 ---
 
 ## Active Branch
-`main` (just merged) — create `feature/firebase-admin` from `dev` at start of next session
+`dev` → merge to `main` for PR 4-14 (Vercel production deploy)
 
 ## Known Issues / Decisions
-- `gemini-embedding-001` produces 3072-dim vectors (not 768 — `text-embedding-004` is retired)
-- In-memory cosine similarity confirmed fast enough — 536 chunks loaded and ranked in <1s
-- CKLA Instructional Companion PDFs are mostly image-based → low chunk counts (3–4 chunks each)
-  → Teacher Guide + scope/sequence PDFs yield the most text (126 + 31 + 16 chunks)
-- PowerShell on Windows 10 — no bash heredoc; use `-m "message"` for git commits
+- MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
+- Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
+- `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
+- PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
-- `/api/chat` now adds ~1–2s latency per request due to Gemini embed call before Claude
-  → Acceptable for MVP; can cache query embeddings in v2
-
-## Recent Decisions & Notes
-- PR 3-01 (`admin.ts`) may already be partially done from Week 1 PR 1-12 — verify first
-- The `buildSystemPrompt` `ragContext` slot was already wired in PR 1-12; PR 2-08 just fills it
-- Week 3 adds Firestore persistence for sessions — currently everything is client-side only
+- Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type
+- Messages forwarded from client via `/api/session/end` → `/api/summary` (never persisted individually)

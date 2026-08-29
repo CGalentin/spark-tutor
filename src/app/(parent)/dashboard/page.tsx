@@ -34,9 +34,7 @@ export default function DashboardPage() {
             <p className="py-8 text-center text-sm text-slate-400">Loading sessions…</p>
           )}
 
-          {error !== null && (
-            <p className="py-8 text-center text-sm text-red-500">{error}</p>
-          )}
+          {error !== null && <p className="py-8 text-center text-sm text-red-500">{error}</p>}
 
           {!isLoading && error === null && sessions.length === 0 && (
             <p className="py-8 text-center text-sm text-slate-400">

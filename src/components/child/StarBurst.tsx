@@ -20,6 +20,9 @@ export function StarBurst({ triggered, onComplete }: StarBurstProps) {
   useEffect(() => {
     if (!triggered) return;
 
+    // Intentional setState-in-effect: visible is an animation trigger that must
+    // turn on in the same tick as the effect, then auto-off via the timer.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true);
 
     // Animation duration matches the CSS keyframe duration (800ms)
@@ -54,7 +57,11 @@ export function StarBurst({ triggered, onComplete }: StarBurstProps) {
         aria-live="polite"
         aria-label="Star earned!"
       >
-        <span className="star-pop text-[120px] leading-none select-none" role="img" aria-hidden="true">
+        <span
+          className="star-pop text-[120px] leading-none select-none"
+          role="img"
+          aria-hidden="true"
+        >
           ⭐
         </span>
       </div>

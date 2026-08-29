@@ -21,9 +21,14 @@ function formatDate(date: Date): string {
 function StarRow({ count }: { count: number }) {
   if (count === 0) return null;
   return (
-    <div className="flex flex-wrap gap-0.5" aria-label={`${count} star${count === 1 ? '' : 's'} earned`}>
+    <div
+      className="flex flex-wrap gap-0.5"
+      aria-label={`${count} star${count === 1 ? '' : 's'} earned`}
+    >
       {Array.from({ length: Math.min(count, 10) }).map((_, i) => (
-        <span key={i} className="text-base" aria-hidden="true">⭐</span>
+        <span key={i} className="text-base" aria-hidden="true">
+          ⭐
+        </span>
       ))}
     </div>
   );
@@ -37,7 +42,7 @@ export function SessionSummaryCard({ session }: SessionSummaryCardProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
             <CardTitle className="text-base">
               {session.characterName.trim().length > 0

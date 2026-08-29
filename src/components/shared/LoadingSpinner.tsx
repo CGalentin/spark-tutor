@@ -15,9 +15,7 @@ export function LoadingSpinner({ message }: LoadingSpinnerProps) {
         role="status"
         aria-label="Loading"
       />
-      {message !== undefined && (
-        <p className="text-sm text-slate-500">{message}</p>
-      )}
+      {message !== undefined && <p className="text-sm text-slate-500">{message}</p>}
     </div>
   );
 }

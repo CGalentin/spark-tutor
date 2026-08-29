@@ -20,6 +20,7 @@ import { StarBurst } from '@/components/child/StarBurst';
 import { SessionProgressBar } from '@/components/child/SessionProgressBar';
 import { EndSessionButton } from '@/components/child/EndSessionButton';
 import { WellDoneScreen } from '@/components/child/WellDoneScreen';
+import type { AvatarAnimationState } from '@/components/child/AnimatedAvatar';
 import type { Message, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
@@ -63,6 +64,8 @@ export default function ChatPage() {
   const [starBurstTriggered, setStarBurstTriggered] = useState(false);
   // sessionEnded drives the WellDoneScreen — stays true until the user navigates away
   const [sessionEnded, setSessionEnded] = useState(false);
+  // mascot animation state — thinking while loading, celebrating on star, idle otherwise
+  const [avatarState, setAvatarState] = useState<AvatarAnimationState>('idle');
 
   const handleStarBurstComplete = useCallback(() => setStarBurstTriggered(false), []);
 
@@ -72,6 +75,20 @@ export default function ChatPage() {
       router.replace('/character-select');
     }
   }, [selectedCharacterId, router]);
+
+  // ── Sync mascot animation to loading state ────────────────────────────────
+  // The avatar thinks while the AI is generating a response.
+  // avatarState cannot be purely derived from isChatLoading: it also transitions to
+  // 'celebrating' via handleSend on star events, so a useEffect sync is the right pattern.
+  useEffect(() => {
+    if (isChatLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAvatarState('thinking');
+    } else if (avatarState === 'thinking') {
+      setAvatarState('idle');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isChatLoading]);
 
   const character = selectedCharacterId ? getCharacterById(selectedCharacterId) : undefined;
 
@@ -235,11 +252,12 @@ export default function ChatPage() {
             };
             setMessages((prev) => [...prev, mascotMessage]);
 
-                    // Claude embeds [STAR EARNED] in the text when the child nails an answer
-                    if (event.starEarned) {
-                      setStarBurstTriggered(true);
-                      await awardStar();
-                    }
+            // Claude embeds [STAR EARNED] in the text when the child nails an answer
+            if (event.starEarned) {
+              setStarBurstTriggered(true);
+              setAvatarState('celebrating');
+              await awardStar();
+            }
             break streamLoop;
           } else if (event.type === 'error') {
             throw new Error(event.error);
@@ -248,7 +266,7 @@ export default function ChatPage() {
       }
     } catch {
       // Show a warm, child-safe message — never expose technical error details
-      setChatError("Hmm, let me think for a second... try asking me again! 🤔");
+      setChatError('Hmm, let me think for a second... try asking me again! 🤔');
     } finally {
       setIsChatLoading(false);
     }
@@ -263,12 +281,12 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-b from-violet-50 to-white">
+    <div className="flex h-dvh flex-col bg-gradient-to-b from-violet-50 to-white">
       {/* Star burst overlay — triggered once per star earned */}
       <StarBurst triggered={starBurstTriggered} onComplete={handleStarBurstComplete} />
       {/* Header: mascot identity + stars earned this session */}
       <header className="shrink-0 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
-        <MascotAvatar character={character} mascotName={mascotName} />
+        <MascotAvatar character={character} mascotName={mascotName} animationState={avatarState} />
 
         {/* Stars row — only visible after the first star is earned */}
         {starsEarned > 0 && (
@@ -317,7 +335,7 @@ export default function ChatPage() {
           </div>
 
           {/* End session button below chat input */}
-          <div className="shrink-0 px-4 pb-4">
+          <div className="shrink-0 px-4 pb-[max(16px,env(safe-area-inset-bottom))]">
             <EndSessionButton
               disabled={isChatLoading || isSessionEnding}
               onEndSession={handleEndSession}

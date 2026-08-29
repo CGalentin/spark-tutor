@@ -104,8 +104,37 @@ type ApiResult<T> =
 
 ### 8. Firestore Access Pattern
 - Components NEVER write to Firestore directly
-- All reads/writes go through service functions in `/src/lib/firebase/`
-- Real-time data (parent dashboard) uses `onSnapshot` with cleanup in `useEffect`
+- Client-side reads go through service functions in `/src/lib/firebase/` (using client SDK)
+- Server-side reads/writes go through `adminDb` in `/src/lib/firebase/admin.ts` (Admin SDK, API routes only)
+- Real-time data (parent dashboard) uses `subscribeToSessions()` → `onSnapshot` with cleanup in `useEffect`
+
+### 10. Session Lifecycle
+```
+Child picks subject → handleSubjectSelect → POST /api/session/start
+  → creates Firestore doc users/{uid}/sessions/{id}
+  → returns sessionId → stored in useSessionStore
+
+Each chat message:
+  → POST /api/chat (with sessionId)
+  → Claude responds
+  → FieldValue.increment(1) on messageCount in Firestore
+
+Each star earned:
+  → useStars.awardStar() → local store + POST /api/session/star
+  → FieldValue.increment(1) on starsEarned in Firestore
+
+Child taps "All Done!":
+  → handleEndSession → POST /api/session/end
+  → writes endedAt, final starsEarned, messageCount
+  → fire-and-forget: POST /api/summary (with messages array)
+    → Claude analyzes transcript → JSON summary
+    → saves to session.summary (nested field, not subcollection)
+  → shows WellDoneScreen
+
+Parent opens dashboard:
+  → useSessionHistory → subscribeToSessions → onSnapshot
+  → live list of sessions (updates when summary arrives)
+```
 
 ### 9. Error Handling Pattern
 - Every async function wrapped in `try/catch`

@@ -73,9 +73,10 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
 
     const responseData: SessionEndResponse = { sessionId };
-    return Response.json(
-      { success: true, data: responseData } satisfies ApiResult<SessionEndResponse>,
-    );
+    return Response.json({
+      success: true,
+      data: responseData,
+    } satisfies ApiResult<SessionEndResponse>);
   } catch {
     return Response.json(
       { success: false, error: 'Failed to end session.' } satisfies ApiResult<never>,

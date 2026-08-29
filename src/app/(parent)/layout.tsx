@@ -46,12 +46,14 @@ export default function ParentLayout({ children }: ParentLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-dvh bg-slate-50">
       {/* Top nav bar */}
       <nav className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-3 py-3 sm:px-4">
           <div className="flex items-center gap-2">
-            <span className="text-xl" aria-hidden="true">⭐</span>
+            <span className="text-xl" aria-hidden="true">
+              ⭐
+            </span>
             <span className="font-semibold text-slate-700">Spark Tutor</span>
           </div>
 
@@ -64,11 +66,7 @@ export default function ParentLayout({ children }: ParentLayoutProps) {
             >
               Dashboard
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-            >
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
               Sign Out
             </Button>
           </div>
@@ -76,9 +74,7 @@ export default function ParentLayout({ children }: ParentLayoutProps) {
       </nav>
 
       {/* Page content */}
-      <main className="mx-auto max-w-3xl px-4 py-8">
-        {children}
-      </main>
+      <main className="mx-auto max-w-3xl px-3 py-6 sm:px-4 sm:py-8">{children}</main>
     </div>
   );
 }

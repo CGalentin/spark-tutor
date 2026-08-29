@@ -19,23 +19,19 @@ export default function CharacterSelectPage() {
   const setSelectedCharacterId = useChildStore((s) => s.setSelectedCharacterId);
   const setCharacterName = useChildStore((s) => s.setCharacterName);
 
-  const selectedCharacter = selectedCharacterId
-    ? getCharacterById(selectedCharacterId)
-    : undefined;
+  const selectedCharacter = selectedCharacterId ? getCharacterById(selectedCharacterId) : undefined;
 
   function handleConfirm() {
     router.push('/chat');
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-violet-100 to-white px-4 py-10">
+    <main className="flex min-h-dvh flex-col items-center bg-gradient-to-b from-violet-100 to-white px-4 py-10">
       {/* Header */}
       <div className="mb-2 text-5xl" aria-hidden="true">
         ✨
       </div>
-      <h1 className="mb-2 text-center text-3xl font-extrabold text-slate-800">
-        Pick your friend!
-      </h1>
+      <h1 className="mb-2 text-center text-3xl font-extrabold text-slate-800">Pick your friend!</h1>
       <p className="mb-8 text-center text-lg text-slate-500">
         Choose a Spark Squad buddy to learn with.
       </p>

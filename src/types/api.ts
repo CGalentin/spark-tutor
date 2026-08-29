@@ -5,9 +5,7 @@ import type { Message, Subject } from './session';
 
 /** Standard API response wrapper used by all /app/api routes.
  *  Discriminated union makes it easy to check success before accessing data. */
-export type ApiResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+export type ApiResult<T> = { success: true; data: T } | { success: false; error: string };
 
 /** Request body sent to POST /api/chat. */
 export interface ChatRequest {
@@ -71,6 +69,30 @@ export interface SessionEndRequest {
 /** Successful response from POST /api/session/end. */
 export interface SessionEndResponse {
   sessionId: string;
+}
+
+/** Grade levels supported by the MCP math problem generator. */
+export type MathGrade = 'K' | '1';
+
+/** Difficulty levels for generated math problems. */
+export type MathDifficulty = 'easy' | 'medium';
+
+/** Request body sent to POST /api/mcp/math-problem. */
+export interface MathProblemRequest {
+  /** Kindergarten ('K') or Grade 1 ('1'). */
+  grade: MathGrade;
+  /** The math topic — e.g. "counting", "addition", "shapes". */
+  topic: string;
+  difficulty: MathDifficulty;
+}
+
+/** Successful response from POST /api/mcp/math-problem.
+ *  The answer is intentionally omitted — it is never returned to the client. */
+export interface MathProblemResponse {
+  /** The math problem text shown to the child (via Claude). */
+  problem: string;
+  /** A hint Claude can use to guide the child toward the answer. */
+  hint: string;
 }
 
 /** Request body sent to POST /api/summary. */

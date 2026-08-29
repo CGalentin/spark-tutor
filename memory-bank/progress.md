@@ -1,15 +1,15 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 2 of 4 — Complete ✅ | Live: https://spark-tutor-app.vercel.app**
+**Week 4 of 4 — In Progress (13/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
 
 ## Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
 | Week 1 | Foundation & Chat UI | ✅ Complete |
 | Week 2 | RAG Layer | ✅ Complete (10/10 PRs done) |
-| Week 3 | Parent Layer & Agentic Summary | ⏳ Not Started |
-| Week 4 | MCP Tool & Polish | ⏳ Not Started |
+| Week 3 | Parent Layer & Agentic Summary | ✅ Complete (11/11 PRs done) |
+| Week 4 | MCP Tool & Polish | 🔄 In Progress (13/15 PRs done) |
 
 ---
 
@@ -52,6 +52,24 @@
 
 ---
 
+## Week 3 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-01 | Firebase Admin Setup | `feature/firebase-admin` | ✅ Done |
+| 3-02 | Session Tracking — Start | `feature/session-start` | ✅ Done |
+| 3-03 | Session Tracking — Messages | `feature/session-messages` | ✅ Done |
+| 3-04 | Stars Logic | `feature/stars-logic` | ✅ Done |
+| 3-05 | Progress Bar | `feature/progress-bar` | ✅ Done |
+| 3-06 | Session End Flow | `feature/session-end` | ✅ Done |
+| 3-07 | Agentic Summary — Claude Call | `feature/agentic-summary` | ✅ Done |
+| 3-08 | Save Summary to Firestore | `feature/save-summary` | ✅ Done |
+| 3-09 | Parent Dashboard Layout | `feature/parent-dashboard` | ✅ Done |
+| 3-10 | Session Summary Card | `feature/summary-card` | ✅ Done |
+| 3-11 | Week 3 Integration Test & Deploy | `dev` | ✅ Done |
+
+---
+
 ## What Works Right Now
 
 ### Week 1 (complete)
@@ -64,6 +82,33 @@
 - Claude chat route (`/api/chat`): SSE streaming, `[STAR EARNED]` detection, model `claude-haiku-4-5-20251001`
 - Full chat UI: MascotAvatar, ChatBubble (child/mascot), ChatMessageList (auto-scroll, typing indicator), ChatInput, SubjectSelector
 - Vercel deployment: https://spark-tutor-app.vercel.app — zero build errors, all routes working
+
+### Week 4 (in progress — Jun 21, 12/15 done)
+- **MCP math tool** — `/api/mcp/math-problem` generates grade-appropriate problems; answer never returned to client
+- **MCP routing in chat** — `detectsProblemRequest()` triggers MCP before RAG when child asks for a practice problem
+- **SVG avatars** — 6 geometric SVG components (`BlipAvatar`, `FinnAvatar`, `ZorroAvatar`, `LunaAvatar`, `PipAvatar`, `NovaAvatar`)
+- **Avatar animations** — CSS keyframes: idle float, thinking tilt, celebration bounce (in `globals.css`)
+- **AnimatedAvatar** — wrapper component applying correct animation class; celebration auto-reverts to idle
+- **CharacterCard + MascotAvatar** — emoji placeholders replaced with SVG avatars; thinking/celebrating wired to chat state
+- **Mobile polish (child)** — `h-dvh`, safe-area insets, touch targets verified, font sizes 16px+
+- **Mobile polish (parent)** — `min-h-dvh`, nav spacing, `SessionSummaryCard` header wraps on narrow screens
+- **Error & loading UI** — `ErrorMessage.tsx` (child + parent variants); `loading.tsx` + `error.tsx` for both chat and dashboard routes
+- **Rate limiting** — `src/lib/upstash/ratelimit.ts`; `chatRatelimit` (30/hr) on `/api/chat`, `summaryRatelimit` (10/hr) on `/api/summary`; fail-open when env vars absent
+- **Code quality** — `.prettierrc` created; Prettier run over all 80 src files; all ESLint errors + warnings resolved; 3 `console.error` calls removed; unused imports removed
+- **Husky pre-commit hook** — `husky@9` + `lint-staged@16` installed; `.husky/pre-commit` runs `tsc --noEmit && prettier --check && eslint`; `lint-staged` config in package.json; hook verified firing on commit
+- **Integration test fixes** — Upstash fail-open extended to bad credentials (try/catch); `WellDoneScreen` "Play Again!" button added; Firestore security rules fixed (client reads now allowed); `firestore.rules` committed to repo
+
+### Week 3 (complete — Jun 17)
+- **verifyAuthToken helper** — shared token verification across all protected API routes
+- **Session lifecycle** — `/api/session/start` (creates Firestore doc) → `/api/session/star` (increments stars) → `/api/session/end` (closes session, triggers summary)
+- **Message count tracking** — `/api/chat` increments `messageCount` in Firestore per AI response
+- **Stars logic** — `useStars.ts` hook + `StarBurst.tsx` animation + Firestore sync
+- **Progress bar** — `SessionProgressBar.tsx` fills over 10 messages, shows star badge
+- **WellDoneScreen** — full-screen celebration after session ends
+- **Agentic summary** — `buildSummaryPrompt.ts` + `/api/summary` sends session transcript to Claude, parses JSON, saves to Firestore
+- **Parent dashboard** — nav bar layout, `DashboardHeader`, Shadcn `Card` layout
+- **Session summary card** — `useSessionHistory.ts` (onSnapshot), `SessionSummaryCard.tsx` (Shadcn Card + Badge)
+- **13 routes** building clean on Vercel production
 
 ### Week 2 (complete — Jun 17)
 - **RAG source documents** — 17 PDFs in `rag-sources/` (9 math, 8 reading), CC-licensed, gitignored
@@ -78,12 +123,30 @@
 - **Quality verified** — `scripts/rag/testRetrieval.ts` — 10/10 sample K-1 questions return relevant chunks (score 0.66–0.75)
 - **Model note**: `text-embedding-004` retired; `gemini-embedding-001` is the current stable model (3072 dims)
 
+## Week 4 — PR Checklist (In Progress)
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 4-01 | MCP Math Problem Generator | `feature/mcp-math-tool` | ✅ Done |
+| 4-02 | Wire MCP Into Chat Router | `feature/mcp-routing` | ✅ Done |
+| 4-03 | Character SVG Avatars | `feature/character-avatars` | ✅ Done |
+| 4-04 | Character Animations | `feature/character-animations` | ✅ Done |
+| 4-05 | Update Character Select + MascotAvatar | `feature/character-select-avatars` | ✅ Done |
+| 4-06 | Mobile Polish — Child UI | `feature/mobile-polish-child` | ✅ Done |
+| 4-07 | Mobile Polish — Parent UI | `feature/mobile-polish-parent` | ✅ Done |
+| 4-08 | Privacy Policy Page | `feature/privacy-policy` | ✅ Done |
+| 4-09 | Error States & Loading UI | `feature/error-and-loading` | ✅ Done |
+| 4-10 | Rate Limiting | `feature/rate-limiting` | ✅ Done |
+| 4-11 | Prettier & Lint Cleanup | `feature/code-quality` | ✅ Done |
+| 4-12 | Husky Pre-commit Hook | `feature/husky` | ⏳ Pending |
+| 4-13 | Final End-to-End Test | `dev` | ⏳ Pending |
+| 4-14 | Vercel Production Deploy | `main` | ⏳ Pending |
+| 4-15 | Portfolio README | `feature/readme` | ⏳ Pending |
+
+---
+
 ## What Does Not Work Yet
-- RAG layer not wired to chat (PRs 2-04 through 2-08 remaining)
-- No parent dashboard (placeholder only — Week 3)
-- No Firestore session persistence (client-side only — Week 3)
-- No agentic session summary (Week 3)
-- No MCP math tool (Week 4)
+- Nothing blocking — all tooling in place; PRs 4-13 through 4-15 are final testing + deploy + docs
 
 ## Completion Checklist (Final MVP Gate)
 - [ ] All 4 weeks complete

@@ -13,6 +13,7 @@ import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { SUMMARY_SYSTEM_PROMPT } from '@/constants/prompts';
 import { buildSummaryPrompt } from '@/lib/claude/buildSummaryPrompt';
+import { summaryRatelimit } from '@/lib/upstash/ratelimit';
 import type { ApiResult, SummaryRequest, SummaryResponse, Message } from '@/types';
 
 /** Parsed JSON structure expected from Claude's summary response. */
@@ -60,7 +61,27 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 2. Parse request body ─────────────────────────────────────────────────
+  // ── 2. Rate limit — 10 requests per user per hour ────────────────────────
+  // summaryRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks summary.
+  if (summaryRatelimit !== null) {
+    try {
+      const { success } = await summaryRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error: 'Too many summary requests. Please wait before ending another session.',
+          } satisfies ApiResult<never>,
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
+    }
+  }
+
+  // ── 3. Parse request body ─────────────────────────────────────────────────
   let body: SummaryRequest;
   try {
     body = (await request.json()) as SummaryRequest;
@@ -80,7 +101,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 3. Fetch session document from Firestore ──────────────────────────────
+  // ── 4. Fetch session document from Firestore ──────────────────────────────
   let sessionData: FirebaseFirestore.DocumentData;
   try {
     const sessionRef = adminDb
@@ -104,7 +125,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 4. Build the summary prompt from session metadata ─────────────────────
+  // ── 5. Build the summary prompt from session metadata ─────────────────────
   // The messages are passed in the request body (from the client's in-memory state)
   // since we don't persist individual messages to Firestore during the session.
   const sessionMessages: Message[] = Array.isArray(body.messages) ? body.messages : [];
@@ -113,7 +134,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const userMessage = buildSummaryPrompt({ subject, mascotName, messages: sessionMessages });
 
-  // ── 5. Call Claude for the structured summary ─────────────────────────────
+  // ── 6. Call Claude for the structured summary ─────────────────────────────
   let summaryData: ClaudeSummaryJson;
   try {
     const anthropic = getAnthropicClient();
@@ -145,7 +166,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 6. Save summary to Firestore ─────────────────────────────────────────
+  // ── 7. Save summary to Firestore ─────────────────────────────────────────
   try {
     const summaryRef = adminDb
       .collection('users')
@@ -171,7 +192,5 @@ export async function POST(request: NextRequest): Promise<Response> {
     encouragementNote: summaryData.encouragementNote,
   };
 
-  return Response.json(
-    { success: true, data: responseData } satisfies ApiResult<SummaryResponse>,
-  );
+  return Response.json({ success: true, data: responseData } satisfies ApiResult<SummaryResponse>);
 }
