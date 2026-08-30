@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 and 2-02 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-03 done)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -21,8 +21,13 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `ChatRequest.grade?: GradeBand` — `/api/chat` accepts it and validates K/1/2/3
   - Child UI does not send `grade` yet — existing sessions stay Kindergarten until a later PR
 
+- [x] PR 2-03 · Topic Curriculum Map (`feature/topic-curriculum-map`)
+  - `src/constants/topicMap.ts` — `TOPIC_MAP` nested as subject → grade → topic[]
+  - Math and reading: 5 topics per grade K–3; science: Phase 2 placeholder (same 6 topics all grades)
+  - `getTopics(subject, gradeBand)` helper for later learning-path PRs
+
 ## Up Next
-- PR 2-03 · Topic Curriculum Map (`feature/topic-curriculum-map`)
+- PR 2-04 · Learning Path Firestore Types (`feature/learning-path-types`)
 
 ---
 
@@ -109,7 +114,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/grade-band-prompt-layer` — PR 2-02 complete, not yet merged to `dev`.
+`feature/topic-curriculum-map` — PR 2-03 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

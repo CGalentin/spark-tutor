@@ -81,7 +81,7 @@
 ### PR 2-03 · Topic Curriculum Map
 **Branch:** `feature/topic-curriculum-map`
 
-- [ ] Create `/src/constants/topicMap.ts`:
+- [x] Create `/src/constants/topicMap.ts`:
   - Define `TopicMap` — nested object: `subject → gradeBand → topic[]`
   - Math topics per grade:
     - K: Counting to 10, Counting to 20, Shapes, Comparing numbers, Simple addition
@@ -95,8 +95,8 @@
     - 3: Inferencing, Text evidence, Literary devices, Summary writing, Research skills
   - Science topics per grade (placeholder for Phase 2):
     - K-3: Living things, Weather, Human body, Animals, Plants, Earth and sky
-- [ ] Export from `/src/constants/index.ts`
-- [ ] Commit: `feat(constants): add topic curriculum map for math and reading k-3`
+- [x] Export from `/src/constants/index.ts`
+- [x] Commit: `feat(constants): add topic curriculum map for math and reading k-3`
 
 ---
 
