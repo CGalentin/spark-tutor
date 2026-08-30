@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-03 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-04 done)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -26,8 +26,13 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Math and reading: 5 topics per grade K–3; science: Phase 2 placeholder (same 6 topics all grades)
   - `getTopics(subject, gradeBand)` helper for later learning-path PRs
 
+- [x] PR 2-04 · Learning Path Firestore Types (`feature/learning-path-types`)
+  - `src/types/learningPath.ts` — `TopicMastery`, `LearningPath`, `EvaluationResult`
+  - Firestore path (documented): `users/{parentUID}/learningPath/{subject}`
+  - Uses tutoring `GradeBand` (K–3) and client Firestore `Timestamp` (safe for dashboard + API)
+
 ## Up Next
-- PR 2-04 · Learning Path Firestore Types (`feature/learning-path-types`)
+- PR 2-05 · Learning Path Firestore Helpers (`feature/learning-path-firestore`)
 
 ---
 
@@ -114,7 +119,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/topic-curriculum-map` — PR 2-03 complete, not yet merged to `dev`.
+`feature/learning-path-types` — PR 2-04 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

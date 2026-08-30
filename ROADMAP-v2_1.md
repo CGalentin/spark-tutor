@@ -103,7 +103,7 @@
 ### PR 2-04 · Learning Path Firestore Types
 **Branch:** `feature/learning-path-types`
 
-- [ ] Create `/src/types/learningPath.ts`:
+- [x] Create `/src/types/learningPath.ts`:
   ```ts
   interface TopicMastery {
     topic: string;
@@ -135,9 +135,9 @@
     reasoning: string;       // Gemini's brief explanation — shown to parent only
   }
   ```
-- [ ] Export from `/src/types/index.ts`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(types): add LearningPath, TopicMastery, and EvaluationResult types`
+- [x] Export from `/src/types/index.ts`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(types): add LearningPath, TopicMastery, and EvaluationResult types`
 
 ---
 

@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 1 in progress (PR 2-01 through 2-03 done) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 1 in progress (PR 2-01 through 2-04 done) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -10,7 +10,8 @@
 | 2-01 | Grade Band Constants | `feature/grade-band-constants` | ✅ Done |
 | 2-02 | Update System Prompt Composer | `feature/grade-band-prompt-layer` | ✅ Done |
 | 2-03 | Topic Curriculum Map | `feature/topic-curriculum-map` | ✅ Done |
-| 2-04 | Learning Path Firestore Types | `feature/learning-path-types` | ⬜ Next |
+| 2-04 | Learning Path Firestore Types | `feature/learning-path-types` | ✅ Done |
+| 2-05 | Learning Path Firestore Helpers | `feature/learning-path-firestore` | ⬜ Next |
 
 ---
 
