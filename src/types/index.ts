@@ -24,3 +24,10 @@ export type {
 } from './api';
 
 export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';
+
+export type {
+  TopicMastery,
+  LearningPath,
+  EvaluationResult,
+  EvaluationConfidence,
+} from './learningPath';
