@@ -1,6 +1,26 @@
 # Active Context — Spark Tutor
 
 ## Current Status
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 done)**
+
+v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
+
+---
+
+## Completed This Session (Aug 30)
+
+- [x] PR 2-01 · Grade Band Constants (`feature/grade-band-constants`)
+  - `src/constants/gradeBands.ts` — `GradeBand` (`'K' | '1' | '2' | '3'`) + `GRADE_BAND_CONFIGS`
+  - `src/constants/gradeBandPrompts.ts` — `GRADE_BAND_PROMPT` (K: 2 sentences / single-step; 1: 3 / two-step; 2: 4 / two-step; 3: 5 / multi-step)
+  - Barrel export from `src/constants/index.ts`
+  - Note: RAG chunk `GradeBand` in `src/types/rag.ts` is still `'K' | '1' | 'K-1'` (curriculum metadata — different type)
+
+## Up Next
+- PR 2-02 · Update System Prompt Composer (`feature/grade-band-prompt-layer`)
+
+---
+
+## v1 Status (complete)
 **Week 4 — MCP Tool, Characters & Polish — ✅ COMPLETE (15/15 PRs done)**
 
 ---
@@ -83,7 +103,7 @@
 ---
 
 ## Active Branch
-`dev` — all 4 weeks complete. MVP shipped to production.
+`feature/grade-band-constants` — PR 2-01 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
