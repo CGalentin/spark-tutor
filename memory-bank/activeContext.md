@@ -125,7 +125,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/learning-path-firestore` — PR 2-05 complete, not yet merged to `dev`.
+`dev` — PR 2-05 merged. Next: PR 2-06 · Session Start Reads Learning Path.
 
 ## Known Issues / Decisions
 - Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
