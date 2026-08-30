@@ -144,16 +144,16 @@
 ### PR 2-05 · Learning Path Firestore Helpers
 **Branch:** `feature/learning-path-firestore`
 
-- [ ] Add to `/src/lib/firebase/firestore.ts` (server-side admin functions):
+- [x] Add to `/src/lib/firebase/firestore.ts` (server-side admin functions):
   - `getLearningPath(parentUID, subject)` → `LearningPath | null`
   - `createLearningPath(parentUID, subject, initialTopic, grade)` → creates doc
   - `updateLearningPath(parentUID, subject, updates)` → partial update
   - `saveMasteryResult(parentUID, subject, result: TopicMastery)` → appends to history
   - `subscribeToLearningPath(parentUID, subject, callback)` → onSnapshot for dashboard
-- [ ] All server functions use `adminDb` (Firebase Admin) — never the client SDK
-- [ ] All functions fully typed — no `any`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(firebase): add learning path firestore helpers with admin sdk`
+- [x] All server functions use `adminDb` (Firebase Admin) — never the client SDK
+- [x] All functions fully typed — no `any`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(firebase): add learning path firestore helpers with admin sdk`
 
 ---
 

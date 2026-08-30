@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-04 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-05 done)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -31,8 +31,14 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Firestore path (documented): `users/{parentUID}/learningPath/{subject}`
   - Uses tutoring `GradeBand` (K–3) and client Firestore `Timestamp` (safe for dashboard + API)
 
+- [x] PR 2-05 · Learning Path Firestore Helpers (`feature/learning-path-firestore`)
+  - Admin CRUD in `src/lib/firebase/learningPath.ts` (server-only — firestore.ts is imported by client hooks)
+  - `getLearningPath` / `createLearningPath` / `updateLearningPath` / `saveMasteryResult` via `adminDb`
+  - `subscribeToLearningPath` on client `firestore.ts` for the parent dashboard
+  - Path: `users/{parentUID}/learningPath/{subject}`
+
 ## Up Next
-- PR 2-05 · Learning Path Firestore Helpers (`feature/learning-path-firestore`)
+- PR 2-06 · Session Start Reads Learning Path (`feature/session-reads-learning-path`)
 
 ---
 
@@ -119,12 +125,12 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/learning-path-types` — PR 2-04 complete, not yet merged to `dev`.
+`feature/learning-path-firestore` — PR 2-05 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
 - Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
-- Learning path types exist; Firestore helpers (PR 2-05) are not written yet
+- Learning path helpers exist; session start does not create/read a path yet (PR 2-06)
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
 - Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only

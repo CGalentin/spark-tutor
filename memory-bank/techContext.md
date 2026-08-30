@@ -81,7 +81,8 @@ UPSTASH_REDIS_REST_TOKEN            ✅ filled (Vercel: Production + Preview; lo
 src/lib/firebase/config.ts        ← Firebase singleton init, exports auth + db
 src/lib/firebase/admin.ts         ← Firebase Admin SDK init; exports adminAuth, adminDb, verifyAuthToken()
 src/lib/firebase/auth.ts          ← signIn, signUp, signOut, onAuthChange
-src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessions() (onSnapshot)
+src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessions(), subscribeToLearningPath() (client SDK)
+src/lib/firebase/learningPath.ts  ← get/create/update/saveMastery (Admin SDK — API routes only)
 src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbedding(), countChunks()
 
 # Gemini (embedding only)

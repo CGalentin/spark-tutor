@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 1 in progress (PR 2-01 through 2-04 done) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 1 in progress (PR 2-01 through 2-05 done) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -11,7 +11,8 @@
 | 2-02 | Update System Prompt Composer | `feature/grade-band-prompt-layer` | ✅ Done |
 | 2-03 | Topic Curriculum Map | `feature/topic-curriculum-map` | ✅ Done |
 | 2-04 | Learning Path Firestore Types | `feature/learning-path-types` | ✅ Done |
-| 2-05 | Learning Path Firestore Helpers | `feature/learning-path-firestore` | ⬜ Next |
+| 2-05 | Learning Path Firestore Helpers | `feature/learning-path-firestore` | ✅ Done |
+| 2-06 | Session Start Reads Learning Path | `feature/session-reads-learning-path` | ⬜ Next |
 
 ---
 
@@ -22,9 +23,9 @@
 - Chat API accepts optional `grade` and injects Layer 4 (defaults to K)
 - Topic curriculum map (`getTopics`)
 - LearningPath / TopicMastery / EvaluationResult TypeScript types
+- Learning path Admin helpers + client `subscribeToLearningPath` (not wired to session start yet)
 
 **Not built yet (rest of Sprint 1)**
-- PR 2-05 Firestore helpers (read/write learning path)
 - PR 2-06 session start returns current topic + grade; child UI still does not send `grade`
 - PR 2-07 sprint integration test
 

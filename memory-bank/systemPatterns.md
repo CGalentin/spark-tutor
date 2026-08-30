@@ -89,7 +89,7 @@ users/{parentUID}/
       encouragementNote: string
       generatedAt: Timestamp
 
-  learningPath/{subject}/        ← types exist (PR 2-04); helpers not written yet (PR 2-05)
+  learningPath/{subject}/        ← helpers in src/lib/firebase/learningPath.ts (Admin) + subscribeToLearningPath (client)
     currentGrade: GradeBand      ← tutoring 'K'|'1'|'2'|'3' (not RAG 'K-1')
     currentTopic: string
     topicsCompleted: string[]
@@ -124,6 +124,8 @@ type ApiResult<T> =
 - Components NEVER write to Firestore directly
 - Client-side reads go through service functions in `/src/lib/firebase/` (using client SDK)
 - Server-side reads/writes go through `adminDb` in `/src/lib/firebase/admin.ts` (Admin SDK, API routes only)
+- Learning path CRUD for API routes: `src/lib/firebase/learningPath.ts` (Admin SDK — do not import from Client Components)
+- Learning path live dashboard: `subscribeToLearningPath()` in `firestore.ts` (client SDK `onSnapshot`)
 - Real-time data (parent dashboard) uses `subscribeToSessions()` → `onSnapshot` with cleanup in `useEffect`
 
 ### 9. Error Handling Pattern
