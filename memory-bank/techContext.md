@@ -90,7 +90,7 @@ src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
-src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer (child chat)
+src/lib/claude/buildSystemPrompt.ts ← 6-layer system prompt composer (child chat)
 src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
 
 # API Routes
@@ -105,14 +105,19 @@ src/app/api/summary/route.ts           ← sends transcript to Claude; saves sum
 # Types
 src/types/index.ts                ← central re-export for all shared types
 src/types/session.ts              ← Subject, Message, Session, SessionSummary
-src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand
-src/types/api.ts                  ← ApiResult<T>, ChatRequest, SessionStartRequest/Response,
+src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('K'|'1'|'K-1' — RAG chunk metadata)
+src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult (tutoring GradeBand K–3)
+src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response,
                                      SessionEndRequest/Response, SummaryRequest/Response, etc.
 
 # Constants + State
+src/constants/index.ts            ← barrel: grade bands, prompts, topic map
 src/constants/characters.ts       ← all 6 Spark Squad character configs
 src/constants/prompts.ts          ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
-src/constants/subjects.ts         ← Subject, GradeBand, MAX_SESSION_STARS
+src/constants/gradeBands.ts       ← tutoring GradeBand 'K'|'1'|'2'|'3' + GRADE_BAND_CONFIGS
+src/constants/gradeBandPrompts.ts ← GRADE_BAND_PROMPT strings (Layer 4)
+src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading K–3; science placeholder)
+src/constants/subjects.ts         ← SUBJECTS, MAX_SESSION_STARS (legacy GRADE_BANDS still K|1 for RAG-era constants)
 src/store/useChildStore.ts        ← character selection state
 src/store/useSessionStore.ts      ← active session state (sessionId, subject, stars, messageCount)
 src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthenticated)
@@ -151,7 +156,14 @@ scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8
 - Child chat: `max_tokens: 300`, `temperature: 0.7`
 - Session summary: `max_tokens: 600`
 - Always stream responses for child chat via SSE
-- System prompt = BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT + RAG_CONTEXT (4 layers; Layer 4 optional)
+- System prompt layers (see systemPatterns.md):
+    1. BASE_TUTOR_RULES
+    2. CHARACTER_VOICE
+    3. SUBJECT_CONTEXT
+    4. GRADE_BAND (GRADE_BAND_PROMPT; defaults to K if request omits `grade`)
+    5. RAG_CONTEXT (optional)
+    6. MCP_CONTEXT (optional)
+- ChatRequest.grade is optional `'K'|'1'|'2'|'3'` — child UI does not send it yet
 - `[STAR EARNED]` in Claude response = award a star to the child
 
 ## Gemini API Settings

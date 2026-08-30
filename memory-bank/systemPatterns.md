@@ -55,7 +55,7 @@ Offline (ingestion scripts — run once, not in the app):
                                    (dedup via chunkExists(); safe to re-run)
 
 Online (per child message in /api/chat):
-  child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 4
+  child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 5
 ```
 Corpus: 202 math chunks + 334 reading chunks = 536 total in `curriculum_chunks` Firestore collection.
 Cosine similarity is computed in-memory (all subject-filtered chunks fetched, ranked, top-3 returned).
@@ -88,8 +88,24 @@ users/{parentUID}/
       areasForPractice: string[]
       encouragementNote: string
       generatedAt: Timestamp
+
+  learningPath/{subject}/        ← types exist (PR 2-04); helpers not written yet (PR 2-05)
+    currentGrade: GradeBand      ← tutoring 'K'|'1'|'2'|'3' (not RAG 'K-1')
+    currentTopic: string
+    topicsCompleted: string[]
+    masteryHistory: TopicMastery[]
+    suggestedNextTopic: string | null
+    parentApproved: boolean
+    parentApprovedAt: Timestamp | null
+    lastEvaluatedAt: Timestamp | null
 ```
-All child session data lives under the parent UID — no child accounts exist.
+All child session and learning-path data lives under the parent UID — no child accounts exist.
+
+**Two different `GradeBand` types (do not mix them):**
+- Tutoring: `src/constants/gradeBands.ts` — `'K' | '1' | '2' | '3'`
+- RAG chunks: `src/types/rag.ts` — `'K' | '1' | 'K-1'` (curriculum metadata)
+
+`@/types` currently re-exports the RAG `GradeBand`. Import the tutoring one from `@/constants`.
 
 ### 6. API Response Shape
 Every API route returns this consistent shape:
@@ -109,6 +125,12 @@ type ApiResult<T> =
 - Client-side reads go through service functions in `/src/lib/firebase/` (using client SDK)
 - Server-side reads/writes go through `adminDb` in `/src/lib/firebase/admin.ts` (Admin SDK, API routes only)
 - Real-time data (parent dashboard) uses `subscribeToSessions()` → `onSnapshot` with cleanup in `useEffect`
+
+### 9. Error Handling Pattern
+- Every async function wrapped in `try/catch`
+- Child-facing: mascot says warm message, retry button shown
+- Parent-facing: plain English with retry action
+- API routes always return a response — never leave a request hanging
 
 ### 10. Session Lifecycle
 ```
@@ -137,12 +159,6 @@ Parent opens dashboard:
   → useSessionHistory → subscribeToSessions → onSnapshot
   → live list of sessions (updates when summary arrives)
 ```
-
-### 9. Error Handling Pattern
-- Every async function wrapped in `try/catch`
-- Child-facing: mascot says warm message, retry button shown
-- Parent-facing: plain English with retry action
-- API routes always return a response — never leave a request hanging
 
 ## Route Structure
 ```

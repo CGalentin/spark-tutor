@@ -49,6 +49,8 @@ Read all files at the start of every new session to restore full project context
 
 **At the start of a new session:** Say "read the memory bank" — the AI will read all 6 files and restore full context before doing any work.
 
-**After completing a PR:** Update `activeContext.md` (current focus, next steps) and `progress.md` (mark PR done, update what works/what's left).
+**After completing a PR:** Update `activeContext.md` (current focus, next steps) and `progress.md` (mark PR done, update what works / what's left). Check off the PR in `ROADMAP-v2_1.md`.
 
-**After a major architectural decision:** Update `systemPatterns.md` and/or `techContext.md` to reflect the change.
+**After a major architectural decision:** Update `systemPatterns.md` and `techContext.md` in the same docs commit (prompt layers, Firestore shape, new files).
+
+**After a product-scope change:** Update `projectbrief.md` and `productContext.md` (who the app is for, what problems it solves). Do not leave those files describing an older product than the code.

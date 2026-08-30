@@ -122,6 +122,9 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 `feature/learning-path-types` — PR 2-04 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
+- Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
+- Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
+- Learning path types exist; Firestore helpers (PR 2-05) are not written yet
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
 - Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only

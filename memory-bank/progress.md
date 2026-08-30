@@ -15,6 +15,24 @@
 
 ---
 
+## v2 Sprint 1 — What Works / What's Left
+
+**Works now**
+- Grade-band configs + prompt strings (K–3)
+- Chat API accepts optional `grade` and injects Layer 4 (defaults to K)
+- Topic curriculum map (`getTopics`)
+- LearningPath / TopicMastery / EvaluationResult TypeScript types
+
+**Not built yet (rest of Sprint 1)**
+- PR 2-05 Firestore helpers (read/write learning path)
+- PR 2-06 session start returns current topic + grade; child UI still does not send `grade`
+- PR 2-07 sprint integration test
+
+**Still v1 in production**
+- Child UI, RAG corpus (K-1 chunks), parent dashboard session list
+
+---
+
 ## v1 Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
