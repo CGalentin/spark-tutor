@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 and 2-02 done)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -15,8 +15,14 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Barrel export from `src/constants/index.ts`
   - Note: RAG chunk `GradeBand` in `src/types/rag.ts` is still `'K' | '1' | 'K-1'` (curriculum metadata — different type)
 
+- [x] PR 2-02 · Update System Prompt Composer (`feature/grade-band-prompt-layer`)
+  - `buildSystemPrompt` takes optional `gradeBand` (defaults to `'K'`)
+  - Layer 4 injects `GRADE_BAND_PROMPT[gradeBand]` after character voice, before RAG
+  - `ChatRequest.grade?: GradeBand` — `/api/chat` accepts it and validates K/1/2/3
+  - Child UI does not send `grade` yet — existing sessions stay Kindergarten until a later PR
+
 ## Up Next
-- PR 2-02 · Update System Prompt Composer (`feature/grade-band-prompt-layer`)
+- PR 2-03 · Topic Curriculum Map (`feature/topic-curriculum-map`)
 
 ---
 
@@ -103,7 +109,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/grade-band-constants` — PR 2-01 complete, not yet merged to `dev`.
+`feature/grade-band-prompt-layer` — PR 2-02 complete, not yet merged to `dev`.
 
 ## Known Issues / Decisions
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

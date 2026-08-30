@@ -33,14 +33,16 @@ Browser (Child or Parent)
 
 ## Key Architectural Patterns
 
-### 1. Composable System Prompt (4 Layers)
-Every Claude chat call builds the system prompt from four layers (Layer 4 only injected when RAG returns results):
+### 1. Composable System Prompt (6 Layers)
+Every Claude chat call builds the system prompt from independent layers (RAG and MCP are optional):
 ```
-Layer 1: BASE_TUTOR_RULES    — never changes; enforces K-1 safety + Socratic method
+Layer 1: BASE_TUTOR_RULES    — never changes; enforces safety + Socratic method
 Layer 2: CHARACTER_VOICE     — loaded from constants/characters.ts by selected character id
 Layer 3: SUBJECT_CONTEXT     — which subject (math vs reading) this session covers
-Layer 4: RAG_CONTEXT         — top 3 curriculum chunks via in-memory cosine similarity on Firestore
+Layer 4: GRADE_BAND          — GRADE_BAND_PROMPT[K|1|2|3]; defaults to K if omitted
+Layer 5: RAG_CONTEXT         — top 3 curriculum chunks via in-memory cosine similarity on Firestore
                                (omitted if RAG retrieval fails — graceful fallback)
+Layer 6: MCP_CONTEXT         — practice problem + hint when the child asks for a math problem
 ```
 This lets us swap or update any layer without touching the others.
 Implemented in: `src/lib/claude/buildSystemPrompt.ts`

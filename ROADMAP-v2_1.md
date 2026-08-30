@@ -64,17 +64,17 @@
 ### PR 2-02 · Update System Prompt Composer
 **Branch:** `feature/grade-band-prompt-layer`
 
-- [ ] Update `/src/lib/claude/buildSystemPrompt.ts`:
+- [x] Update `/src/lib/claude/buildSystemPrompt.ts`:
   - Add optional `gradeBand?: GradeBand` param to `BuildSystemPromptOptions`
   - Add Layer 4: inject `GRADE_BAND_PROMPT[gradeBand]` between CHARACTER_VOICE and RAG_CONTEXT
   - Default to `'K'` if no grade band provided (backwards compatible)
-- [ ] Update `/src/app/api/chat/route.ts`:
+- [x] Update `/src/app/api/chat/route.ts`:
   - Accept optional `grade` field in request body
   - Pass grade to `buildSystemPrompt()`
-- [ ] Update `ChatRequest` type in `/src/types/api.ts` — add `grade?: GradeBand`
-- [ ] Test: send a message with `grade: '2'` — verify Claude uses more complex language
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): add grade band as layer 4 of composable system prompt`
+- [x] Update `ChatRequest` type in `/src/types/api.ts` — add `grade?: GradeBand`
+- [x] Test: send a message with `grade: '2'` — verify Claude uses more complex language
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): add grade band as layer 4 of composable system prompt`
 
 ---
 
