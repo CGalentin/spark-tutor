@@ -6,6 +6,11 @@
 /** The four grade levels a child can be tutored at. */
 export type GradeBand = 'K' | '1' | '2' | '3';
 
+/** Returns true if value is one of K, 1, 2, or 3. */
+export function isGradeBand(value: unknown): value is GradeBand {
+  return value === 'K' || value === '1' || value === '2' || value === '3';
+}
+
 /** How long Claude's replies should be for this grade. */
 export type ResponseLength = 'very-short' | 'short' | 'medium';
 

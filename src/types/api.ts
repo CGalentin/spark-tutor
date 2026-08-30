@@ -1,6 +1,7 @@
 // Types for API routes — request/response shapes and the shared ApiResult wrapper.
 // Every API route handler and service function should use ApiResult<T> as its return type.
 
+import type { GradeBand } from '@/constants/gradeBands';
 import type { Message, Subject } from './session';
 
 /** Standard API response wrapper used by all /app/api routes.
@@ -14,6 +15,8 @@ export interface ChatRequest {
   sessionId: string;
   characterId: string;
   subject: Subject;
+  /** Tutoring grade band. Optional — the chat route defaults to 'K' if omitted. */
+  grade?: GradeBand;
   /** Full conversation history so Claude has context. */
   messages: Message[];
 }

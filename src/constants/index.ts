@@ -8,6 +8,6 @@ export type {
   QuestionComplexity,
   GradeBandConfig,
 } from './gradeBands';
-export { GRADE_BAND_CONFIGS } from './gradeBands';
+export { GRADE_BAND_CONFIGS, isGradeBand } from './gradeBands';
 
 export { GRADE_BAND_PROMPT } from './gradeBandPrompts';

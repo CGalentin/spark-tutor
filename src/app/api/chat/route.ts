@@ -11,13 +11,14 @@
 //   curl -X POST http://localhost:3000/api/chat \
 //     -H "Authorization: Bearer TOKEN" \
 //     -H "Content-Type: application/json" \
-//     -d '{"message":"What is 2 + 2?","characterId":"blip","subject":"math","messages":[]}'
+//     -d '{"message":"What is 2 + 2?","characterId":"blip","subject":"math","grade":"2","messages":[]}'
 
 import { type NextRequest } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
+import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
 import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
 import { detectsProblemRequest, generateMathProblem } from '@/lib/mcp/mathProblem';
@@ -75,7 +76,19 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { message, sessionId, characterId, subject, messages } = body;
+  const { message, sessionId, characterId, subject, messages, grade } = body;
+
+  // Optional grade field — missing or omitted means Kindergarten (old clients still work).
+  let gradeBand: GradeBand = 'K';
+  if (grade !== undefined) {
+    if (!isGradeBand(grade)) {
+      return Response.json(
+        { success: false, error: 'Optional field grade must be "K", "1", "2", or "3".' },
+        { status: 400 },
+      );
+    }
+    gradeBand = grade;
+  }
 
   if (
     typeof message !== 'string' ||
@@ -132,7 +145,13 @@ export async function POST(request: NextRequest) {
   // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
   try {
-    systemPrompt = buildSystemPrompt({ characterId, subject, ragContext, mcpContext });
+    systemPrompt = buildSystemPrompt({
+      characterId,
+      subject,
+      gradeBand,
+      ragContext,
+      mcpContext,
+    });
   } catch (err) {
     return Response.json({ success: false, error: (err as Error).message }, { status: 400 });
   }
