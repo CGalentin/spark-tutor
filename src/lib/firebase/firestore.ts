@@ -13,7 +13,7 @@ import {
   type Unsubscribe,
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Session } from '@/types';
+import type { LearningPath, Session, Subject } from '@/types';
 
 /** Fetches a single session document for a given parent and session ID. */
 export async function getSession(
@@ -91,6 +91,33 @@ export function subscribeToSessions(
       });
 
       onData(sessions);
+    },
+    (error) => onError(error),
+  );
+}
+
+/**
+ * Subscribes to one subject's learning path for the parent dashboard.
+ * Uses the client SDK (onSnapshot) so the UI updates when the evaluator writes a new score.
+ * Returns the unsubscribe function — call it in useEffect cleanup.
+ */
+export function subscribeToLearningPath(
+  parentUID: string,
+  subject: Subject,
+  onData: (path: LearningPath | null) => void,
+  onError: (error: Error) => void,
+): Unsubscribe {
+  const pathRef = doc(db, 'users', parentUID, 'learningPath', subject);
+
+  return onSnapshot(
+    pathRef,
+    (snap) => {
+      if (!snap.exists()) {
+        onData(null);
+        return;
+      }
+
+      onData(snap.data() as LearningPath);
     },
     (error) => onError(error),
   );
