@@ -98,7 +98,7 @@ src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic 
 src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
-src/app/api/session/start/route.ts     ← creates Firestore session doc, returns sessionId
+src/app/api/session/start/route.ts     ← creates Firestore session doc; reads or creates learning path; returns sessionId + currentTopic + currentGrade + suggestedNextTopic
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
 src/app/api/summary/route.ts           ← sends transcript to Claude; saves summary.* to session doc
@@ -108,7 +108,8 @@ src/types/index.ts                ← central re-export for all shared types
 src/types/session.ts              ← Subject, Message, Session, SessionSummary
 src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('K'|'1'|'K-1' — RAG chunk metadata)
 src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult (tutoring GradeBand K–3)
-src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response,
+src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
+                                     (session start returns currentTopic, currentGrade, suggestedNextTopic),
                                      SessionEndRequest/Response, SummaryRequest/Response, etc.
 
 # Constants + State
@@ -120,7 +121,7 @@ src/constants/gradeBandPrompts.ts ← GRADE_BAND_PROMPT strings (Layer 4)
 src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading K–3; science placeholder)
 src/constants/subjects.ts         ← SUBJECTS, MAX_SESSION_STARS (legacy GRADE_BANDS still K|1 for RAG-era constants)
 src/store/useChildStore.ts        ← character selection state
-src/store/useSessionStore.ts      ← active session state (sessionId, subject, stars, messageCount)
+src/store/useSessionStore.ts      ← active session state (sessionId, subject, currentTopic, currentGrade, stars, messageCount)
 src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthenticated)
 
 # Hooks

@@ -138,7 +138,10 @@ type ApiResult<T> =
 ```
 Child picks subject → handleSubjectSelect → POST /api/session/start
   → creates Firestore doc users/{uid}/sessions/{id}
-  → returns sessionId → stored in useSessionStore
+  → getLearningPath(parentUID, subject)
+    if missing: createLearningPath with first TOPIC_MAP topic at grade K
+  → returns sessionId, currentTopic, currentGrade, suggestedNextTopic
+  → stored in useSessionStore
 
 Each chat message:
   → POST /api/chat (with sessionId)

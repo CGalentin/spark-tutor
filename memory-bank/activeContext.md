@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-05 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-06 done)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -37,8 +37,15 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `subscribeToLearningPath` on client `firestore.ts` for the parent dashboard
   - Path: `users/{parentUID}/learningPath/{subject}`
 
+- [x] PR 2-06 · Session Start Reads Learning Path (`feature/session-reads-learning-path`)
+  - `/api/session/start` reads `getLearningPath` after creating the session doc
+  - If missing: `createLearningPath` with first TOPIC_MAP topic for that subject at grade K
+  - Response now includes `currentTopic`, `currentGrade`, `suggestedNextTopic` with `sessionId`
+  - `useSessionStore` stores `currentTopic` + `currentGrade`; chat page writes them on start
+  - Child UI still does not send `grade` on `/api/chat` (defaults to K)
+
 ## Up Next
-- PR 2-06 · Session Start Reads Learning Path (`feature/session-reads-learning-path`)
+- PR 2-07 · Sprint 1 Integration Test (on `dev` after this branch is merged)
 
 ---
 
@@ -125,12 +132,13 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-05 merged. Next: PR 2-06 · Session Start Reads Learning Path.
+`feature/session-reads-learning-path` — PR 2-06 committed. Awaiting review; do not merge until user says continue.
 
 ## Known Issues / Decisions
 - Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
-- Learning path helpers exist; session start does not create/read a path yet (PR 2-06)
+- New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
+- `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
 - Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only

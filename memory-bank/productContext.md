@@ -36,7 +36,7 @@ Children pick one character and give it a custom name. The character's personali
 6. Parent clicks "End Session" — Claude generates a summary automatically
 7. Summary appears on parent dashboard within seconds
 
-**v2 (partially built):** chat API already accepts `grade` (K/1/2/3) and injects the matching prompt. The child UI does not send `grade` yet, so live sessions still default to Kindergarten. Learning-path Firestore helpers exist; session start does not create or return a path yet.
+**v2 (partially built):** chat API already accepts `grade` (K/1/2/3) and injects the matching prompt. The child UI does not send `grade` yet, so live chat still defaults to Kindergarten. Session start reads or creates a learning path per subject and returns `currentTopic` / `currentGrade` / `suggestedNextTopic`; the chat page stores topic and grade in Zustand.
 
 ## Key UX Principles
 - **Child UI:** Bright colors, large text (18px+), 48px+ touch targets, rounded buttons, single-column layout, no technical errors ever shown to child

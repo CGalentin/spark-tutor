@@ -160,15 +160,15 @@
 ### PR 2-06 · Session Start Reads Learning Path
 **Branch:** `feature/session-reads-learning-path`
 
-- [ ] Update `/src/app/api/session/start/route.ts`:
+- [x] Update `/src/app/api/session/start/route.ts`:
   - After creating session doc, call `getLearningPath(parentUID, subject)`
   - If no learning path exists: create one with the first topic from `TopicMap`
   - Return `learningPath` data alongside `sessionId` in response
-- [ ] Update `SessionStartResponse` type — add `currentTopic`, `currentGrade`, `suggestedNextTopic`
-- [ ] Update `chat/page.tsx` — store `currentTopic` and `currentGrade` from session start response in `useSessionStore`
-- [ ] Update `useSessionStore` — add `currentTopic: string`, `currentGrade: GradeBand` fields
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): session start reads learning path and returns current topic and grade`
+- [x] Update `SessionStartResponse` type — add `currentTopic`, `currentGrade`, `suggestedNextTopic`
+- [x] Update `chat/page.tsx` — store `currentTopic` and `currentGrade` from session start response in `useSessionStore`
+- [x] Update `useSessionStore` — add `currentTopic: string`, `currentGrade: GradeBand` fields
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): session start reads learning path and returns current topic and grade`
 
 ---
 
