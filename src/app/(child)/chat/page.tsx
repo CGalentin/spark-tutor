@@ -11,6 +11,7 @@ import { auth } from '@/lib/firebase/config';
 import { useChildStore } from '@/store/useChildStore';
 import { useSessionStore } from '@/store/useSessionStore';
 import { useStars } from '@/hooks/useStars';
+import { getTopics } from '@/constants';
 import { getCharacterById } from '@/constants/characters';
 import { MascotAvatar } from '@/components/child/MascotAvatar';
 import { ChatMessageList } from '@/components/child/ChatMessageList';
@@ -21,7 +22,7 @@ import { SessionProgressBar } from '@/components/child/SessionProgressBar';
 import { EndSessionButton } from '@/components/child/EndSessionButton';
 import { WellDoneScreen } from '@/components/child/WellDoneScreen';
 import type { AvatarAnimationState } from '@/components/child/AnimatedAvatar';
-import type { Message, Subject } from '@/types';
+import type { ApiResult, Message, SessionStartResponse, Subject } from '@/types';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
 type SseEvent =
@@ -101,7 +102,7 @@ export default function ChatPage() {
       : '';
 
   // ── Handle subject selection ──────────────────────────────────────────────
-  // Calls /api/session/start to create a Firestore session doc and get the real sessionId.
+  // Creates the session, then stores the learning-path topic and grade from the response.
   async function handleSubjectSelect(chosen: Subject) {
     if (character === undefined) return;
 
@@ -126,16 +127,23 @@ export default function ChatPage() {
         }),
       });
 
-      const result = (await response.json()) as { success: boolean; data?: { sessionId: string } };
+      const result = (await response.json()) as ApiResult<SessionStartResponse>;
 
-      if (!result.success || result.data === undefined) {
+      if (!result.success) {
         throw new Error('Failed to start session.');
       }
 
-      startSession(result.data.sessionId, chosen);
+      startSession(
+        result.data.sessionId,
+        chosen,
+        result.data.currentTopic,
+        result.data.currentGrade,
+      );
     } catch {
-      // Fall back to a client-side ID so the child can still chat even if the API fails
-      startSession(createMessageId(), chosen);
+      // Fall back to a client-side ID so the child can still chat even if the API fails.
+      // Kindergarten + first curriculum topic keep the store typed without a real path.
+      const fallbackTopic = getTopics(chosen, 'K')[0] ?? '';
+      startSession(createMessageId(), chosen, fallbackTopic, 'K');
     }
   }
 

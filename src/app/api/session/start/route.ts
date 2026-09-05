@@ -1,14 +1,45 @@
 // POST /api/session/start — Creates a new tutoring session in Firestore.
 // Called when the child picks a subject in the chat screen.
 // All session data is stored under the parent UID (COPPA: no child accounts).
+// After the session doc is created, reads (or creates) the learning path so the
+// client knows currentTopic and currentGrade for this subject.
 //
 // Request body: { characterType, characterName, subject }
-// Response:     { success: true, data: { sessionId } }
+// Response:     { success: true, data: { sessionId, currentTopic, currentGrade, suggestedNextTopic } }
 
 import { type NextRequest } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
-import type { ApiResult, SessionStartRequest, SessionStartResponse } from '@/types';
+import { createLearningPath, getLearningPath } from '@/lib/firebase/learningPath';
+import { getTopics, type GradeBand } from '@/constants';
+import type {
+  ApiResult,
+  LearningPath,
+  SessionStartRequest,
+  SessionStartResponse,
+  Subject,
+} from '@/types';
+
+/** New learning paths start at Kindergarten until the child UI sends a grade. */
+const DEFAULT_GRADE: GradeBand = 'K';
+
+/**
+ * Returns the parent's learning path for this subject, creating one on first use.
+ * A brand-new path starts at Kindergarten and the first topic in TOPIC_MAP.
+ */
+async function resolveLearningPath(parentUID: string, subject: Subject): Promise<LearningPath> {
+  const existing = await getLearningPath(parentUID, subject);
+  if (existing !== null) {
+    return existing;
+  }
+
+  const firstTopic = getTopics(subject, DEFAULT_GRADE)[0];
+  if (firstTopic === undefined) {
+    throw new Error(`No topics configured for ${subject} grade ${DEFAULT_GRADE}.`);
+  }
+
+  return createLearningPath(parentUID, subject, firstTopic, DEFAULT_GRADE);
+}
 
 export async function POST(request: NextRequest): Promise<Response> {
   // ── 1. Verify Firebase Auth token ────────────────────────────────────────
@@ -68,7 +99,16 @@ export async function POST(request: NextRequest): Promise<Response> {
       starsEarned: 0,
     });
 
-    const responseData: SessionStartResponse = { sessionId: sessionRef.id };
+    // ── 4. Read or create the learning path for this subject ───────────────
+    const learningPath = await resolveLearningPath(parentUID, subject);
+
+    const responseData: SessionStartResponse = {
+      sessionId: sessionRef.id,
+      currentTopic: learningPath.currentTopic,
+      currentGrade: learningPath.currentGrade,
+      suggestedNextTopic: learningPath.suggestedNextTopic,
+    };
+
     return Response.json({
       success: true,
       data: responseData,

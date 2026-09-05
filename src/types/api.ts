@@ -57,6 +57,12 @@ export interface SessionStartRequest {
 export interface SessionStartResponse {
   /** The Firestore document ID of the newly created session. */
   sessionId: string;
+  /** Topic the child should work on this session (from their learning path). */
+  currentTopic: string;
+  /** Tutoring grade band for this session (K–3, not RAG chunk metadata). */
+  currentGrade: GradeBand;
+  /** AI-suggested next topic, if the evaluator has proposed one. Null until then. */
+  suggestedNextTopic: string | null;
 }
 
 /** Request body sent to POST /api/session/end. */
