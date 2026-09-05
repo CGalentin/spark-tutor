@@ -24,7 +24,7 @@ Browser (Child or Parent)
    ┌────▼──────────────────────────────────────┐
    │  External Services                         │
    │  Claude (Anthropic) — chat + summary       │
-   │  Gemini (Google)    — embeddings only      │
+   │  Gemini (Google)    — embeddings + Flash evaluator (parent-only)      │
    │  Firebase Auth      — parent auth          │
    │  Firestore          — sessions + summaries │
    │  Firestore (curriculum_chunks) — RAG store  │
@@ -63,8 +63,9 @@ Why not Firebase Vector Search extension? Corpus < 1 000 chunks; no index config
 
 ### 3. Dual-LLM Pattern
 - **Claude** → all conversation generation (chat + session summaries)
-- **Gemini** → embeddings only (never generates text for users)
-This separation is intentional: Claude has stronger safety controls and character voice consistency; Gemini is cost-efficient for embedding at scale.
+- **Gemini embeddings** (`gemini-embedding-001`) → RAG only (never generates user-facing text)
+- **Gemini Flash** (`gemini-3.5-flash`) → parent-only mastery evaluator (`evaluateMastery`)
+This separation is intentional: Claude has stronger safety controls and character voice consistency; Gemini is cost-efficient for embeddings and silent scoring. Flash results are never shown to the child.
 
 ### 4. MCP Tool Pattern
 The math problem generator is a Next.js API route that Claude can "call" during a session:

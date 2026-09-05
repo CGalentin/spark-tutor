@@ -194,17 +194,19 @@
 ### PR 2-08 · Gemini Flash Client
 **Branch:** `feature/gemini-flash-client`
 
-- [ ] Update `/src/lib/gemini/client.ts`:
+- [x] Update `/src/lib/gemini/client.ts`:
   - Add `getGeminiFlashClient()` alongside existing embedding client
   - Use model: `gemini-2.0-flash` (fast, cheap, already in your Google AI Studio account)
   - Keep embedding client and Flash client as separate singletons
-- [ ] Create `/src/lib/gemini/evaluate.ts`:
+- [x] Create `/src/lib/gemini/evaluate.ts`:
   - Export `evaluateMastery(messages, topic, grade)` → `EvaluationResult`
   - Takes the last N messages (topic block), topic name, and grade band
   - Returns structured JSON: score, mastered, confidence, suggestedNext, reasoning
-- [ ] Test: call `evaluateMastery` with a sample conversation — verify JSON response
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(gemini): add gemini flash client and evaluateMastery function`
+- [x] Test: call `evaluateMastery` with a sample conversation — verify JSON response
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(gemini): add gemini flash client and evaluateMastery function`
+
+> **Model note:** `gemini-2.0-flash` was shut down 1 Jun 2026. This PR uses `gemini-3.5-flash` (Google's current Flash replacement). Smoke test: `npx ts-node --project tsconfig.scripts.json scripts/gemini/testEvaluate.ts`
 
 ---
 

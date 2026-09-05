@@ -85,9 +85,10 @@ src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessio
 src/lib/firebase/learningPath.ts  ← get/create/update/saveMastery (Admin SDK — API routes only)
 src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbedding(), countChunks()
 
-# Gemini (embedding only)
-src/lib/gemini/client.ts          ← GoogleGenerativeAI singleton
+# Gemini (embeddings + Flash evaluator)
+src/lib/gemini/client.ts          ← getGeminiClient() embeddings SDK; getGeminiFlashClient() Flash model singleton
 src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
+src/lib/gemini/evaluate.ts        ← evaluateMastery(messages, topic, grade) → EvaluationResult (parent-only)
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
@@ -151,6 +152,7 @@ scripts/rag/chunkDocument.ts      ← PDF → overlapping text chunks
 scripts/rag/ingestDocuments.ts    ← full ingestion pipeline (chunk → embed → Firestore)
 scripts/rag/testEmbed.ts          ← smoke test for Gemini embedding
 scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8/10)
+scripts/gemini/testEvaluate.ts    ← smoke test for evaluateMastery (Gemini Flash JSON)
 ```
 
 ## Claude API Settings
@@ -169,10 +171,11 @@ scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8
 - `[STAR EARNED]` in Claude response = award a star to the child
 
 ## Gemini API Settings
-- Model: `gemini-embedding-001` — current stable embedding model as of Jun 2026
-- Output: 3072-dimension vectors (NOTE: `text-embedding-004` is retired — do not use)
-- Used only for: embedding curriculum chunks at ingestion time, and embedding child queries at chat time
-- Never generates user-facing text
+- Embedding model: `gemini-embedding-001` — 3072-dimension vectors (`text-embedding-004` is retired)
+- Flash model: `gemini-3.5-flash` — mastery evaluator (`gemini-2.0-flash` shut down 1 Jun 2026)
+- Embeddings used for: curriculum ingestion + child-query retrieval
+- Flash used for: `evaluateMastery` JSON scores (parent dashboard only — never child-facing)
+- Never send Flash reasoning to the child chat UI
 
 ## Component Rules
 - Child UI: custom components ONLY — NO Shadcn. Min 18px text, 48px touch targets, rounded-3xl, bright colors

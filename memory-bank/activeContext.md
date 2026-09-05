@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — complete (PR 2-01 through 2-07)**
+**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-08 done, awaiting merge)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -51,8 +51,14 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Grade 2 chat: more structured two-step teaching ("When we count, we start at 1...")
   - `npx tsc --noEmit` and `npm run build` both passed
 
+- [x] PR 2-08 · Gemini Flash Client (`feature/gemini-flash-client`)
+  - `getGeminiFlashClient()` is a separate singleton from the embedding client
+  - Model: `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026)
+  - `evaluateMastery(messages, topic, grade)` → typed `EvaluationResult`
+  - Smoke test with a counting transcript returned valid JSON (score 50, mastered false)
+
 ## Up Next
-- Sprint 2 PR 2-08 · Gemini Flash Client (`feature/gemini-flash-client`)
+- PR 2-09 · Evaluator System Prompt (`feature/evaluator-prompt`)
 
 ---
 
@@ -139,10 +145,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — Sprint 1 complete. Next: Sprint 2 PR 2-08 · Gemini Flash Client.
+`feature/gemini-flash-client` — PR 2-08 committed. Awaiting review; do not merge until user says continue.
 
 ## Known Issues / Decisions
-- Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
+- Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Inline prompt until PR 2-09.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
