@@ -132,7 +132,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/session-reads-learning-path` — PR 2-06 committed. Awaiting review; do not merge until user says continue.
+`dev` — PR 2-06 merged. Next: PR 2-07 · Sprint 1 Integration Test.
 
 ## Known Issues / Decisions
 - Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.
