@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 1 in progress (PR 2-01 through 2-06 done) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 1 complete (PR 2-01 through 2-07) | v1 MVP complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -12,7 +12,8 @@
 | 2-03 | Topic Curriculum Map | `feature/topic-curriculum-map` | ✅ Done |
 | 2-04 | Learning Path Firestore Types | `feature/learning-path-types` | ✅ Done |
 | 2-05 | Learning Path Firestore Helpers | `feature/learning-path-firestore` | ✅ Done |
-| 2-06 | Session Start Reads Learning Path | `feature/session-reads-learning-path` | ✅ Done (awaiting merge) |
+| 2-06 | Session Start Reads Learning Path | `feature/session-reads-learning-path` | ✅ Done |
+| 2-07 | Sprint 1 Integration Test | `dev` | ✅ Done |
 
 ---
 
@@ -26,9 +27,10 @@
 - Learning path Admin helpers + client `subscribeToLearningPath`
 - Session start reads or creates a learning path and returns `currentTopic`, `currentGrade`, `suggestedNextTopic`
 - Chat page stores topic + grade in `useSessionStore` (still does not send `grade` on chat)
+- Sprint 1 live check: session start returns Counting to 10 / K; Firestore `learningPath/math` created; K vs grade 2 Claude language differs
 
-**Not built yet (rest of Sprint 1)**
-- PR 2-07 sprint integration test (verify Firestore path + grade-band language)
+**Not built yet (Sprint 2)**
+- Gemini Flash evaluator, topic-boundary detection, evaluate API
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

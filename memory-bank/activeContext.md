@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — in progress (PR 2-01 through 2-06 done)**
+**v2 Sprint 1 — Foundation (Grade Bands + Data Model) — complete (PR 2-01 through 2-07)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -44,8 +44,15 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `useSessionStore` stores `currentTopic` + `currentGrade`; chat page writes them on start
   - Child UI still does not send `grade` on `/api/chat` (defaults to K)
 
+- [x] PR 2-07 · Sprint 1 Integration Test (`dev`)
+  - `/api/session/start` returned `currentTopic: "Counting to 10"`, `currentGrade: "K"`, `suggestedNextTopic: null`
+  - Firestore `users/{uid}/learningPath/math` created with the same topic and grade
+  - Grade K chat: simple counting language ("show me your three apples", "count them out loud")
+  - Grade 2 chat: more structured two-step teaching ("When we count, we start at 1...")
+  - `npx tsc --noEmit` and `npm run build` both passed
+
 ## Up Next
-- PR 2-07 · Sprint 1 Integration Test (on `dev` after this branch is merged)
+- Sprint 2 PR 2-08 · Gemini Flash Client (`feature/gemini-flash-client`)
 
 ---
 
@@ -132,7 +139,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-06 merged. Next: PR 2-07 · Sprint 1 Integration Test.
+`dev` — Sprint 1 complete. Next: Sprint 2 PR 2-08 · Gemini Flash Client.
 
 ## Known Issues / Decisions
 - Two `GradeBand` types: tutoring K–3 in `src/constants/gradeBands.ts`; RAG `'K'|'1'|'K-1'` in `src/types/rag.ts`. Import tutoring from `@/constants`.

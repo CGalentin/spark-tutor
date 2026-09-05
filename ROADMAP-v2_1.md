@@ -25,7 +25,7 @@
 
 ## Phase 1 Progress
 
-- [ ] Sprint 1 — Foundation (Grade Bands + Data Model)
+- [x] Sprint 1 — Foundation (Grade Bands + Data Model)
 - [ ] Sprint 2 — Evaluator Agent (Gemini Flash)
 - [ ] Sprint 3 — Agentic Learning Path
 - [ ] Sprint 4 — Parent Dashboard Updates
@@ -175,13 +175,13 @@
 ### PR 2-07 · Sprint 1 Integration Test
 **Branch:** `dev`
 
-- [ ] Start a session — verify `currentTopic` and `currentGrade` are returned from `/api/session/start`
-- [ ] Send a message with grade K — verify Claude uses simple K-level language
-- [ ] Send a message with grade 2 — verify Claude uses more complex language
-- [ ] Check Firestore console — verify `learningPath` document created under `users/{uid}/learningPath/math`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Verify build passes: `npm run build`
-- [ ] Commit: `chore: sprint 1 complete — grade bands and learning path foundation`
+- [x] Start a session — verify `currentTopic` and `currentGrade` are returned from `/api/session/start`
+- [x] Send a message with grade K — verify Claude uses simple K-level language
+- [x] Send a message with grade 2 — verify Claude uses more complex language
+- [x] Check Firestore console — verify `learningPath` document created under `users/{uid}/learningPath/math`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Verify build passes: `npm run build`
+- [x] Commit: `chore: sprint 1 complete — grade bands and learning path foundation`
 
 ---
 
@@ -562,16 +562,16 @@
 
 ## v2 Phase 1 Completion Checklist
 
-- [ ] Grade band prompts working for K, 1, 2, 3
+- [x] Grade band prompts working for K, 1, 2, 3
 - [ ] Gemini Flash Evaluator scoring mastery after every 6 messages
-- [ ] Learning path persisted in Firestore per subject
+- [x] Learning path persisted in Firestore per subject
 - [ ] Teacher Agent adapts based on current topic and mastery history
 - [ ] Difficulty adapts based on score history (easier/normal/harder)
 - [ ] Parent sees live mastery indicator during active sessions
 - [ ] Parent receives and can act on topic suggestions
 - [ ] Session summaries include mastery scores
 - [ ] All new endpoints rate limited
-- [ ] Zero TypeScript errors
+- [x] Zero TypeScript errors
 - [ ] Zero ESLint warnings
 - [ ] Live on Vercel with zero build errors
 - [ ] README updated with v2 architecture
