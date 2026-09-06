@@ -25,6 +25,7 @@ export type {
 
 export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';
 
+export { MASTERED_SCORE } from './learningPath';
 export type {
   TopicMastery,
   LearningPath,

@@ -4,13 +4,16 @@
 
 import { getGeminiFlashClient } from './client';
 import type { GradeBand } from '@/constants/gradeBands';
-import type { EvaluationConfidence, EvaluationResult, Message } from '@/types';
-
-const MASTERED_SCORE = 80;
+import {
+  MASTERED_SCORE,
+  type EvaluationConfidence,
+  type EvaluationResult,
+  type Message,
+} from '@/types';
 
 /**
  * Asks Gemini Flash to score mastery for one topic block.
- * `mastered` is always derived from score (>= 80) so callers cannot drift.
+ * `mastered` is always derived from score (>= MASTERED_SCORE) so callers cannot drift.
  */
 export async function evaluateMastery(
   messages: Message[],
@@ -63,7 +66,7 @@ function buildTemporaryEvaluatorPrompt(
     'Respond ONLY with JSON in this shape:',
     '{',
     '  "score": number from 0 to 100,',
-    '  "mastered": true if score is 80 or higher,',
+    '  "mastered": true if score is 90 or higher,',
     '  "confidence": "low" | "medium" | "high",',
     '  "suggestedNext": next topic name as a string, or null,',
     '  "reasoning": one or two sentences for the parent',

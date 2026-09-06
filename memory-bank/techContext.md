@@ -108,7 +108,7 @@ src/app/api/summary/route.ts           ← sends transcript to Claude; saves sum
 src/types/index.ts                ← central re-export for all shared types
 src/types/session.ts              ← Subject, Message, Session, SessionSummary
 src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('K'|'1'|'K-1' — RAG chunk metadata)
-src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult (tutoring GradeBand K–3)
+src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult, MASTERED_SCORE (90)
 src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
                                      (session start returns currentTopic, currentGrade, suggestedNextTopic),
                                      SessionEndRequest/Response, SummaryRequest/Response, etc.

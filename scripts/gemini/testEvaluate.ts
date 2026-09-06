@@ -7,6 +7,7 @@ import * as path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
 import { evaluateMastery } from '../../src/lib/gemini/evaluate';
+import { MASTERED_SCORE } from '../../src/types/learningPath';
 import type { Message } from '../../src/types/session';
 
 const sampleMessages: Message[] = [
@@ -45,8 +46,8 @@ async function main(): Promise<void> {
   if (typeof result.score !== 'number' || result.score < 0 || result.score > 100) {
     throw new Error(`Invalid score: ${String(result.score)}`);
   }
-  if (result.mastered !== result.score >= 80) {
-    throw new Error('mastered did not match score >= 80');
+  if (result.mastered !== result.score >= MASTERED_SCORE) {
+    throw new Error(`mastered did not match score >= ${MASTERED_SCORE}`);
   }
   if (result.reasoning.trim().length === 0) {
     throw new Error('reasoning was empty');

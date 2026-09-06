@@ -14,7 +14,7 @@ import {
 } from 'firebase-admin/firestore';
 import { adminDb } from './admin';
 import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
-import type { LearningPath, Subject, TopicMastery } from '@/types';
+import { MASTERED_SCORE, type LearningPath, type Subject, type TopicMastery } from '@/types';
 
 const LEARNING_PATH_COLLECTION = 'learningPath';
 
@@ -101,7 +101,7 @@ export async function updateLearningPath(
 
 /**
  * Appends one mastery result to history and stamps lastEvaluatedAt.
- * Sets `mastered` from the score (true when score >= 80) so callers cannot drift.
+ * Sets `mastered` from the score (true when score >= MASTERED_SCORE) so callers cannot drift.
  */
 export async function saveMasteryResult(
   parentUID: string,
@@ -109,7 +109,7 @@ export async function saveMasteryResult(
   result: TopicMastery,
 ): Promise<void> {
   try {
-    const mastered = result.score >= 80;
+    const mastered = result.score >= MASTERED_SCORE;
     const entry: TopicMastery = {
       ...result,
       subject,

@@ -110,7 +110,7 @@
     subject: string;
     grade: GradeBand;
     score: number;          // 0-100
-    mastered: boolean;      // score >= 80
+    mastered: boolean;      // score >= 90
     evaluatedAt: Timestamp;
   }
 
@@ -217,15 +217,15 @@
   - Takes `{ topic, grade, messages }` 
   - Returns a structured prompt instructing Gemini Flash to:
     - Score mastery 0-100 based on child's responses in the conversation
-    - Mark `mastered: true` if score >= 80
+    - Mark `mastered: true` if score >= 90
     - Rate confidence as low/medium/high
     - Suggest the most logical next topic from the curriculum map
     - Respond ONLY in valid JSON — no preamble, no markdown fences
   - Include grading rubric in prompt:
     - 0-40: Child is struggling, needs more practice on this topic
     - 41-70: Child shows partial understanding, needs reinforcement
-    - 71-79: Child is close, one more topic block recommended
-    - 80-100: Child has mastered this topic, ready to advance
+    - 71-89: Child is close, one more topic block recommended
+    - 90-100: Child has mastered this topic, ready to advance
 - [ ] Add JSON parse safety — wrap in try/catch, return fallback result on parse failure
 - [ ] Verify TypeScript compiles: `npx tsc --noEmit`
 - [ ] Commit: `feat(gemini): add evaluator system prompt builder with mastery rubric`
@@ -425,7 +425,7 @@
 
 - [ ] Create `/src/components/parent/MasteryIndicator.tsx`:
   - Circular progress ring (SVG) showing current topic mastery score 0-100
-  - Color coded: red (0-49) → yellow (50-79) → green (80-100)
+  - Color coded: red (0-49) → yellow (50-89) → green (90-100)
   - Shows topic name, score, and confidence label ('Building', 'Almost there', 'Mastered!')
   - Animates smoothly when score updates via onSnapshot
   - Uses Shadcn `Badge` for confidence label
@@ -495,7 +495,7 @@
   - Claude now includes in summary: topic mastered yes/no, score achieved, suggested focus for next session
 - [ ] Update `SessionSummaryCard.tsx`:
   - Add mastery score badge (color coded red/yellow/green)
-  - Add "Topic mastered ✓" indicator when score >= 80
+  - Add "Topic mastered ✓" indicator when score >= 90
   - Add "Suggested next: [topic]" line when suggestion exists
 - [ ] Verify TypeScript compiles: `npx tsc --noEmit`
 - [ ] Commit: `feat(parent-ui): update session summary with mastery scores and topic suggestion`

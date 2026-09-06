@@ -149,6 +149,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Inline prompt until PR 2-09.
+- `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)

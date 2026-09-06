@@ -10,12 +10,15 @@ import type { Timestamp } from 'firebase/firestore';
 import type { GradeBand } from '@/constants/gradeBands';
 import type { Subject } from './session';
 
+/** Topic is mastered when the evaluator score is this high or higher. */
+export const MASTERED_SCORE = 90;
+
 /** How sure the evaluator is about a mastery score — parent dashboard only. */
 export type EvaluationConfidence = 'low' | 'medium' | 'high';
 
 /**
  * One scored attempt at a topic.
- * `mastered` is true when score is 80 or higher (the helper in PR 2-05 will set this).
+ * `mastered` is true when score is MASTERED_SCORE (90) or higher.
  */
 export interface TopicMastery {
   topic: string;
@@ -23,7 +26,7 @@ export interface TopicMastery {
   grade: GradeBand;
   /** Mastery score from 0 to 100. */
   score: number;
-  /** True when score >= 80. */
+  /** True when score >= MASTERED_SCORE (90). */
   mastered: boolean;
   evaluatedAt: Timestamp;
 }
