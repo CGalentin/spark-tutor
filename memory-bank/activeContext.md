@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-12 done, awaiting review)**
+**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-12 merged to local `dev`; next is 2-13)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -165,7 +165,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/evaluator-in-chat` — PR 2-12 committed. Awaiting review; do not merge until user says continue.
+`dev` — PR 2-12 merged. Next: PR 2-13 · Next Topic Suggester.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
