@@ -21,6 +21,8 @@ export type {
   SessionEndResponse,
   SummaryRequest,
   SummaryResponse,
+  EvaluateRequest,
+  EvaluateResponse,
 } from './api';
 
 export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';

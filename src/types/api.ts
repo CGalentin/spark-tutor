@@ -3,6 +3,7 @@
 
 import type { GradeBand } from '@/constants/gradeBands';
 import type { Message, Subject } from './session';
+import type { EvaluationResult } from './learningPath';
 
 /** Standard API response wrapper used by all /app/api routes.
  *  Discriminated union makes it easy to check success before accessing data. */
@@ -116,4 +117,22 @@ export interface SummaryResponse {
   topicsCovered: string[];
   areasForPractice: string[];
   encouragementNote: string;
+}
+
+/** Request body sent to POST /api/evaluate. Parent-only — never shown in child chat. */
+export interface EvaluateRequest {
+  sessionId: string;
+  /** Conversation block for this topic (child + mascot messages). */
+  messages: Message[];
+  /** Topic being scored (from the learning path). */
+  topic: string;
+  /** Tutoring grade band (K–3 from @/constants — not RAG chunk grades). */
+  grade: GradeBand;
+  subject: Subject;
+}
+
+/** Successful response from POST /api/evaluate. */
+export interface EvaluateResponse {
+  evaluated: true;
+  result: EvaluationResult;
 }
