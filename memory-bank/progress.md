@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 2 in progress (PR 2-11 merged to local `dev`) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 2 in progress (PR 2-12 done, awaiting review) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -23,7 +23,8 @@
 | 2-09 | Evaluator System Prompt | `feature/evaluator-prompt` | ✅ Done (merged to local `dev`) |
 | 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (merged to local `dev`) |
 | 2-11 | Evaluator API Route | `feature/evaluator-api` | ✅ Done (merged to local `dev`) |
-| 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ⬜ Next |
+| 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ✅ Done (awaiting review) |
+| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ⬜ Next |
 
 ---
 
@@ -38,14 +39,15 @@
 - Session start reads or creates a learning path and returns `currentTopic`, `currentGrade`, `suggestedNextTopic`
 - Chat page stores topic + grade in `useSessionStore` (still does not send `grade` on chat)
 - Sprint 1 live check: session start returns Counting to 10 / K; Firestore `learningPath/math` created; K vs grade 2 Claude language differs
-- Gemini Flash `evaluateMastery` returns typed JSON (not wired into chat yet)
+- Gemini Flash `evaluateMastery` returns typed JSON
 - Evaluator prompt builder with mastery rubric (71–89 close, 90–100 mastered) and curriculum next-topic hint
 - Unreadable evaluator JSON falls back to score 0 / not mastered
-- Topic boundary detector (`detectTopicBoundary`) + `topicMessageCount` in the session store (not wired into chat yet)
-- `POST /api/evaluate` scores a topic, saves `evaluations[]` + mastery history (not called from chat yet)
+- Topic boundary detector (`detectTopicBoundary`) + `topicMessageCount` in the session store
+- `POST /api/evaluate` scores a topic, saves `evaluations[]` + mastery history
+- Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
 
 **Not built yet (rest of Sprint 2)**
-- Wire evaluator into chat, next-topic suggester (mastery history + next grade)
+- Next-topic suggester (mastery history + next grade); Sprint 2 integration test
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

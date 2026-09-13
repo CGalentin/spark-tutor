@@ -79,7 +79,7 @@ The math problem generator is a Next.js API route that Claude can "call" during 
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:
 - `detectTopicBoundary(messageCount, messages)` is true every `TOPIC_BLOCK_SIZE` (6) child messages, or when the last child message includes "I'm done" / "next topic" / "something else"
 - Count `0` is not a boundary (even though 0 % 6 === 0)
-- `useSessionStore.topicMessageCount` tracks the current block; chat wiring is PR 2-12
+- `useSessionStore.topicMessageCount` tracks the current block; chat resets it after firing `/api/evaluate`
 
 ### 5. Firestore Data Structure
 ```
@@ -156,7 +156,7 @@ Each chat message:
   → POST /api/chat (with sessionId)
   → Claude responds
   → FieldValue.increment(1) on messageCount in Firestore
-  → (PR 2-12) at topic boundary: fire-and-forget POST /api/evaluate
+  → at topic boundary: fire-and-forget POST /api/evaluate
     → evaluateMastery → session.evaluations[] + learningPath masteryHistory
     → if mastered: suggestedNextTopic + parentApproved false
 

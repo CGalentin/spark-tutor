@@ -267,15 +267,15 @@
 ### PR 2-12 · Wire Evaluator Into Chat Flow
 **Branch:** `feature/evaluator-in-chat`
 
-- [ ] Update `chat/page.tsx`:
+- [x] Update `chat/page.tsx`:
   - After each mascot response, increment `topicMessageCount` in store
   - Call `detectTopicBoundary()` — if true, fire POST to `/api/evaluate` (non-blocking)
   - Evaluator call is fire-and-forget from child UI — never blocks the chat
   - Reset `topicMessageCount` to 0 after evaluation fires
-- [ ] Child never sees any indication the Evaluator ran — no UI change to child chat
-- [ ] Add error boundary: if `/api/evaluate` fails, log silently and continue chat
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(chat): wire evaluator into chat flow at topic boundaries`
+- [x] Child never sees any indication the Evaluator ran — no UI change to child chat
+- [x] Add error boundary: if `/api/evaluate` fails, log silently and continue chat
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(chat): wire evaluator into chat flow at topic boundaries`
 
 ---
 

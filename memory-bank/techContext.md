@@ -100,7 +100,7 @@ src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic 
 src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
-src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path (not wired to chat yet)
+src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path
 src/app/api/session/start/route.ts     ← creates Firestore session doc; reads or creates learning path; returns sessionId + currentTopic + currentGrade + suggestedNextTopic
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
@@ -144,7 +144,7 @@ src/components/ui/                               ← Shadcn components (do not e
 
 # MCP
 src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
-src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; not wired into chat yet)
+src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; chat calls this after each mascot reply)
 
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
