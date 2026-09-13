@@ -8,17 +8,20 @@
 import { type NextRequest } from 'next/server';
 import { FieldValue, Timestamp as AdminTimestamp } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
-import { saveMasteryResult, updateLearningPath } from '@/lib/firebase/learningPath';
+import {
+  getLearningPath,
+  saveMasteryResult,
+  updateLearningPath,
+} from '@/lib/firebase/learningPath';
 import { evaluateMastery } from '@/lib/gemini/evaluate';
-import { getTopics } from '@/constants/topicMap';
-import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
+import { suggestNextTopic } from '@/lib/gemini/suggestNextTopic';
+import { isGradeBand } from '@/constants/gradeBands';
 import type {
   ApiResult,
   EvaluateRequest,
   EvaluateResponse,
   EvaluationResult,
   Message,
-  Subject,
   TopicMastery,
 } from '@/types';
 
@@ -121,12 +124,18 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // Curriculum next-topic when mastered. PR 2-13 will replace this helper
-  // with src/lib/gemini/suggestNextTopic.ts (uses mastery history + next grade).
+  // Curriculum next-topic when mastered: skip already-mastered topics in this
+  // grade, then roll into the first topic of the next grade if needed.
   if (result.mastered) {
+    const { completedTopics, masteryHistory } = await loadPathProgress(
+      parentUID,
+      subject,
+      trimmedTopic,
+    );
+
     result = {
       ...result,
-      suggestedNext: suggestNextTopic(subject, grade, trimmedTopic),
+      suggestedNext: suggestNextTopic(subject, grade, completedTopics, masteryHistory),
     };
   }
 
@@ -198,15 +207,29 @@ export async function POST(request: NextRequest): Promise<Response> {
 }
 
 /**
- * Picks the next topic in the current grade's curriculum list.
- * Returns null if this is the last topic (PR 2-13 will roll into the next grade).
+ * Reads completed topics + mastery history for the next-topic pick.
+ * Always includes `justMasteredTopic` so we do not suggest the topic we just scored.
+ * Returns empty history (plus the current topic) if the path is missing.
  */
-function suggestNextTopic(subject: Subject, grade: GradeBand, currentTopic: string): string | null {
-  const topics = getTopics(subject, grade);
-  const index = topics.indexOf(currentTopic);
-  if (index === -1) {
-    return topics[0] ?? null;
-  }
+async function loadPathProgress(
+  parentUID: string,
+  subject: EvaluateRequest['subject'],
+  justMasteredTopic: string,
+): Promise<{ completedTopics: string[]; masteryHistory: TopicMastery[] }> {
+  try {
+    const path = await getLearningPath(parentUID, subject);
+    if (path === null) {
+      return { completedTopics: [justMasteredTopic], masteryHistory: [] };
+    }
 
-  return topics[index + 1] ?? null;
+    const alreadyListed = path.topicsCompleted.includes(justMasteredTopic);
+    return {
+      completedTopics: alreadyListed
+        ? path.topicsCompleted
+        : [...path.topicsCompleted, justMasteredTopic],
+      masteryHistory: path.masteryHistory,
+    };
+  } catch {
+    return { completedTopics: [justMasteredTopic], masteryHistory: [] };
+  }
 }
