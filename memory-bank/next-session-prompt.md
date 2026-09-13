@@ -1,6 +1,7 @@
 # Next session prompt — paste this into a new Cursor chat
 
-Paused after PR 2-12 (merged to local `dev` on 13 Sep 2026). Resume with PR 2-13, then 2-14.
+PR 2-13 is done on `feature/next-topic-suggester` (13 Sep 2026). Waiting for review.
+After you say "continue": merge 2-13 to local `dev`, then start PR 2-14.
 
 Copy everything below the line.
 
@@ -8,11 +9,11 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-12 are complete and merged to local `dev`. Do not redo them.
+PRs 2-01 through 2-13 are complete. 2-13 is on `feature/next-topic-suggester` and is not merged yet.
 
-Start PR 2-13 from local `dev` on branch `feature/next-topic-suggester`. Follow ROADMAP-v2_1.md exactly. After 2-13: stop, summarize, wait for me to say "continue" before merging or starting 2-14.
+I said continue. Merge `feature/next-topic-suggester` into local `dev` (no push). Then start PR 2-14 on `dev` (no feature branch). Follow ROADMAP-v2_1.md exactly. After 2-14: stop, summarize, wait before merging to main or starting Sprint 3.
 
-What's done through 2-12
+What's done through 2-13
 
 Grade-band configs + prompt strings (K–3). Chat API accepts optional grade (defaults to 'K'). Child UI still does not send grade on `/api/chat`.
 
@@ -28,32 +29,13 @@ Gemini Flash evaluator: getGeminiFlashClient() is a separate singleton from embe
 
 Topic boundary: detectTopicBoundary in src/lib/mcp/topicBoundary.ts. TOPIC_BLOCK_SIZE = 6. Also true if the last child message says "I'm done" / "im done" / "next topic" / "something else". Count 0 is not a boundary. useSessionStore.topicMessageCount tracks the current block.
 
-POST /api/evaluate: auth, evaluateMastery, saves evaluations[] on the session doc, saveMasteryResult on the learning path. If mastered: sets parentApproved = false. The route currently has a **local** suggestNextTopic() helper (next topic in the current grade only — does not use mastery history or roll to the next grade). PR 2-13 replaces that with src/lib/gemini/suggestNextTopic.ts.
+POST /api/evaluate: auth, evaluateMastery, saves evaluations[] on the session doc, saveMasteryResult on the learning path. If mastered: sets parentApproved = false and calls src/lib/gemini/suggestNextTopic.ts (curriculum sequence + mastery history; rolls to the next grade when the current grade is done). Saves suggestion to learningPath.suggestedNextTopic.
 
 Chat: after each mascot reply, increment topicMessageCount, detectTopicBoundary, fire-and-forget POST /api/evaluate, reset the counter. Failures are silent — no child UI change.
 
-PR 2-13 · Next Topic Suggester
+PR 2-14 · Sprint 2 Integration Test
 
-Branch: feature/next-topic-suggester (off local `dev`).
-
-- Create /src/lib/gemini/suggestNextTopic.ts:
-  - suggestNextTopic(subject, grade, completedTopics, masteryHistory) → string
-  - Uses TopicMap to find unmastered topics in current grade
-  - Picks the most logical next topic based on curriculum sequence
-  - If all topics in current grade mastered: suggests first topic of next grade
-  - Returns topic name as a plain string
-- Update /src/app/api/evaluate/route.ts:
-  - Call suggestNextTopic() when mastered: true
-  - Save suggestion to learningPath.suggestedNextTopic in Firestore
-  - Remove the local helper in the route
-- Verify TypeScript compiles: npx tsc --noEmit
-- Commit: feat(gemini): add next topic suggester using curriculum map and mastery history
-
-Tutoring grade is @/constants (src/constants/gradeBands.ts) — 'K' | '1' | '2' | '3'. Do not use RAG GradeBand from @/types.
-
-PR 2-14 · Sprint 2 Integration Test (only after I say continue and 2-13 is merged)
-
-Branch: `dev` (no feature branch).
+Branch: `dev` (no feature branch). Merge 2-13 first.
 
 - Run a 6-message chat session on a Math topic
 - Verify /api/evaluate is called after message 6 (Network tab)
@@ -81,11 +63,10 @@ Memory bank (required)
 After every PR: activeContext.md, progress.md, check off ROADMAP-v2_1.md.
 After architecture changes: also systemPatterns.md and techContext.md.
 After product-scope changes: also projectbrief.md and productContext.md.
-When 2-13 starts, you can delete or shorten next-session-prompt.md if it is stale.
 
 Do not mix these GradeBand types
 
 Tutoring K–3: @/constants (src/constants/gradeBands.ts)
 RAG chunks: @/types (src/types/rag.ts — 'K' | '1' | 'K-1')
 
-After 2-13, wait for my review.
+After 2-14, wait for my review. Do not merge to main or start Sprint 3.

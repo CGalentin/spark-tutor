@@ -1,11 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Paused 13 Sep 2026 — resume tomorrow on PR 2-13.**
+**Waiting for review after PR 2-13 (13 Sep 2026).**
 
-v2 Sprint 2 Evaluator Agent: PRs 2-08 through 2-12 are merged to local `dev`. Do not start 2-13 until the next session.
-
-Paste `memory-bank/next-session-prompt.md` into a new Cursor chat to resume.
+v2 Sprint 2 Evaluator Agent: PRs 2-08 through 2-12 are merged to local `dev`. PR 2-13 is on `feature/next-topic-suggester` — do not merge or start 2-14 until the user says "continue".
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -74,17 +72,22 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
 - [x] PR 2-11 · Evaluator API Route (`feature/evaluator-api`)
   - `POST /api/evaluate` — auth, `evaluateMastery`, save `evaluations[]` on the session, `saveMasteryResult`
-  - If mastered: local `suggestNextTopic()` from TOPIC_MAP + `parentApproved: false` (PR 2-13 upgrades this)
+  - If mastered: local `suggestNextTopic()` from TOPIC_MAP + `parentApproved: false` (upgraded in PR 2-13)
   - Types: `EvaluateRequest`, `EvaluateResponse` — still not called from chat (PR 2-12)
 
 - [x] PR 2-12 · Wire Evaluator Into Chat Flow (`feature/evaluator-in-chat`)
   - After each mascot reply: increment `topicMessageCount`, `detectTopicBoundary`, fire-and-forget POST `/api/evaluate`
   - Reset `topicMessageCount` when evaluation fires; failures are silent — no child UI change
 
-## Up Next (next session — do not start now)
-- PR 2-13 · Next Topic Suggester (`feature/next-topic-suggester` off local `dev`)
-- Then PR 2-14 · Sprint 2 Integration Test (on `dev`, after 2-13 is merged)
-- Handoff prompt: `memory-bank/next-session-prompt.md`
+- [x] PR 2-13 · Next Topic Suggester (`feature/next-topic-suggester`)
+  - `src/lib/gemini/suggestNextTopic.ts` — first unmastered TOPIC_MAP topic in the current grade; if none, first topic of the next grade
+  - Uses `MASTERED_SCORE` (90) + `completedTopics` / `masteryHistory` (not Gemini)
+  - `/api/evaluate` calls it when `mastered: true`, saves `learningPath.suggestedNextTopic`, local helper removed
+  - Grade 3 with everything mastered stays on the last listed topic (must return a string)
+
+## Up Next (wait for "continue")
+- Merge `feature/next-topic-suggester` → local `dev` (do not push)
+- Then PR 2-14 · Sprint 2 Integration Test (on `dev`, no feature branch)
 
 ---
 
@@ -171,14 +174,14 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — paused after PR 2-12 merge. Next session: PR 2-13 · Next Topic Suggester. Local `dev` is ahead of `origin/dev`; do not force-push.
+`feature/next-topic-suggester` — PR 2-13 complete, waiting for review. Local `dev` is ahead of `origin/dev`; do not force-push.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
 - Chat fires `/api/evaluate` at topic boundaries (every 6 child messages or "I'm done" / "next topic" / "something else"). Failures are silent — child UI unchanged.
-- Next-topic pick is a local TOPIC_MAP helper until PR 2-13.
+- Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` is still empty until parent approval in PR 2-16, so history is the real source of "already mastered".
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)

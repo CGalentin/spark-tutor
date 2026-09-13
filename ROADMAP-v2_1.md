@@ -282,17 +282,17 @@
 ### PR 2-13 · Next Topic Suggester
 **Branch:** `feature/next-topic-suggester`
 
-- [ ] Create `/src/lib/gemini/suggestNextTopic.ts`:
+- [x] Create `/src/lib/gemini/suggestNextTopic.ts`:
   - `suggestNextTopic(subject, grade, completedTopics, masteryHistory)` → `string`
   - Uses `TopicMap` to find unmastered topics in current grade
   - Picks the most logical next topic based on curriculum sequence
   - If all topics in current grade mastered: suggests first topic of next grade
   - Returns topic name as a plain string
-- [ ] Update `/src/app/api/evaluate/route.ts`:
+- [x] Update `/src/app/api/evaluate/route.ts`:
   - Call `suggestNextTopic()` when `mastered: true`
   - Save suggestion to `learningPath.suggestedNextTopic` in Firestore
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(gemini): add next topic suggester using curriculum map and mastery history`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(gemini): add next topic suggester using curriculum map and mastery history`
 
 ---
 

@@ -70,6 +70,8 @@ This separation is intentional: Claude has stronger safety controls and characte
 
 Evaluator prompt (`src/lib/gemini/buildEvaluatorPrompt.ts`) is a dedicated composer, like Claude's `buildSystemPrompt`. It injects the mastery rubric (0–40 / 41–70 / 71–89 / 90–100), the TOPIC_MAP sequence for `suggestedNext`, and a JSON-only contract. `mastered` is always derived from `MASTERED_SCORE` (90) in code, even if Gemini's JSON disagrees. Unreadable JSON returns a fallback (score 0, mastered false) so a bad model reply never auto-advances.
 
+When `mastered` is true, `/api/evaluate` overwrites Gemini's `suggestedNext` with `suggestNextTopic()` (`src/lib/gemini/suggestNextTopic.ts`). That helper does not call Gemini: it walks TOPIC_MAP in order, skips topics already in `completedTopics` or with a mastery score >= 90, and if the current grade is fully mastered, returns the first topic of the next grade (K→1→2→3). Grade 3 with nothing left stays on the last listed topic so the return type can stay a plain string.
+
 ### 4. MCP Tool Pattern
 The math problem generator is a Next.js API route that Claude can "call" during a session:
 - Input: `{ grade, topic, difficulty }`
@@ -158,7 +160,8 @@ Each chat message:
   → FieldValue.increment(1) on messageCount in Firestore
   → at topic boundary: fire-and-forget POST /api/evaluate
     → evaluateMastery → session.evaluations[] + learningPath masteryHistory
-    → if mastered: suggestedNextTopic + parentApproved false
+    → if mastered: suggestNextTopic() (TOPIC_MAP + mastery history; next grade if current grade is done)
+      → learningPath.suggestedNextTopic + parentApproved false
 
 Each star earned:
   → useStars.awardStar() → local store + POST /api/session/star

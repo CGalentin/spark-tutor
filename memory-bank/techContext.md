@@ -90,6 +90,7 @@ src/lib/gemini/client.ts          ← getGeminiClient() embeddings SDK; getGemin
 src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
 src/lib/gemini/buildEvaluatorPrompt.ts ← evaluator rubric + curriculum next-topic + JSON-only contract
 src/lib/gemini/evaluate.ts        ← evaluateMastery(messages, topic, grade) → EvaluationResult (parent-only; parse fallback)
+src/lib/gemini/suggestNextTopic.ts ← suggestNextTopic(subject, grade, completedTopics, masteryHistory) → next topic string
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
@@ -100,7 +101,7 @@ src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic 
 src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
-src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path
+src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
 src/app/api/session/start/route.ts     ← creates Firestore session doc; reads or creates learning path; returns sessionId + currentTopic + currentGrade + suggestedNextTopic
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary

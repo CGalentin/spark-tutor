@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Paused 13 Sep 2026 after PR 2-12 (merged to local `dev`). Resume with PR 2-13. | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**Waiting for review after PR 2-13 (`feature/next-topic-suggester`). | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -24,7 +24,8 @@
 | 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (merged to local `dev`) |
 | 2-11 | Evaluator API Route | `feature/evaluator-api` | ✅ Done (merged to local `dev`) |
 | 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ✅ Done (merged to local `dev`) |
-| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ⬜ Next |
+| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ✅ Done (waiting for review / merge) |
+| 2-14 | Sprint 2 Integration Test | `dev` | ⬜ After merge + "continue" |
 
 ---
 
@@ -45,9 +46,10 @@
 - Topic boundary detector (`detectTopicBoundary`) + `topicMessageCount` in the session store
 - `POST /api/evaluate` scores a topic, saves `evaluations[]` + mastery history
 - Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
+- Next-topic suggester uses TOPIC_MAP + mastery history; rolls to the next grade when the current grade is done
 
 **Not built yet (rest of Sprint 2)**
-- Next-topic suggester (mastery history + next grade); Sprint 2 integration test
+- Sprint 2 integration test (PR 2-14, after 2-13 is merged)
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
