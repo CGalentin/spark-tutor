@@ -15,6 +15,7 @@ Browser (Child or Parent)
    ┌────▼──────────────────────────────────────┐
    │           API Routes (/app/api)            │
    │  /api/chat      → Claude (streaming)       │
+   │  /api/evaluate  → Gemini Flash (mastery)   │
    │  /api/summary   → Claude (agentic)         │
    │  /api/rag       → Gemini embed + Firebase  │
    │  /api/mcp/math-problem → Claude MCP tool   │
@@ -155,6 +156,9 @@ Each chat message:
   → POST /api/chat (with sessionId)
   → Claude responds
   → FieldValue.increment(1) on messageCount in Firestore
+  → (PR 2-12) at topic boundary: fire-and-forget POST /api/evaluate
+    → evaluateMastery → session.evaluations[] + learningPath masteryHistory
+    → if mastered: suggestedNextTopic + parentApproved false
 
 Each star earned:
   → useStars.awardStar() → local store + POST /api/session/star

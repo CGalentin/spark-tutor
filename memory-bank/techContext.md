@@ -100,6 +100,7 @@ src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic 
 src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
+src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path (not wired to chat yet)
 src/app/api/session/start/route.ts     ← creates Firestore session doc; reads or creates learning path; returns sessionId + currentTopic + currentGrade + suggestedNextTopic
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
@@ -112,7 +113,8 @@ src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('
 src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult, MASTERED_SCORE (90)
 src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
                                      (session start returns currentTopic, currentGrade, suggestedNextTopic),
-                                     SessionEndRequest/Response, SummaryRequest/Response, etc.
+                                     SessionEndRequest/Response, SummaryRequest/Response,
+                                     EvaluateRequest/EvaluateResponse, etc.
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map

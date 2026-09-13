@@ -249,7 +249,7 @@
 ### PR 2-11 · Evaluator API Route
 **Branch:** `feature/evaluator-api`
 
-- [ ] Create `/src/app/api/evaluate/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/evaluate/route.ts` — POST endpoint:
   - Accepts `{ sessionId, messages, topic, grade, subject }`
   - Verifies Firebase auth token
   - Calls `evaluateMastery(messages, topic, grade)` via Gemini Flash
@@ -258,9 +258,9 @@
   - If mastered: calls `suggestNextTopic()` and saves suggestion to `learningPath.suggestedNextTopic`
   - Sets `learningPath.parentApproved = false` (awaiting parent confirmation)
   - Returns `{ evaluated: true, result: EvaluationResult }`
-- [ ] Add `EvaluateRequest`, `EvaluateResponse` types to `/src/types/api.ts`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): add evaluator api route powered by gemini flash`
+- [x] Add `EvaluateRequest`, `EvaluateResponse` types to `/src/types/api.ts`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): add evaluator api route powered by gemini flash`
 
 ---
 
