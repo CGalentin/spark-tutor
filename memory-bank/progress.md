@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 2 in progress (PR 2-10 done, awaiting review) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 2 in progress (PR 2-10 merged to local `dev`) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -21,7 +21,7 @@
 |---|---|---|---|
 | 2-08 | Gemini Flash Client | `feature/gemini-flash-client` | ✅ Done (merged to local `dev`) |
 | 2-09 | Evaluator System Prompt | `feature/evaluator-prompt` | ✅ Done (merged to local `dev`) |
-| 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (awaiting review) |
+| 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (merged to local `dev`) |
 | 2-11 | Evaluator API Route | `feature/evaluator-api` | ⬜ Next |
 
 ---
