@@ -123,7 +123,7 @@ src/constants/gradeBandPrompts.ts ← GRADE_BAND_PROMPT strings (Layer 4)
 src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading K–3; science placeholder)
 src/constants/subjects.ts         ← SUBJECTS, MAX_SESSION_STARS (legacy GRADE_BANDS still K|1 for RAG-era constants)
 src/store/useChildStore.ts        ← character selection state
-src/store/useSessionStore.ts      ← active session state (sessionId, subject, currentTopic, currentGrade, stars, messageCount)
+src/store/useSessionStore.ts      ← active session state (sessionId, subject, currentTopic, currentGrade, stars, messageCount, topicMessageCount)
 src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthenticated)
 
 # Hooks
@@ -142,6 +142,7 @@ src/components/ui/                               ← Shadcn components (do not e
 
 # MCP
 src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
+src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; not wired into chat yet)
 
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA

@@ -75,6 +75,11 @@ The math problem generator is a Next.js API route that Claude can "call" during 
 - Output to Claude: `{ problem, hint }` — the `answer` field is NEVER sent to client
 - Claude receives the problem and hint, then guides the child Socratically toward the answer
 
+Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:
+- `detectTopicBoundary(messageCount, messages)` is true every `TOPIC_BLOCK_SIZE` (6) child messages, or when the last child message includes "I'm done" / "next topic" / "something else"
+- Count `0` is not a boundary (even though 0 % 6 === 0)
+- `useSessionStore.topicMessageCount` tracks the current block; chat wiring is PR 2-12
+
 ### 5. Firestore Data Structure
 ```
 users/{parentUID}/

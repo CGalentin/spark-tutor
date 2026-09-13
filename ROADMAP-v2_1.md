@@ -235,14 +235,14 @@
 ### PR 2-10 · Topic Boundary Detection
 **Branch:** `feature/topic-boundary-detection`
 
-- [ ] Create `/src/lib/mcp/topicBoundary.ts`:
+- [x] Create `/src/lib/mcp/topicBoundary.ts`:
   - Export `detectTopicBoundary(messageCount, messages)` → `boolean`
   - Returns true when: messageCount is a multiple of 6 (every 6 child messages = one topic block)
   - Secondary trigger: child explicitly says "I'm done" / "next topic" / "something else"
   - Export `TOPIC_BLOCK_SIZE = 6` constant
-- [ ] Add `topicMessageCount` to `useSessionStore` — tracks messages within current topic block
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(session): add topic boundary detection at every 6 child messages`
+- [x] Add `topicMessageCount` to `useSessionStore` — tracks messages within current topic block
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(session): add topic boundary detection at every 6 child messages`
 
 ---
 
