@@ -213,7 +213,7 @@
 ### PR 2-09 · Evaluator System Prompt
 **Branch:** `feature/evaluator-prompt`
 
-- [ ] Create `/src/lib/gemini/buildEvaluatorPrompt.ts`:
+- [x] Create `/src/lib/gemini/buildEvaluatorPrompt.ts`:
   - Takes `{ topic, grade, messages }` 
   - Returns a structured prompt instructing Gemini Flash to:
     - Score mastery 0-100 based on child's responses in the conversation
@@ -226,9 +226,9 @@
     - 41-70: Child shows partial understanding, needs reinforcement
     - 71-89: Child is close, one more topic block recommended
     - 90-100: Child has mastered this topic, ready to advance
-- [ ] Add JSON parse safety — wrap in try/catch, return fallback result on parse failure
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(gemini): add evaluator system prompt builder with mastery rubric`
+- [x] Add JSON parse safety — wrap in try/catch, return fallback result on parse failure
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(gemini): add evaluator system prompt builder with mastery rubric`
 
 ---
 

@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-08 merged to local `dev`)**
+**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-09 done, awaiting review)**
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -57,8 +57,14 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `evaluateMastery(messages, topic, grade)` → typed `EvaluationResult`
   - Smoke test with a counting transcript returned valid JSON (score 50, mastered false)
 
+- [x] PR 2-09 · Evaluator System Prompt (`feature/evaluator-prompt`)
+  - `buildEvaluatorPrompt({ topic, grade, messages })` — rubric, curriculum sequence, JSON-only contract
+  - Rubric: 0–40 struggling, 41–70 partial, 71–89 close, 90–100 mastered (`MASTERED_SCORE` = 90)
+  - `evaluateMastery` uses the new prompt; unreadable JSON returns a fallback (score 0, mastered false)
+  - Not wired into chat yet (PR 2-12)
+
 ## Up Next
-- PR 2-09 · Evaluator System Prompt (`feature/evaluator-prompt`)
+- PR 2-10 · Topic Boundary Detection (`feature/topic-boundary-detection`)
 
 ---
 
@@ -145,11 +151,12 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-08 merged. Next: PR 2-09 · Evaluator System Prompt.
+`feature/evaluator-prompt` — PR 2-09 committed. Awaiting review; do not merge until user says continue.
 
 ## Known Issues / Decisions
-- Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Inline prompt until PR 2-09.
+- Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
+- Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)

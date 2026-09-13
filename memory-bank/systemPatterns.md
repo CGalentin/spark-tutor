@@ -67,6 +67,8 @@ Why not Firebase Vector Search extension? Corpus < 1 000 chunks; no index config
 - **Gemini Flash** (`gemini-3.5-flash`) → parent-only mastery evaluator (`evaluateMastery`)
 This separation is intentional: Claude has stronger safety controls and character voice consistency; Gemini is cost-efficient for embeddings and silent scoring. Flash results are never shown to the child.
 
+Evaluator prompt (`src/lib/gemini/buildEvaluatorPrompt.ts`) is a dedicated composer, like Claude's `buildSystemPrompt`. It injects the mastery rubric (0–40 / 41–70 / 71–89 / 90–100), the TOPIC_MAP sequence for `suggestedNext`, and a JSON-only contract. `mastered` is always derived from `MASTERED_SCORE` (90) in code, even if Gemini's JSON disagrees. Unreadable JSON returns a fallback (score 0, mastered false) so a bad model reply never auto-advances.
+
 ### 4. MCP Tool Pattern
 The math problem generator is a Next.js API route that Claude can "call" during a session:
 - Input: `{ grade, topic, difficulty }`

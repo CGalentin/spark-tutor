@@ -88,7 +88,8 @@ src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbeddi
 # Gemini (embeddings + Flash evaluator)
 src/lib/gemini/client.ts          ← getGeminiClient() embeddings SDK; getGeminiFlashClient() Flash model singleton
 src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
-src/lib/gemini/evaluate.ts        ← evaluateMastery(messages, topic, grade) → EvaluationResult (parent-only)
+src/lib/gemini/buildEvaluatorPrompt.ts ← evaluator rubric + curriculum next-topic + JSON-only contract
+src/lib/gemini/evaluate.ts        ← evaluateMastery(messages, topic, grade) → EvaluationResult (parent-only; parse fallback)
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
@@ -175,6 +176,8 @@ scripts/gemini/testEvaluate.ts    ← smoke test for evaluateMastery (Gemini Fla
 - Flash model: `gemini-3.5-flash` — mastery evaluator (`gemini-2.0-flash` shut down 1 Jun 2026)
 - Embeddings used for: curriculum ingestion + child-query retrieval
 - Flash used for: `evaluateMastery` JSON scores (parent dashboard only — never child-facing)
+- Evaluator prompt: `buildEvaluatorPrompt({ topic, grade, messages })` with MASTERED_SCORE rubric
+- Parse failure: fallback EvaluationResult (score 0, mastered false, confidence low)
 - Never send Flash reasoning to the child chat UI
 
 ## Component Rules

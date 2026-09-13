@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 2 in progress (PR 2-08 merged to local `dev`) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**v2 Sprint 2 in progress (PR 2-09 done, awaiting review) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -20,7 +20,8 @@
 | PR | Title | Branch | Status |
 |---|---|---|---|
 | 2-08 | Gemini Flash Client | `feature/gemini-flash-client` | ✅ Done (merged to local `dev`) |
-| 2-09 | Evaluator System Prompt | `feature/evaluator-prompt` | ⬜ Next |
+| 2-09 | Evaluator System Prompt | `feature/evaluator-prompt` | ✅ Done (awaiting review) |
+| 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ⬜ Next |
 
 ---
 
@@ -36,9 +37,11 @@
 - Chat page stores topic + grade in `useSessionStore` (still does not send `grade` on chat)
 - Sprint 1 live check: session start returns Counting to 10 / K; Firestore `learningPath/math` created; K vs grade 2 Claude language differs
 - Gemini Flash `evaluateMastery` returns typed JSON (not wired into chat yet)
+- Evaluator prompt builder with mastery rubric (71–89 close, 90–100 mastered) and curriculum next-topic hint
+- Unreadable evaluator JSON falls back to score 0 / not mastered
 
 **Not built yet (rest of Sprint 2)**
-- Evaluator rubric prompt, topic-boundary detection, evaluate API, wire into chat
+- Topic-boundary detection, evaluate API, wire into chat
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
