@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Waiting for review after PR 2-13 (13 Sep 2026).**
+**Sprint 2 complete on local `dev` (13 Sep 2026). Waiting for review before Sprint 3.**
 
-v2 Sprint 2 Evaluator Agent: PRs 2-08 through 2-12 are merged to local `dev`. PR 2-13 is on `feature/next-topic-suggester` — do not merge or start 2-14 until the user says "continue".
+v2 Evaluator Agent (PRs 2-08 through 2-14) is live locally. Do not start PR 2-15 until the user says "continue". Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -84,10 +84,19 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Uses `MASTERED_SCORE` (90) + `completedTopics` / `masteryHistory` (not Gemini)
   - `/api/evaluate` calls it when `mastered: true`, saves `learningPath.suggestedNextTopic`, local helper removed
   - Grade 3 with everything mastered stays on the last listed topic (must return a string)
+  - Merged to local `dev`
+
+- [x] PR 2-14 · Sprint 2 Integration Test (`dev`)
+  - 6-message Math session on "Counting to 10" (grade K); topic boundary fired only after message 6
+  - `POST /api/evaluate` ran after the 6th mascot reply returned (separate ~6s request; chat 6 took ~15s and did not wait on Flash)
+  - Firestore session `evaluations[]` length 1 (score 65, mastered false)
+  - Firestore `learningPath/math` masteryHistory grew 0 → 1; `lastEvaluatedAt` set
+  - Not mastered, so `suggestedNextTopic` stayed null (correct — suggester only runs at score >= 90)
+  - `npx tsc --noEmit` and `npm run build` passed; `vercel --prod` skipped per request
 
 ## Up Next (wait for "continue")
-- Merge `feature/next-topic-suggester` → local `dev` (do not push)
-- Then PR 2-14 · Sprint 2 Integration Test (on `dev`, no feature branch)
+- PR 2-15 · Learning Path Injects Into Teacher Prompt (`feature/learning-path-prompt-injection`)
+- Do not merge `dev` → `main` yet
 
 ---
 
@@ -174,7 +183,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/next-topic-suggester` — PR 2-13 complete, waiting for review. Local `dev` is ahead of `origin/dev`; do not force-push.
+`dev` — Sprint 2 complete (PR 2-14). Local `dev` is ahead of `origin/dev`; do not force-push. Next: PR 2-15 after "continue".
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
@@ -182,6 +191,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
 - Chat fires `/api/evaluate` at topic boundaries (every 6 child messages or "I'm done" / "next topic" / "something else"). Failures are silent — child UI unchanged.
 - Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` is still empty until parent approval in PR 2-16, so history is the real source of "already mastered".
+- Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)

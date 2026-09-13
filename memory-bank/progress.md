@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Waiting for review after PR 2-13 (`feature/next-topic-suggester`). | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**Sprint 2 complete on local `dev` (PR 2-14). Waiting before Sprint 3. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -24,8 +24,8 @@
 | 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (merged to local `dev`) |
 | 2-11 | Evaluator API Route | `feature/evaluator-api` | ✅ Done (merged to local `dev`) |
 | 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ✅ Done (merged to local `dev`) |
-| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ✅ Done (waiting for review / merge) |
-| 2-14 | Sprint 2 Integration Test | `dev` | ⬜ After merge + "continue" |
+| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ✅ Done (merged to local `dev`) |
+| 2-14 | Sprint 2 Integration Test | `dev` | ✅ Done (`vercel --prod` skipped) |
 
 ---
 
@@ -47,9 +47,10 @@
 - `POST /api/evaluate` scores a topic, saves `evaluations[]` + mastery history
 - Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
 - Next-topic suggester uses TOPIC_MAP + mastery history; rolls to the next grade when the current grade is done
+- Sprint 2 live check: 6 Math messages on Counting to 10 → evaluate after message 6 → session `evaluations[]` + learningPath masteryHistory; score 65 / not mastered so no next-topic suggestion; chat completed before evaluate started
 
-**Not built yet (rest of Sprint 2)**
-- Sprint 2 integration test (PR 2-14, after 2-13 is merged)
+**Not built yet (Sprint 3)**
+- Teacher prompt injection of learning path, parent approve/reject APIs, difficulty adaptation, session-start full integration
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

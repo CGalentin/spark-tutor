@@ -26,7 +26,7 @@
 ## Phase 1 Progress
 
 - [x] Sprint 1 — Foundation (Grade Bands + Data Model)
-- [ ] Sprint 2 — Evaluator Agent (Gemini Flash)
+- [x] Sprint 2 — Evaluator Agent (Gemini Flash)
 - [ ] Sprint 3 — Agentic Learning Path
 - [ ] Sprint 4 — Parent Dashboard Updates
 
@@ -299,16 +299,16 @@
 ### PR 2-14 · Sprint 2 Integration Test
 **Branch:** `dev`
 
-- [ ] Run a 6-message chat session on a Math topic
-- [ ] Verify `/api/evaluate` is called after message 6 (check Network tab)
-- [ ] Check Firestore — verify `evaluations[]` array populated in session doc
-- [ ] Check Firestore — verify `learningPath` updated with mastery result
-- [ ] If mastered: verify `suggestedNextTopic` populated in `learningPath`
-- [ ] Verify chat never paused or blocked during evaluation
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Verify build passes: `npm run build`
+- [x] Run a 6-message chat session on a Math topic
+- [x] Verify `/api/evaluate` is called after message 6 (check Network tab)
+- [x] Check Firestore — verify `evaluations[]` array populated in session doc
+- [x] Check Firestore — verify `learningPath` updated with mastery result
+- [x] If mastered: verify `suggestedNextTopic` populated in `learningPath`
+- [x] Verify chat never paused or blocked during evaluation
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Verify build passes: `npm run build`
 - [ ] Deploy to Vercel: `vercel --prod`
-- [ ] Commit: `chore: sprint 2 complete — evaluator agent live with gemini flash`
+- [x] Commit: `chore: sprint 2 complete — evaluator agent live with gemini flash`
 
 ---
 
@@ -565,7 +565,7 @@
 ## v2 Phase 1 Completion Checklist
 
 - [x] Grade band prompts working for K, 1, 2, 3
-- [ ] Gemini Flash Evaluator scoring mastery after every 6 messages
+- [x] Gemini Flash Evaluator scoring mastery after every 6 messages
 - [x] Learning path persisted in Firestore per subject
 - [ ] Teacher Agent adapts based on current topic and mastery history
 - [ ] Difficulty adapts based on score history (easier/normal/harder)
