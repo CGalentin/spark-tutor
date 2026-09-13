@@ -13,6 +13,7 @@ import { useSessionStore } from '@/store/useSessionStore';
 import { useStars } from '@/hooks/useStars';
 import { getTopics } from '@/constants';
 import { getCharacterById } from '@/constants/characters';
+import { detectTopicBoundary } from '@/lib/mcp/topicBoundary';
 import { MascotAvatar } from '@/components/child/MascotAvatar';
 import { ChatMessageList } from '@/components/child/ChatMessageList';
 import { ChatInput } from '@/components/child/ChatInput';
@@ -22,7 +23,8 @@ import { SessionProgressBar } from '@/components/child/SessionProgressBar';
 import { EndSessionButton } from '@/components/child/EndSessionButton';
 import { WellDoneScreen } from '@/components/child/WellDoneScreen';
 import type { AvatarAnimationState } from '@/components/child/AnimatedAvatar';
-import type { ApiResult, Message, SessionStartResponse, Subject } from '@/types';
+import type { ApiResult, EvaluateRequest, Message, SessionStartResponse, Subject } from '@/types';
+import type { GradeBand } from '@/constants';
 
 /** Discriminated union matching the SSE events emitted by /api/chat. */
 type SseEvent =
@@ -33,6 +35,48 @@ type SseEvent =
 /** Creates a time-stamped unique ID for message objects. */
 function createMessageId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+/**
+ * Asks Gemini Flash to score the current topic. Fire-and-forget: never throws,
+ * never waits on the caller, never updates child UI.
+ */
+async function requestEvaluation(input: {
+  sessionId: string;
+  messages: Message[];
+  topic: string;
+  grade: GradeBand;
+  subject: Subject;
+}): Promise<void> {
+  try {
+    if (input.topic.trim().length === 0) {
+      return;
+    }
+
+    const token = await auth.currentUser?.getIdToken();
+    if (token === undefined || token === '') {
+      return;
+    }
+
+    const body: EvaluateRequest = {
+      sessionId: input.sessionId,
+      messages: input.messages,
+      topic: input.topic,
+      grade: input.grade,
+      subject: input.subject,
+    };
+
+    await fetch('/api/evaluate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    // Silent — a failed evaluation must not pause or message the child
+  }
 }
 
 /** Child tutoring chat page — the main session screen. */
@@ -46,12 +90,16 @@ export default function ChatPage() {
   // ── Session (from store) ──────────────────────────────────────────────────
   const sessionId = useSessionStore((s) => s.sessionId);
   const messageCount = useSessionStore((s) => s.messageCount);
+  const currentTopic = useSessionStore((s) => s.currentTopic);
+  const currentGrade = useSessionStore((s) => s.currentGrade);
   const isChatLoading = useSessionStore((s) => s.isChatLoading);
   const isSessionEnding = useSessionStore((s) => s.isSessionEnding);
   const startSession = useSessionStore((s) => s.startSession);
   const setIsChatLoading = useSessionStore((s) => s.setIsChatLoading);
   const setIsSessionEnding = useSessionStore((s) => s.setIsSessionEnding);
   const incrementMessageCount = useSessionStore((s) => s.incrementMessageCount);
+  const incrementTopicMessageCount = useSessionStore((s) => s.incrementTopicMessageCount);
+  const resetTopicMessageCount = useSessionStore((s) => s.resetTopicMessageCount);
   const endSession = useSessionStore((s) => s.endSession);
 
   // ── Stars (hook handles local state + Firestore sync) ─────────────────────
@@ -259,6 +307,23 @@ export default function ChatPage() {
               timestamp: new Date(),
             };
             setMessages((prev) => [...prev, mascotMessage]);
+
+            // Count this completed child+mascot turn toward the topic block
+            incrementTopicMessageCount();
+            const topicCount = useSessionStore.getState().topicMessageCount;
+            const nextMessages = [...historySnapshot, childMessage, mascotMessage];
+
+            // Fire-and-forget: do not await — chat must keep moving
+            if (detectTopicBoundary(topicCount, nextMessages) && sessionId !== null) {
+              resetTopicMessageCount();
+              void requestEvaluation({
+                sessionId,
+                messages: nextMessages,
+                topic: currentTopic,
+                grade: currentGrade,
+                subject,
+              });
+            }
 
             // Claude embeds [STAR EARNED] in the text when the child nails an answer
             if (event.starEarned) {
