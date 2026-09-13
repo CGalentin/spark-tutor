@@ -1,7 +1,11 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**v2 Sprint 2 — Evaluator Agent — in progress (PR 2-12 merged to local `dev`; next is 2-13)**
+**Paused 13 Sep 2026 — resume tomorrow on PR 2-13.**
+
+v2 Sprint 2 Evaluator Agent: PRs 2-08 through 2-12 are merged to local `dev`. Do not start 2-13 until the next session.
+
+Paste `memory-bank/next-session-prompt.md` into a new Cursor chat to resume.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -77,8 +81,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - After each mascot reply: increment `topicMessageCount`, `detectTopicBoundary`, fire-and-forget POST `/api/evaluate`
   - Reset `topicMessageCount` when evaluation fires; failures are silent — no child UI change
 
-## Up Next
-- PR 2-13 · Next Topic Suggester (`feature/next-topic-suggester`)
+## Up Next (next session — do not start now)
+- PR 2-13 · Next Topic Suggester (`feature/next-topic-suggester` off local `dev`)
+- Then PR 2-14 · Sprint 2 Integration Test (on `dev`, after 2-13 is merged)
+- Handoff prompt: `memory-bank/next-session-prompt.md`
 
 ---
 
@@ -165,7 +171,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-12 merged. Next: PR 2-13 · Next Topic Suggester.
+`dev` — paused after PR 2-12 merge. Next session: PR 2-13 · Next Topic Suggester. Local `dev` is ahead of `origin/dev`; do not force-push.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.

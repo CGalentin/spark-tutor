@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**v2 Sprint 2 in progress (PR 2-12 merged to local `dev`; next is 2-13) | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
+**Paused 13 Sep 2026 after PR 2-12 (merged to local `dev`). Resume with PR 2-13. | Sprint 1 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 

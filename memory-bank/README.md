@@ -47,7 +47,11 @@ Read all files at the start of every new session to restore full project context
 
 ## How to Use
 
-**At the start of a new session:** Say "read the memory bank" — the AI will read all 6 files and restore full context before doing any work.
+**At the start of a new session:** Say "read the memory bank" — the AI will read all files here (including `next-session-prompt.md` when present) and restore full context before doing any work.
+
+### next-session-prompt.md
+- Paste-ready prompt for the next Cursor chat
+- Present while work is paused between sessions; remove or shorten when it is stale
 
 **After completing a PR:** Update `activeContext.md` (current focus, next steps) and `progress.md` (mark PR done, update what works / what's left). Check off the PR in `ROADMAP-v2_1.md`.
 
