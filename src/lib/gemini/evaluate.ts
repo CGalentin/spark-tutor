@@ -1,8 +1,8 @@
 // Scores a child's mastery of one topic from a conversation block.
 // Uses Gemini Flash. Results are for the parent dashboard only — never shown to the child.
-// PR 2-09 will replace the inline prompt with buildEvaluatorPrompt + a full rubric.
 
 import { getGeminiFlashClient } from './client';
+import { buildEvaluatorPrompt } from './buildEvaluatorPrompt';
 import type { GradeBand } from '@/constants/gradeBands';
 import {
   MASTERED_SCORE,
@@ -11,9 +11,14 @@ import {
   type Message,
 } from '@/types';
 
+/** Parent-facing note when Gemini's JSON cannot be read. Score stays 0 so we never auto-advance. */
+const PARSE_FAILURE_REASONING =
+  'The evaluator could not read a valid score from this conversation. The child has not been marked as mastered.';
+
 /**
  * Asks Gemini Flash to score mastery for one topic block.
  * `mastered` is always derived from score (>= MASTERED_SCORE) so callers cannot drift.
+ * If Gemini returns unreadable JSON, returns a safe fallback instead of throwing.
  */
 export async function evaluateMastery(
   messages: Message[],
@@ -25,7 +30,7 @@ export async function evaluateMastery(
   }
 
   const model = getGeminiFlashClient();
-  const prompt = buildTemporaryEvaluatorPrompt(messages, topic, grade);
+  const prompt = buildEvaluatorPrompt({ topic, grade, messages });
 
   const result = await model.generateContent({
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -36,47 +41,32 @@ export async function evaluateMastery(
   });
 
   const rawText = result.response.text();
-  return parseEvaluationJson(rawText, topic);
+
+  try {
+    return parseEvaluationJson(rawText, topic);
+  } catch {
+    return fallbackEvaluation(topic);
+  }
 }
 
 /**
- * Temporary prompt until PR 2-09 adds buildEvaluatorPrompt with the scoring rubric.
+ * Conservative result used when Gemini's reply is not valid JSON.
+ * mastered is false because score 0 is below MASTERED_SCORE (90).
  */
-function buildTemporaryEvaluatorPrompt(
-  messages: Message[],
-  topic: string,
-  grade: GradeBand,
-): string {
-  const transcript =
-    messages.length === 0
-      ? '(no messages in this topic block)'
-      : messages
-          .map((message) => `${message.role === 'child' ? 'Child' : 'Mascot'}: ${message.content}`)
-          .join('\n');
-
-  return [
-    "You score a child's mastery of one tutoring topic.",
-    'This result is shown to the parent only — never to the child.',
-    `Topic: ${topic}`,
-    `Grade band: ${grade}`,
-    '',
-    'Transcript:',
-    transcript,
-    '',
-    'Respond ONLY with JSON in this shape:',
-    '{',
-    '  "score": number from 0 to 100,',
-    '  "mastered": true if score is 90 or higher,',
-    '  "confidence": "low" | "medium" | "high",',
-    '  "suggestedNext": next topic name as a string, or null,',
-    '  "reasoning": one or two sentences for the parent',
-    '}',
-  ].join('\n');
+function fallbackEvaluation(topic: string): EvaluationResult {
+  return {
+    topic,
+    score: 0,
+    mastered: false,
+    confidence: 'low',
+    suggestedNext: null,
+    reasoning: PARSE_FAILURE_REASONING,
+  };
 }
 
 /**
  * Turns Gemini's JSON text into a typed EvaluationResult.
- * Throws if the payload is missing required fields.
+ * Throws if the payload is missing required fields — evaluateMastery catches that.
  */
 function parseEvaluationJson(rawText: string, topic: string): EvaluationResult {
   const parsed: unknown = JSON.parse(stripMarkdownFences(rawText));
