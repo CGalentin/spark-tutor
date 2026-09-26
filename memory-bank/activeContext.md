@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-15 merged to local `dev` and pushed to `origin/dev` (26 Sep 2026). Waiting to start PR 2-16.**
+**PR 2-16 is committed on `feature/parent-topic-approval` (26 Sep 2026). Not merged. Waiting for review, then "continue" before merging to local `dev` or starting PR 2-17.**
 
 v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-15 are merged to local `dev` (and origin/dev). Next is PR 2-16 · Parent Topic Approval API. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -101,8 +101,17 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `difficultyHint` is always `'normal'` until PR 2-17
   - Live check: off-topic "multiplication and dinosaurs" → Blip stayed on counting to 10
 
-## Up Next (wait for "continue")
-- PR 2-16 · Parent Topic Approval API (`feature/parent-topic-approval` off local `dev`)
+- [x] PR 2-16 · Parent Topic Approval API (`feature/parent-topic-approval`)
+  - `POST /api/learning-path/approve` — `{ subject, approvedTopic }` moves `currentTopic`, sets `parentApproved` true, stamps `parentApprovedAt`, clears `suggestedNextTopic`, appends the previous topic to `topicsCompleted[]`
+  - `POST /api/learning-path/reject` — `{ subject }` clears `suggestedNextTopic` only; `currentTopic` stays
+  - Both verify the Firebase auth token and return `ApiResult` (`{ approved: true, newTopic }` / `{ rejected: true }`)
+  - Types: `ApproveTopicRequest`, `ApproveTopicResponse`, `RejectTopicRequest`, `RejectTopicResponse`
+  - Does not change `currentGrade` (a next-grade suggestion still leaves the stored grade as-is)
+  - Not called from the child UI — parent dashboard wires these in PR 2-22
+  - Not merged yet
+
+## Up Next (wait for review, then "continue")
+- Merge `feature/parent-topic-approval` into local `dev`, then PR 2-17 · Difficulty Adaptation (`feature/difficulty-adaptation`)
 
 ---
 
@@ -189,14 +198,15 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-15 merged and pushed. Next: PR 2-16 after "continue". Do not force-push.
+`feature/parent-topic-approval` — PR 2-16 committed, not merged. Local `dev` is still at PR 2-15. Do not force-push. Do not merge until "continue".
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
 - Chat fires `/api/evaluate` at topic boundaries (every 6 child messages or "I'm done" / "next topic" / "something else"). Failures are silent — child UI unchanged.
-- Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` is still empty until parent approval in PR 2-16, so history is the real source of "already mastered".
+- Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` stays empty until a parent approves a move; approve then appends the topic being left.
+- Approve does not change `currentGrade`. Reject only clears `suggestedNextTopic` (`parentApproved` stays whatever it already was).
 - Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
 - Teacher prompt Layer 5 uses `difficultyHint: 'normal'` until PR 2-17 computes easier/normal/harder

@@ -1,6 +1,8 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PR 2-15 is merged to local `dev` and pushed to `origin/dev` (26 Sep 2026). Resume with PR 2-16.
+PR 2-16 is committed on `feature/parent-topic-approval` (26 Sep 2026). It is NOT merged. Local `dev` is still at PR 2-15.
+
+If the user says "continue": merge `feature/parent-topic-approval` into local `dev` first, then start PR 2-17. Do not start 2-17 before that merge. Do not push unless asked.
 
 Copy everything below the line.
 
@@ -10,9 +12,9 @@ I'm building Spark Tutor v2. Read the memory bank first: all files in memory-ban
 
 PRs 2-01 through 2-15 are complete and merged to local `dev` (and pushed to `origin/dev`). Do not redo them.
 
-Start PR 2-16 from local `dev` on branch `feature/parent-topic-approval`. Follow ROADMAP-v2_1.md exactly. After 2-16: stop, summarize, wait for me to say "continue" before merging or starting 2-17.
+PR 2-16 is committed on `feature/parent-topic-approval` and is waiting for review. Do not redo it. Do not merge it and do not start PR 2-17 until I say "continue". When I say "continue", merge `feature/parent-topic-approval` into local `dev` first, then start PR 2-17 from that updated `dev`.
 
-What's done through 2-15
+What's done through 2-16
 
 Grade-band configs + prompt strings (K–3). Chat API accepts optional grade (defaults to 'K'). Child UI still does not send grade on `/api/chat`.
 
@@ -36,22 +38,27 @@ Teacher system prompt is 7 layers: 1 BASE_TUTOR_RULES, 2 CHARACTER_VOICE, 3 SUBJ
 
 Live check: off-topic "multiplication and dinosaurs" → mascot stayed on Counting to 10.
 
-PR 2-16 · Parent Topic Approval API
+Parent topic approval (PR 2-16, not merged):
+- POST /api/learning-path/approve { subject, approvedTopic } — currentTopic becomes approvedTopic, parentApproved true, parentApprovedAt now, suggestedNextTopic null, previous topic appended to topicsCompleted[] (skip if already listed or if it is the same topic). Returns { approved: true, newTopic }.
+- POST /api/learning-path/reject { subject } — clears suggestedNextTopic only. currentTopic stays. Returns { rejected: true }.
+- Both verify Firebase auth. Missing learning path returns 404. currentGrade is not changed. Child UI does not call these (dashboard is PR 2-22).
 
-Branch: feature/parent-topic-approval (off local `dev`).
+PR 2-17 · Difficulty Adaptation
 
-- Create /src/app/api/learning-path/approve/route.ts — POST:
-  - Accepts { subject, approvedTopic }
-  - Verifies Firebase auth token
-  - Updates learningPath: currentTopic → approvedTopic, parentApproved → true, parentApprovedAt → now, suggestedNextTopic → null, append previous topic to topicsCompleted[]
-  - Returns { approved: true, newTopic: approvedTopic }
-- Create /src/app/api/learning-path/reject/route.ts — POST:
-  - Accepts { subject }
-  - Clears suggestedNextTopic without changing currentTopic
-  - Returns { rejected: true }
-- Add types to /src/types/api.ts
+Branch: feature/difficulty-adaptation (off local `dev` AFTER 2-16 is merged).
+
+- Create /src/lib/claude/adaptDifficulty.ts:
+  - getDifficultyHint(masteryHistory, currentTopic) → 'easier' | 'normal' | 'harder'
+  - If last 2 scores on this topic < 50: return 'easier'
+  - If last 2 scores on this topic > 85: return 'harder'
+  - Otherwise: return 'normal'
+- Update GRADE_BAND_PROMPT injection in buildSystemPrompt.ts:
+  - Append difficulty hint to Learning Path layer:
+    - 'easier': "Use more visual descriptions, break into smaller steps, extra encouragement"
+    - 'normal': standard grade band prompt
+    - 'harder': "Challenge with slightly harder variations, ask follow-up questions"
 - npx tsc --noEmit
-- Commit: feat(api): add parent topic approval and rejection endpoints
+- Commit: feat(api): add difficulty adaptation based on mastery score history
 
 Tutoring grade is @/constants (src/constants/gradeBands.ts) — 'K' | '1' | '2' | '3'. Do not use RAG GradeBand from @/types.
 
@@ -77,4 +84,4 @@ Do not mix these GradeBand types
 Tutoring K–3: @/constants (src/constants/gradeBands.ts)
 RAG chunks: @/types (src/types/rag.ts — 'K' | '1' | 'K-1')
 
-After 2-16, wait for my review.
+After 2-17, wait for my review.

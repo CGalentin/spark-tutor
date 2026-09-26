@@ -344,7 +344,7 @@
 ### PR 2-16 · Parent Topic Approval API
 **Branch:** `feature/parent-topic-approval`
 
-- [ ] Create `/src/app/api/learning-path/approve/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/learning-path/approve/route.ts` — POST endpoint:
   - Accepts `{ subject, approvedTopic }`
   - Verifies Firebase auth token
   - Updates `learningPath`:
@@ -354,13 +354,13 @@
     - `suggestedNextTopic` → `null` (clear the suggestion)
     - Appends previous topic to `topicsCompleted[]`
   - Returns `{ approved: true, newTopic: approvedTopic }`
-- [ ] Create `/src/app/api/learning-path/reject/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/learning-path/reject/route.ts` — POST endpoint:
   - Accepts `{ subject }` — parent wants to keep current topic
   - Clears `suggestedNextTopic` without changing `currentTopic`
   - Returns `{ rejected: true }`
-- [ ] Add types to `/src/types/api.ts`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): add parent topic approval and rejection endpoints`
+- [x] Add types to `/src/types/api.ts`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): add parent topic approval and rejection endpoints`
 
 ---
 

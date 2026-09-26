@@ -102,6 +102,8 @@ src/app/api/chat/route.ts              ← SSE streaming chat; fetches learning 
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
+src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
+src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
 src/app/api/session/start/route.ts     ← creates Firestore session doc; reads or creates learning path; returns sessionId + currentTopic + currentGrade + suggestedNextTopic
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
@@ -115,7 +117,9 @@ src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResu
 src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
                                      (session start returns currentTopic, currentGrade, suggestedNextTopic),
                                      SessionEndRequest/Response, SummaryRequest/Response,
-                                     EvaluateRequest/EvaluateResponse, etc.
+                                     EvaluateRequest/EvaluateResponse,
+                                     ApproveTopicRequest/ApproveTopicResponse,
+                                     RejectTopicRequest/RejectTopicResponse
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map

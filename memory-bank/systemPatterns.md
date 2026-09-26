@@ -20,6 +20,8 @@ Browser (Child or Parent)
    │  /api/rag       → Gemini embed + Firebase  │
    │  /api/mcp/math-problem → Claude MCP tool   │
    │  /api/session/start|end → Firestore        │
+   │  /api/learning-path/approve|reject       │
+   │       → parent confirms next topic       │
    └────┬──────────────────────────────────────┘
         │
    ┌────▼──────────────────────────────────────┐
@@ -167,6 +169,15 @@ Each chat message:
     → if mastered: suggestNextTopic() (TOPIC_MAP + mastery history; next grade if current grade is done)
       → learningPath.suggestedNextTopic + parentApproved false
 
+Parent confirms (dashboard calls these in Sprint 4; no child UI):
+  → POST /api/learning-path/approve { subject, approvedTopic }
+    → currentTopic = approvedTopic, parentApproved true, parentApprovedAt now
+    → suggestedNextTopic null
+    → previous topic appended to topicsCompleted (skipped if already listed, or if it is the same topic)
+    → currentGrade is not changed
+  → POST /api/learning-path/reject { subject }
+    → suggestedNextTopic null only; currentTopic stays
+
 Each star earned:
   → useStars.awardStar() → local store + POST /api/session/star
   → FieldValue.increment(1) on starsEarned in Firestore
@@ -183,6 +194,14 @@ Parent opens dashboard:
   → useSessionHistory → subscribeToSessions → onSnapshot
   → live list of sessions (updates when summary arrives)
 ```
+
+### 11. Parent Topic Approval
+The evaluator never changes `currentTopic`. It only writes `suggestedNextTopic` and sets `parentApproved` to false. The parent decides:
+
+- **Approve** (`POST /api/learning-path/approve`): body `{ subject, approvedTopic }`. Sets `currentTopic` to that topic, `parentApproved` true, `parentApprovedAt` to now, `suggestedNextTopic` null, and appends the topic being left onto `topicsCompleted[]`.
+- **Reject** (`POST /api/learning-path/reject`): body `{ subject }`. Sets `suggestedNextTopic` to null. Does not change `currentTopic`, `currentGrade`, `parentApproved`, or `topicsCompleted`.
+
+Both routes verify the Firebase ID token and use the Admin learning-path helpers. Responses use `ApiResult`: `{ approved: true, newTopic }` or `{ rejected: true }`. A missing learning path returns 404. `currentGrade` stays as stored even when the approved topic belongs to the next grade.
 
 ## Route Structure
 ```
