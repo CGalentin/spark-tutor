@@ -5,7 +5,7 @@
 // Layer 2: CHARACTER_VOICE      — mascot personality (depends on selected character)
 // Layer 3: SUBJECT_CONTEXT      — which subject this session covers
 // Layer 4: GRADE_BAND           — how to talk for K / 1 / 2 / 3 (defaults to K)
-// Layer 5: LEARNING_PATH        — current topic + mastered topics (optional until a path exists)
+// Layer 5: LEARNING_PATH        — current topic, mastered topics, difficulty (optional until a path exists)
 // Layer 6: RAG_CONTEXT          — curriculum chunks (optional)
 // Layer 7: MCP_CONTEXT          — practice problem + hint (optional)
 
@@ -14,6 +14,7 @@ import { getCharacterById } from '@/constants/characters';
 import { GRADE_BAND_PROMPT } from '@/constants/gradeBandPrompts';
 import type { GradeBand } from '@/constants/gradeBands';
 import type { LearningPathContext, Subject } from '@/types';
+import { DIFFICULTY_HINT_LINE } from './adaptDifficulty';
 
 interface BuildSystemPromptOptions {
   characterId: string;
@@ -86,12 +87,20 @@ function formatLearningPathLayer(context: LearningPathContext): string {
   const masteredList =
     context.masteredTopics.length === 0 ? 'none yet' : context.masteredTopics.join(', ');
 
-  return [
+  const lines = [
     'LEARNING PATH:',
     `Current topic: ${context.currentTopic}`,
     `Topics this child has already mastered: ${masteredList}`,
     `Difficulty level: ${context.difficultyHint}`,
     `Focus exclusively on ${context.currentTopic} until the child shows understanding.`,
     'Do not introduce new topics — let the parent decide when to advance.',
-  ].join('\n');
+  ];
+
+  // Easier/harder adds a teaching line. Normal keeps the grade-band prompt in Layer 4.
+  const difficultyLine = DIFFICULTY_HINT_LINE[context.difficultyHint];
+  if (difficultyLine !== null) {
+    lines.push(difficultyLine);
+  }
+
+  return lines.join('\n');
 }

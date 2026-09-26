@@ -18,7 +18,7 @@ export type EvaluationConfidence = 'low' | 'medium' | 'high';
 
 /**
  * How hard Claude should make this topic.
- * PR 2-15 uses 'normal' as a placeholder; PR 2-17 will pick easier/normal/harder from scores.
+ * getDifficultyHint picks this from the last two scores on the current topic.
  */
 export type DifficultyHint = 'easier' | 'normal' | 'harder';
 

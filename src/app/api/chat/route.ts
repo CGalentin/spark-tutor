@@ -19,6 +19,7 @@ import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
 import { getLearningPath } from '@/lib/firebase/learningPath';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
+import { getDifficultyHint } from '@/lib/claude/adaptDifficulty';
 import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
 import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
@@ -263,7 +264,7 @@ async function loadLearningPathContext(
 
 /**
  * Builds the prompt slice from a stored learning path.
- * Difficulty stays 'normal' until PR 2-17 reads the score history.
+ * Difficulty comes from the last two scores on the current topic.
  */
 function toLearningPathContext(path: LearningPath): LearningPathContext {
   const masteredFromHistory = path.masteryHistory
@@ -275,6 +276,6 @@ function toLearningPathContext(path: LearningPath): LearningPathContext {
   return {
     currentTopic: path.currentTopic,
     masteredTopics,
-    difficultyHint: 'normal',
+    difficultyHint: getDifficultyHint(path.masteryHistory, path.currentTopic),
   };
 }
