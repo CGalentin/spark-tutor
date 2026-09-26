@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**PR 2-16 committed on `feature/parent-topic-approval`, not merged. Next is review, then merge and PR 2-17. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
+**PR 2-17 committed on `feature/difficulty-adaptation`, not merged. PR 2-16 is on local `dev` (not pushed). Next is review, then merge and PR 2-18. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -30,7 +30,8 @@
 | PR | Title | Branch | Status |
 |---|---|---|---|
 | 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (merged to local `dev`, pushed) |
-| 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (committed, not merged) |
+| 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (merged to local `dev`) |
+| 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (committed, not merged) |
 
 ---
 
@@ -53,11 +54,12 @@
 - Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
 - Next-topic suggester uses TOPIC_MAP + mastery history; rolls to the next grade when the current grade is done
 - Sprint 2 live check: 6 Math messages on Counting to 10 → evaluate after message 6 → session `evaluations[]` + learningPath masteryHistory; score 65 / not mastered so no next-topic suggestion; chat completed before evaluate started
-- Teacher prompt Layer 5 injects current topic + mastered topics; Claude stays on that topic (difficulty still `'normal'` until 2-17)
+- Teacher prompt Layer 5 injects current topic + mastered topics; Claude stays on that topic
+- Difficulty follows the last two scores on the current topic: both under 50 → easier, both over 85 → harder, otherwise normal
 - Parent can approve a next topic (`POST /api/learning-path/approve`) or clear the suggestion (`POST /api/learning-path/reject`). No dashboard button yet (PR 2-22)
 
 **Not built yet (rest of Sprint 3)**
-- Difficulty adaptation, session-start full integration
+- Session-start full integration (PR 2-18), then the Sprint 3 integration test
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

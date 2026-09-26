@@ -94,11 +94,12 @@ src/lib/gemini/suggestNextTopic.ts ← suggestNextTopic(subject, grade, complete
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
-src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child chat; Layer 5 = learning path)
+src/lib/claude/adaptDifficulty.ts   ← getDifficultyHint() from the last two scores on the current topic
+src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child chat; Layer 5 = learning path + difficulty line)
 src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
 
 # API Routes
-src/app/api/chat/route.ts              ← SSE streaming chat; fetches learning path; MCP routing before RAG; increments messageCount
+src/app/api/chat/route.ts              ← SSE streaming chat; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
@@ -174,7 +175,7 @@ scripts/gemini/testEvaluate.ts    ← smoke test for evaluateMastery (Gemini Fla
     2. CHARACTER_VOICE
     3. SUBJECT_CONTEXT
     4. GRADE_BAND (GRADE_BAND_PROMPT; defaults to K if request omits `grade`)
-    5. LEARNING_PATH (optional; current topic + mastered topics; difficultyHint is 'normal' until PR 2-17)
+    5. LEARNING_PATH (optional; current topic + mastered topics + easier/normal/harder from recent scores)
     6. RAG_CONTEXT (optional)
     7. MCP_CONTEXT (optional)
 - ChatRequest.grade is optional `'K'|'1'|'2'|'3'` — child UI does not send it yet

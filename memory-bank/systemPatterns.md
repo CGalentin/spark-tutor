@@ -51,7 +51,7 @@ Layer 7: MCP_CONTEXT         — practice problem + hint when the child asks for
 This lets us swap or update any layer without touching the others.
 Implemented in: `src/lib/claude/buildSystemPrompt.ts`
 
-`/api/chat` fetches `getLearningPath(parentUID, subject)` on every request and maps it to `LearningPathContext`. Difficulty is always `'normal'` until PR 2-17. A missing path or Firestore error skips Layer 5 so chat still works.
+`/api/chat` fetches `getLearningPath(parentUID, subject)` on every request and maps it to `LearningPathContext`. `getDifficultyHint` (`src/lib/claude/adaptDifficulty.ts`) reads the last two scores on `currentTopic`: both under 50 → `easier`, both over 85 → `harder`, otherwise `normal`. Fewer than two scores on that topic stays `normal`. Easier and harder append a teaching line to Layer 5. Normal adds no extra line — Layer 4 is already the standard grade-band prompt. A missing path or Firestore error skips Layer 5 so chat still works.
 
 ### 2. RAG Pipeline
 ```
@@ -162,7 +162,7 @@ Child picks subject → handleSubjectSelect → POST /api/session/start
 Each chat message:
   → POST /api/chat (with sessionId)
   → getLearningPath → Layer 5 LEARNING_PATH (skip if missing)
-  → Claude responds (stays on currentTopic)
+  → Claude responds (stays on currentTopic; difficulty from the last two scores on that topic)
   → FieldValue.increment(1) on messageCount in Firestore
   → at topic boundary: fire-and-forget POST /api/evaluate
     → evaluateMastery → session.evaluations[] + learningPath masteryHistory

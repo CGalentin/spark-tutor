@@ -367,18 +367,18 @@
 ### PR 2-17 · Difficulty Adaptation
 **Branch:** `feature/difficulty-adaptation`
 
-- [ ] Create `/src/lib/claude/adaptDifficulty.ts`:
+- [x] Create `/src/lib/claude/adaptDifficulty.ts`:
   - `getDifficultyHint(masteryHistory, currentTopic)` → `'easier' | 'normal' | 'harder'`
   - If last 2 scores on this topic < 50: return 'easier'
   - If last 2 scores on this topic > 85: return 'harder'  
   - Otherwise: return 'normal'
-- [ ] Update `GRADE_BAND_PROMPT` injection in `buildSystemPrompt.ts`:
+- [x] Update `GRADE_BAND_PROMPT` injection in `buildSystemPrompt.ts`:
   - Append difficulty hint to Learning Path layer:
     - 'easier': "Use more visual descriptions, break into smaller steps, extra encouragement"
     - 'normal': standard grade band prompt
     - 'harder': "Challenge with slightly harder variations, ask follow-up questions"
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): add difficulty adaptation based on mastery score history`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): add difficulty adaptation based on mastery score history`
 
 ---
 
@@ -568,7 +568,7 @@
 - [x] Gemini Flash Evaluator scoring mastery after every 6 messages
 - [x] Learning path persisted in Firestore per subject
 - [ ] Teacher Agent adapts based on current topic and mastery history
-- [ ] Difficulty adapts based on score history (easier/normal/harder)
+- [x] Difficulty adapts based on score history (easier/normal/harder)
 - [ ] Parent sees live mastery indicator during active sessions
 - [ ] Parent receives and can act on topic suggestions
 - [ ] Session summaries include mastery scores
