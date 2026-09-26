@@ -153,16 +153,21 @@ type ApiResult<T> =
 ### 10. Session Lifecycle
 ```
 Child picks subject → handleSubjectSelect → POST /api/session/start
-  → creates Firestore doc users/{uid}/sessions/{id}
   → getLearningPath(parentUID, subject)
     if missing: createLearningPath with first TOPIC_MAP topic at grade K
-  → returns sessionId, currentTopic, currentGrade, suggestedNextTopic
+  → if parentApproved is false and suggestedNextTopic is set, teach currentTopic
+  → difficultyHint from the last two scores on that topic
+  → creates Firestore doc users/{uid}/sessions/{id}
+    with currentTopic, currentGrade, difficultyHint
+  → returns sessionId, currentTopic, currentGrade, suggestedNextTopic, learningPath summary
   → stored in useSessionStore
 
 Each chat message:
-  → POST /api/chat (with sessionId)
-  → getLearningPath → Layer 5 LEARNING_PATH (skip if missing)
-  → Claude responds (stays on currentTopic; difficulty from the last two scores on that topic)
+  → POST /api/chat (sessionId, grade = currentGrade, currentTopic)
+  → getLearningPath → Layer 5 LEARNING_PATH
+    sent currentTopic wins over the stored path topic
+    sent grade is Layer 4 (omitted grade still defaults to K)
+  → Claude responds (stays on the session topic; difficulty from the last two scores on that topic)
   → FieldValue.increment(1) on messageCount in Firestore
   → at topic boundary: fire-and-forget POST /api/evaluate
     → evaluateMastery → session.evaluations[] + learningPath masteryHistory

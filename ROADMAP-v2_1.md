@@ -385,15 +385,15 @@
 ### PR 2-18 · Session Start Full Learning Path Integration
 **Branch:** `feature/session-full-integration`
 
-- [ ] Update `/src/app/api/session/start/route.ts`:
+- [x] Update `/src/app/api/session/start/route.ts`:
   - Check `learningPath.parentApproved` — if false and `suggestedNextTopic` exists,
     session starts on current topic (not the suggested one) until parent approves
   - Save `currentTopic`, `currentGrade`, `difficultyHint` to session doc at start
   - Return full learning path summary in `SessionStartResponse`
-- [ ] Update chat page to pass `currentGrade` and `currentTopic` with every chat request
-- [ ] Update chat API route to use these values in prompt composition
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): full learning path integration in session start flow`
+- [x] Update chat page to pass `currentGrade` and `currentTopic` with every chat request
+- [x] Update chat API route to use these values in prompt composition
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): full learning path integration in session start flow`
 
 ---
 

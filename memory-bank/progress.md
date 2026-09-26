@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**PR 2-17 committed on `feature/difficulty-adaptation`, not merged. PR 2-16 is on local `dev` (not pushed). Next is review, then merge and PR 2-18. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
+**PR 2-18 committed on `feature/session-full-integration`, not merged. PR 2-17 is on local `dev` (not pushed). Next is review, then merge and PR 2-19. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -31,7 +31,8 @@
 |---|---|---|---|
 | 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (merged to local `dev`, pushed) |
 | 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (merged to local `dev`) |
-| 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (committed, not merged) |
+| 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (merged to local `dev`) |
+| 2-18 | Session Start Full Learning Path Integration | `feature/session-full-integration` | ✅ Done (committed, not merged) |
 
 ---
 
@@ -43,8 +44,8 @@
 - Topic curriculum map (`getTopics`)
 - LearningPath / TopicMastery / EvaluationResult TypeScript types
 - Learning path Admin helpers + client `subscribeToLearningPath`
-- Session start reads or creates a learning path and returns `currentTopic`, `currentGrade`, `suggestedNextTopic`
-- Chat page stores topic + grade in `useSessionStore` (still does not send `grade` on chat)
+- Session start reads or creates a learning path and returns `currentTopic`, `currentGrade`, `suggestedNextTopic`, plus a `learningPath` summary
+- Chat page stores topic + grade in `useSessionStore` and sends both on every `/api/chat` request
 - Sprint 1 live check: session start returns Counting to 10 / K; Firestore `learningPath/math` created; K vs grade 2 Claude language differs
 - Gemini Flash `evaluateMastery` returns typed JSON
 - Evaluator prompt builder with mastery rubric (71–89 close, 90–100 mastered) and curriculum next-topic hint
@@ -58,8 +59,10 @@
 - Difficulty follows the last two scores on the current topic: both under 50 → easier, both over 85 → harder, otherwise normal
 - Parent can approve a next topic (`POST /api/learning-path/approve`) or clear the suggestion (`POST /api/learning-path/reject`). No dashboard button yet (PR 2-22)
 
+- Session start teaches `currentTopic` while a suggestion is waiting, saves topic/grade/difficulty on the session doc, and returns a learning-path summary
+
 **Not built yet (rest of Sprint 3)**
-- Session-start full integration (PR 2-18), then the Sprint 3 integration test
+- Sprint 3 integration test (PR 2-19)
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
