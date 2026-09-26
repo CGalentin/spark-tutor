@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 3 complete on local `dev` (PR 2-19). Not pushed. Next is review, then PR 2-20. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 3 complete and pushed to `origin/dev` (PR 2-19). Next session starts Sprint 4 at PR 2-20. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 

@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-19 is committed on local `dev` (26 Sep 2026). Sprint 3 is complete. Not pushed. Waiting for review, then "continue" before starting PR 2-20.**
+**Sprint 3 is complete and pushed to `origin/dev` (26 Sep 2026). Tomorrow starts Sprint 4 at PR 2-20. Do not start it until the next session.**
 
-v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on local `dev`. `origin/dev` is still at PR 2-15 — do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `origin/dev`. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -136,8 +136,8 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `npx tsc --noEmit` and `npm run build` passed
   - Live math path for the test parent is now Counting to 20, with those two low scores last, so the next math chat uses easier until two higher scores land
 
-## Up Next (wait for review, then "continue")
-- PR 2-20 · Mastery Indicator Component (`feature/mastery-indicator` off local `dev`)
+## Up Next
+- Next session: PR 2-20 · Mastery Indicator Component (`feature/mastery-indicator` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue".
 
 ---
 
@@ -224,7 +224,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — PR 2-19 committed. Local `dev` is ahead of `origin/dev` (origin is still at PR 2-15). Do not force-push. Do not start PR 2-20 until "continue".
+`dev` — matches `origin/dev` after the Sprint 3 push. Next session starts PR 2-20 on `feature/mastery-indicator`. Do not force-push. Do not start 2-20 until that session.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
