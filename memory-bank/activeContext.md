@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Sprint 2 complete on local `dev` (13 Sep 2026). Waiting for review before Sprint 3.**
+**Waiting for review after PR 2-15 (26 Sep 2026).**
 
-v2 Evaluator Agent (PRs 2-08 through 2-14) is live locally. Do not start PR 2-15 until the user says "continue". Do not merge to `main`. Do not `vercel --prod` unless asked.
+v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-14 are merged to local `dev` (and origin/dev). PR 2-15 is on `feature/learning-path-prompt-injection` — do not merge or start 2-16 until the user says "continue". Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -94,9 +94,16 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Not mastered, so `suggestedNextTopic` stayed null (correct — suggester only runs at score >= 90)
   - `npx tsc --noEmit` and `npm run build` passed; `vercel --prod` skipped per request
 
+- [x] PR 2-15 · Learning Path Injects Into Teacher Prompt (`feature/learning-path-prompt-injection`)
+  - `LearningPathContext` type: currentTopic, masteredTopics, difficultyHint (`'easier' | 'normal' | 'harder'`)
+  - `buildSystemPrompt` Layer 5 (after grade band, before RAG); RAG is Layer 6, MCP is Layer 7
+  - `/api/chat` fetches `getLearningPath` per request; missing path skips the layer
+  - `difficultyHint` is always `'normal'` until PR 2-17
+  - Live check: off-topic "multiplication and dinosaurs" → Blip stayed on counting to 10
+
 ## Up Next (wait for "continue")
-- PR 2-15 · Learning Path Injects Into Teacher Prompt (`feature/learning-path-prompt-injection`)
-- Do not merge `dev` → `main` yet
+- Merge `feature/learning-path-prompt-injection` → local `dev` (do not push)
+- Then PR 2-16 · Parent Topic Approval API (`feature/parent-topic-approval`)
 
 ---
 
@@ -183,7 +190,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — Sprint 2 complete (PR 2-14). Local `dev` is ahead of `origin/dev`; do not force-push. Next: PR 2-15 after "continue".
+`feature/learning-path-prompt-injection` — PR 2-15 complete, waiting for review. Local `dev` matches `origin/dev`; do not force-push.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
@@ -193,6 +200,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` is still empty until parent approval in PR 2-16, so history is the real source of "already mastered".
 - Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI does not send `grade` yet — `/api/chat` defaults to Kindergarten
+- Teacher prompt Layer 5 uses `difficultyHint: 'normal'` until PR 2-17 computes easier/normal/harder
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration

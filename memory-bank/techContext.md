@@ -94,11 +94,11 @@ src/lib/gemini/suggestNextTopic.ts ← suggestNextTopic(subject, grade, complete
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
-src/lib/claude/buildSystemPrompt.ts ← 6-layer system prompt composer (child chat)
+src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child chat; Layer 5 = learning path)
 src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
 
 # API Routes
-src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
+src/app/api/chat/route.ts              ← SSE streaming chat; fetches learning path; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
@@ -111,7 +111,7 @@ src/app/api/summary/route.ts           ← sends transcript to Claude; saves sum
 src/types/index.ts                ← central re-export for all shared types
 src/types/session.ts              ← Subject, Message, Session, SessionSummary
 src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('K'|'1'|'K-1' — RAG chunk metadata)
-src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult, MASTERED_SCORE (90)
+src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult, LearningPathContext, MASTERED_SCORE (90)
 src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
                                      (session start returns currentTopic, currentGrade, suggestedNextTopic),
                                      SessionEndRequest/Response, SummaryRequest/Response,
@@ -170,8 +170,9 @@ scripts/gemini/testEvaluate.ts    ← smoke test for evaluateMastery (Gemini Fla
     2. CHARACTER_VOICE
     3. SUBJECT_CONTEXT
     4. GRADE_BAND (GRADE_BAND_PROMPT; defaults to K if request omits `grade`)
-    5. RAG_CONTEXT (optional)
-    6. MCP_CONTEXT (optional)
+    5. LEARNING_PATH (optional; current topic + mastered topics; difficultyHint is 'normal' until PR 2-17)
+    6. RAG_CONTEXT (optional)
+    7. MCP_CONTEXT (optional)
 - ChatRequest.grade is optional `'K'|'1'|'2'|'3'` — child UI does not send it yet
 - `[STAR EARNED]` in Claude response = award a star to the child
 

@@ -34,19 +34,22 @@ Browser (Child or Parent)
 
 ## Key Architectural Patterns
 
-### 1. Composable System Prompt (6 Layers)
-Every Claude chat call builds the system prompt from independent layers (RAG and MCP are optional):
+### 1. Composable System Prompt (7 Layers)
+Every Claude chat call builds the system prompt from independent layers (learning path, RAG, and MCP are optional):
 ```
 Layer 1: BASE_TUTOR_RULES    — never changes; enforces safety + Socratic method
 Layer 2: CHARACTER_VOICE     — loaded from constants/characters.ts by selected character id
 Layer 3: SUBJECT_CONTEXT     — which subject (math vs reading) this session covers
 Layer 4: GRADE_BAND          — GRADE_BAND_PROMPT[K|1|2|3]; defaults to K if omitted
-Layer 5: RAG_CONTEXT         — top 3 curriculum chunks via in-memory cosine similarity on Firestore
+Layer 5: LEARNING_PATH       — current topic + mastered topics + difficulty hint (omitted if no path)
+Layer 6: RAG_CONTEXT         — top 3 curriculum chunks via in-memory cosine similarity on Firestore
                                (omitted if RAG retrieval fails — graceful fallback)
-Layer 6: MCP_CONTEXT         — practice problem + hint when the child asks for a math problem
+Layer 7: MCP_CONTEXT         — practice problem + hint when the child asks for a math problem
 ```
 This lets us swap or update any layer without touching the others.
 Implemented in: `src/lib/claude/buildSystemPrompt.ts`
+
+`/api/chat` fetches `getLearningPath(parentUID, subject)` on every request and maps it to `LearningPathContext`. Difficulty is always `'normal'` until PR 2-17. A missing path or Firestore error skips Layer 5 so chat still works.
 
 ### 2. RAG Pipeline
 ```
@@ -56,7 +59,7 @@ Offline (ingestion scripts — run once, not in the app):
                                    (dedup via chunkExists(); safe to re-run)
 
 Online (per child message in /api/chat):
-  child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 5
+  child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 6
 ```
 Corpus: 202 math chunks + 334 reading chunks = 536 total in `curriculum_chunks` Firestore collection.
 Cosine similarity is computed in-memory (all subject-filtered chunks fetched, ranked, top-3 returned).
@@ -156,7 +159,8 @@ Child picks subject → handleSubjectSelect → POST /api/session/start
 
 Each chat message:
   → POST /api/chat (with sessionId)
-  → Claude responds
+  → getLearningPath → Layer 5 LEARNING_PATH (skip if missing)
+  → Claude responds (stays on currentTopic)
   → FieldValue.increment(1) on messageCount in Firestore
   → at topic boundary: fire-and-forget POST /api/evaluate
     → evaluateMastery → session.evaluations[] + learningPath masteryHistory

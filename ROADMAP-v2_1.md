@@ -321,7 +321,7 @@
 ### PR 2-15 · Learning Path Injects Into Teacher Prompt
 **Branch:** `feature/learning-path-prompt-injection`
 
-- [ ] Update `/src/lib/claude/buildSystemPrompt.ts`:
+- [x] Update `/src/lib/claude/buildSystemPrompt.ts`:
   - Add optional `learningPathContext?: LearningPathContext` param
   - Add Layer 5 (after grade band, before RAG):
     ```
@@ -331,13 +331,13 @@
     Focus exclusively on ${currentTopic} until the child shows understanding.
     Do not introduce new topics — let the parent decide when to advance.
     ```
-- [ ] Create `LearningPathContext` type in `/src/types/learningPath.ts`
-- [ ] Update `/src/app/api/chat/route.ts`:
+- [x] Create `LearningPathContext` type in `/src/types/learningPath.ts`
+- [x] Update `/src/app/api/chat/route.ts`:
   - Fetch learning path at start of each chat request
   - Pass learning path context into `buildSystemPrompt()`
-- [ ] Test: verify Claude stays on current topic and doesn't wander
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): inject learning path context into teacher agent system prompt`
+- [x] Test: verify Claude stays on current topic and doesn't wander
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): inject learning path context into teacher agent system prompt`
 
 ---
 

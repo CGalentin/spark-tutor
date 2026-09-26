@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 2 complete on local `dev` (PR 2-14). Waiting before Sprint 3. | Live: https://spark-tutor-app.vercel.app**
+**Waiting for review after PR 2-15 (`feature/learning-path-prompt-injection`). | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -25,7 +25,12 @@
 | 2-11 | Evaluator API Route | `feature/evaluator-api` | ✅ Done (merged to local `dev`) |
 | 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ✅ Done (merged to local `dev`) |
 | 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ✅ Done (merged to local `dev`) |
-| 2-14 | Sprint 2 Integration Test | `dev` | ✅ Done (`vercel --prod` skipped) |
+## v2 Sprint 3 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (waiting for review / merge) |
+| 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ⬜ After merge + "continue" |
 
 ---
 
@@ -48,9 +53,10 @@
 - Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
 - Next-topic suggester uses TOPIC_MAP + mastery history; rolls to the next grade when the current grade is done
 - Sprint 2 live check: 6 Math messages on Counting to 10 → evaluate after message 6 → session `evaluations[]` + learningPath masteryHistory; score 65 / not mastered so no next-topic suggestion; chat completed before evaluate started
+- Teacher prompt Layer 5 injects current topic + mastered topics; Claude stays on that topic (difficulty still `'normal'` until 2-17)
 
-**Not built yet (Sprint 3)**
-- Teacher prompt injection of learning path, parent approve/reject APIs, difficulty adaptation, session-start full integration
+**Not built yet (rest of Sprint 3)**
+- Parent approve/reject APIs, difficulty adaptation, session-start full integration
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
