@@ -1,6 +1,9 @@
 // Types for tutoring sessions, messages, and session summaries.
 // All session data is stored under the parent UID in Firestore (COPPA compliance).
 
+import type { GradeBand } from '@/constants/gradeBands';
+import type { DifficultyHint } from './learningPath';
+
 /** The two subjects available in Spark Tutor. */
 export type Subject = 'math' | 'reading';
 
@@ -38,6 +41,12 @@ export interface Session {
   endedAt?: Date;
   messageCount: number;
   starsEarned: number;
+  /** Topic this session started on. Absent on sessions created before PR 2-18. */
+  currentTopic?: string;
+  /** Tutoring grade (K–3). Absent on older session documents. */
+  currentGrade?: GradeBand;
+  /** Difficulty snapshot from session start. Absent on older session documents. */
+  difficultyHint?: DifficultyHint;
   /** Only present after the agentic summary has been generated. */
   summary?: SessionSummary;
 }

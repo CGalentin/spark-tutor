@@ -1,20 +1,24 @@
 // POST /api/session/start — Creates a new tutoring session in Firestore.
 // Called when the child picks a subject in the chat screen.
 // All session data is stored under the parent UID (COPPA: no child accounts).
-// After the session doc is created, reads (or creates) the learning path so the
-// client knows currentTopic and currentGrade for this subject.
+// The learning path is read first so the session document can store the topic,
+// grade, and difficulty the child will actually practice.
+// A suggested next topic is not taught until the parent approves it.
 //
 // Request body: { characterType, characterName, subject }
-// Response:     { success: true, data: { sessionId, currentTopic, currentGrade, suggestedNextTopic } }
+// Response:     { success: true, data: { sessionId, currentTopic, currentGrade, suggestedNextTopic, learningPath } }
 
 import { type NextRequest } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
 import { createLearningPath, getLearningPath } from '@/lib/firebase/learningPath';
+import { getDifficultyHint } from '@/lib/claude/adaptDifficulty';
 import { getTopics, type GradeBand } from '@/constants';
 import type {
   ApiResult,
+  DifficultyHint,
   LearningPath,
+  LearningPathSummary,
   SessionStartRequest,
   SessionStartResponse,
   Subject,
@@ -39,6 +43,41 @@ async function resolveLearningPath(parentUID: string, subject: Subject): Promise
   }
 
   return createLearningPath(parentUID, subject, firstTopic, DEFAULT_GRADE);
+}
+
+/**
+ * Topic this session will teach.
+ * A waiting suggestion stays a suggestion. Approval already copies the new topic
+ * onto currentTopic, so this never teaches suggestedNextTopic.
+ */
+function topicForNewSession(path: LearningPath): string {
+  const suggestionWaiting =
+    path.parentApproved === false &&
+    typeof path.suggestedNextTopic === 'string' &&
+    path.suggestedNextTopic.length > 0;
+
+  if (suggestionWaiting) {
+    return path.currentTopic;
+  }
+
+  return path.currentTopic;
+}
+
+/** Builds the snapshot returned to the chat page and stored on the session. */
+function toLearningPathSummary(
+  path: LearningPath,
+  topic: string,
+  difficultyHint: DifficultyHint,
+): LearningPathSummary {
+  return {
+    subject: path.subject,
+    currentTopic: topic,
+    currentGrade: path.currentGrade,
+    suggestedNextTopic: path.suggestedNextTopic,
+    parentApproved: path.parentApproved,
+    difficultyHint,
+    topicsCompleted: path.topicsCompleted,
+  };
 }
 
 export async function POST(request: NextRequest): Promise<Response> {
@@ -82,7 +121,22 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 3. Create session document in Firestore ───────────────────────────────
+  // ── 3. Read or create the learning path before writing the session ───────
+  let learningPath: LearningPath;
+  try {
+    learningPath = await resolveLearningPath(parentUID, subject);
+  } catch {
+    return Response.json(
+      { success: false, error: 'Failed to load the learning path.' } satisfies ApiResult<never>,
+      { status: 500 },
+    );
+  }
+
+  const sessionTopic = topicForNewSession(learningPath);
+  const difficultyHint = getDifficultyHint(learningPath.masteryHistory, sessionTopic);
+  const learningPathSummary = toLearningPathSummary(learningPath, sessionTopic, difficultyHint);
+
+  // ── 4. Create session document in Firestore ───────────────────────────────
   // Auto-generated document ID becomes the sessionId returned to the client.
   try {
     const sessionsRef = adminDb.collection('users').doc(parentUID).collection('sessions');
@@ -97,16 +151,17 @@ export async function POST(request: NextRequest): Promise<Response> {
       startedAt: FieldValue.serverTimestamp(),
       messageCount: 0,
       starsEarned: 0,
+      currentTopic: sessionTopic,
+      currentGrade: learningPath.currentGrade,
+      difficultyHint,
     });
-
-    // ── 4. Read or create the learning path for this subject ───────────────
-    const learningPath = await resolveLearningPath(parentUID, subject);
 
     const responseData: SessionStartResponse = {
       sessionId: sessionRef.id,
-      currentTopic: learningPath.currentTopic,
+      currentTopic: sessionTopic,
       currentGrade: learningPath.currentGrade,
       suggestedNextTopic: learningPath.suggestedNextTopic,
+      learningPath: learningPathSummary,
     };
 
     return Response.json({

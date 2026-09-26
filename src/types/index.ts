@@ -17,6 +17,7 @@ export type {
   MathProblemResponse,
   SessionStartRequest,
   SessionStartResponse,
+  LearningPathSummary,
   SessionEndRequest,
   SessionEndResponse,
   SummaryRequest,

@@ -13,7 +13,17 @@ import {
   type Unsubscribe,
 } from 'firebase/firestore';
 import { db } from './config';
-import type { LearningPath, Session, Subject } from '@/types';
+import { isGradeBand } from '@/constants/gradeBands';
+import type { DifficultyHint, LearningPath, Session, Subject } from '@/types';
+
+/** Keeps only a real difficulty hint. Older sessions omit the field. */
+function readDifficultyHint(value: unknown): DifficultyHint | undefined {
+  if (value === 'easier' || value === 'normal' || value === 'harder') {
+    return value;
+  }
+
+  return undefined;
+}
 
 /** Fetches a single session document for a given parent and session ID. */
 export async function getSession(
@@ -76,6 +86,9 @@ export function subscribeToSessions(
           endedAt: (data['endedAt'] as { toDate: () => Date } | undefined)?.toDate(),
           messageCount: (data['messageCount'] as number | undefined) ?? 0,
           starsEarned: (data['starsEarned'] as number | undefined) ?? 0,
+          currentTopic: typeof data['currentTopic'] === 'string' ? data['currentTopic'] : undefined,
+          currentGrade: isGradeBand(data['currentGrade']) ? data['currentGrade'] : undefined,
+          difficultyHint: readDifficultyHint(data['difficultyHint']),
           summary: data['summary']
             ? {
                 topicsCovered: (data['summary']['topicsCovered'] as string[]) ?? [],

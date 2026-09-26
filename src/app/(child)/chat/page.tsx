@@ -260,6 +260,8 @@ export default function ChatPage() {
           sessionId: sessionId ?? createMessageId(),
           characterId: character.id,
           subject,
+          grade: currentGrade,
+          ...(currentTopic.trim().length > 0 ? { currentTopic } : {}),
           messages: historySnapshot,
         }),
       });

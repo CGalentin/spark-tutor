@@ -3,7 +3,7 @@
 
 import type { GradeBand } from '@/constants/gradeBands';
 import type { Message, Subject } from './session';
-import type { EvaluationResult } from './learningPath';
+import type { DifficultyHint, EvaluationResult } from './learningPath';
 
 /** Standard API response wrapper used by all /app/api routes.
  *  Discriminated union makes it easy to check success before accessing data. */
@@ -16,8 +16,10 @@ export interface ChatRequest {
   sessionId: string;
   characterId: string;
   subject: Subject;
-  /** Tutoring grade band. Optional — the chat route defaults to 'K' if omitted. */
+  /** Tutoring grade band for this session. Optional — the chat route defaults to 'K' if omitted. */
   grade?: GradeBand;
+  /** Topic this session is teaching. When set, the teacher stays on this topic. */
+  currentTopic?: string;
   /** Full conversation history so Claude has context. */
   messages: Message[];
 }
@@ -54,6 +56,20 @@ export interface SessionStartRequest {
   subject: Subject;
 }
 
+/**
+ * Snapshot of the learning path at session start.
+ * The child teaches from currentTopic. suggestedNextTopic stays a proposal until the parent approves.
+ */
+export interface LearningPathSummary {
+  subject: Subject;
+  currentTopic: string;
+  currentGrade: GradeBand;
+  suggestedNextTopic: string | null;
+  parentApproved: boolean;
+  difficultyHint: DifficultyHint;
+  topicsCompleted: string[];
+}
+
 /** Successful response from POST /api/session/start. */
 export interface SessionStartResponse {
   /** The Firestore document ID of the newly created session. */
@@ -64,6 +80,8 @@ export interface SessionStartResponse {
   currentGrade: GradeBand;
   /** AI-suggested next topic, if the evaluator has proposed one. Null until then. */
   suggestedNextTopic: string | null;
+  /** Full snapshot used to start this session. */
+  learningPath: LearningPathSummary;
 }
 
 /** Request body sent to POST /api/session/end. */

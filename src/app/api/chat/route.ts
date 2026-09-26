@@ -84,9 +84,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { message, sessionId, characterId, subject, messages, grade } = body;
+  const { message, sessionId, characterId, subject, messages, grade, currentTopic } = body;
 
-  // Optional grade field — missing or omitted means Kindergarten (old clients still work).
+  // Grade from this session. Missing means Kindergarten so older clients still work.
   let gradeBand: GradeBand = 'K';
   if (grade !== undefined) {
     if (!isGradeBand(grade)) {
@@ -96,6 +96,18 @@ export async function POST(request: NextRequest) {
       );
     }
     gradeBand = grade;
+  }
+
+  // Topic from this session. When the child sends one, the teacher stays on it.
+  let requestedTopic: string | undefined;
+  if (currentTopic !== undefined) {
+    if (typeof currentTopic !== 'string' || currentTopic.trim().length === 0) {
+      return Response.json(
+        { success: false, error: 'Optional field currentTopic must be a non-empty string.' },
+        { status: 400 },
+      );
+    }
+    requestedTopic = currentTopic.trim();
   }
 
   if (
@@ -151,7 +163,8 @@ export async function POST(request: NextRequest) {
   }
 
   // Learning path is optional — a missing or failed read must not block chat.
-  const learningPathContext = await loadLearningPathContext(parentUID, subject);
+  // The session's topic, when the client sends one, overrides the stored current topic.
+  const learningPathContext = await loadLearningPathContext(parentUID, subject, requestedTopic);
 
   // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
@@ -244,29 +257,51 @@ export async function POST(request: NextRequest) {
 
 /**
  * Loads the parent's learning path for this subject and maps it for the Teacher prompt.
- * Returns undefined if the path is missing or Firestore fails — chat still works.
+ * requestedTopic is the topic this session started on. It wins over a newer path topic
+ * so a mid-session approval does not change the lesson already in progress.
+ * If the path cannot be read, a sent topic still keeps the teacher on that lesson.
  */
 async function loadLearningPathContext(
   parentUID: string,
   subject: ChatRequest['subject'],
+  requestedTopic: string | undefined,
 ): Promise<LearningPathContext | undefined> {
   try {
     const path = await getLearningPath(parentUID, subject);
     if (path === null) {
-      return undefined;
+      return topicOnlyContext(requestedTopic);
     }
 
-    return toLearningPathContext(path);
+    return toLearningPathContext(path, requestedTopic);
   } catch {
-    return undefined;
+    return topicOnlyContext(requestedTopic);
   }
 }
 
 /**
- * Builds the prompt slice from a stored learning path.
- * Difficulty comes from the last two scores on the current topic.
+ * Prompt slice when we know the session topic but have no mastery history.
  */
-function toLearningPathContext(path: LearningPath): LearningPathContext {
+function topicOnlyContext(requestedTopic: string | undefined): LearningPathContext | undefined {
+  if (requestedTopic === undefined) {
+    return undefined;
+  }
+
+  return {
+    currentTopic: requestedTopic,
+    masteredTopics: [],
+    difficultyHint: 'normal',
+  };
+}
+
+/**
+ * Builds the prompt slice from a stored learning path.
+ * Difficulty comes from the last two scores on the topic this session is teaching.
+ */
+function toLearningPathContext(
+  path: LearningPath,
+  requestedTopic: string | undefined,
+): LearningPathContext {
+  const currentTopic = requestedTopic ?? path.currentTopic;
   const masteredFromHistory = path.masteryHistory
     .filter((entry) => entry.mastered || entry.score >= MASTERED_SCORE)
     .map((entry) => entry.topic);
@@ -274,8 +309,8 @@ function toLearningPathContext(path: LearningPath): LearningPathContext {
   const masteredTopics = [...new Set([...path.topicsCompleted, ...masteredFromHistory])];
 
   return {
-    currentTopic: path.currentTopic,
+    currentTopic,
     masteredTopics,
-    difficultyHint: getDifficultyHint(path.masteryHistory, path.currentTopic),
+    difficultyHint: getDifficultyHint(path.masteryHistory, currentTopic),
   };
 }
