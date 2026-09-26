@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-18 is committed on `feature/session-full-integration` (26 Sep 2026). Not merged. Waiting for review, then "continue" before merging to local `dev` or starting PR 2-19.**
+**PR 2-19 is committed on local `dev` (26 Sep 2026). Sprint 3 is complete. Not pushed. Waiting for review, then "continue" before starting PR 2-20.**
 
-v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-17 are merged to local `dev`. `origin/dev` is still at PR 2-15 — do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on local `dev`. `origin/dev` is still at PR 2-15 — do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -124,10 +124,20 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Response adds `learningPath` summary (topic, grade, suggestion, parentApproved, difficultyHint, topicsCompleted) and keeps the existing top-level fields
   - Chat page sends `grade` and `currentTopic` on every `/api/chat` request
   - Chat uses that grade for Layer 4 and that topic for Layer 5. A sent topic wins over a newer path topic so a mid-session approval does not change the lesson in progress
-  - Not merged yet
+  - Merged to local `dev` (fast-forward). Not pushed.
+
+- [x] PR 2-19 · Sprint 3 Integration Test (`dev`)
+  - Live math session on Counting to 10: 6 chats, then POST `/api/evaluate` (same call the chat page makes)
+  - Score 100, mastered, suggested Counting to 20. Session `evaluations[]` length 1. Session doc stored topic K / normal
+  - Off-topic "multiplication and dinosaurs" stayed on a counting question
+  - Approve moved currentTopic to Counting to 20, cleared the suggestion, appended Counting to 10 to topicsCompleted
+  - New session returned Counting to 20. "What are we learning right now?" → count to 20
+  - Two scores under 50 (40 and 30) on Counting to 20 → reply used one hand and fingers, counting 1 to 5
+  - `npx tsc --noEmit` and `npm run build` passed
+  - Live math path for the test parent is now Counting to 20, with those two low scores last, so the next math chat uses easier until two higher scores land
 
 ## Up Next (wait for review, then "continue")
-- Merge `feature/session-full-integration` into local `dev`, then PR 2-19 · Sprint 3 Integration Test (on `dev`)
+- PR 2-20 · Mastery Indicator Component (`feature/mastery-indicator` off local `dev`)
 
 ---
 
@@ -214,7 +224,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/session-full-integration` — PR 2-18 committed, not merged. Local `dev` includes PR 2-17. `origin/dev` is still at PR 2-15. Do not force-push. Do not merge until "continue".
+`dev` — PR 2-19 committed. Local `dev` is ahead of `origin/dev` (origin is still at PR 2-15). Do not force-push. Do not start PR 2-20 until "continue".
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
@@ -225,6 +235,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Approve does not change `currentGrade`. Reject only clears `suggestedNextTopic` (`parentApproved` stays whatever it already was).
 - Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI sends `grade` (the session's `currentGrade`) and `currentTopic` on every `/api/chat` request. If `grade` is omitted, the API still defaults to Kindergarten
+- Sprint 3 live run left the test parent's math path on Counting to 20, with scores 40 and 30 last, so the next math chat uses the easier hint until two higher scores are saved
 - Teacher prompt Layer 5 difficulty comes from `getDifficultyHint`: last two scores on the current topic, both under 50 → easier, both over 85 → harder, otherwise normal. One score stays normal.
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)

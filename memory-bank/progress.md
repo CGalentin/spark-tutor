@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**PR 2-18 committed on `feature/session-full-integration`, not merged. PR 2-17 is on local `dev` (not pushed). Next is review, then merge and PR 2-19. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
+**Sprint 3 complete on local `dev` (PR 2-19). Not pushed. Next is review, then PR 2-20. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -32,7 +32,8 @@
 | 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (merged to local `dev`, pushed) |
 | 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (merged to local `dev`) |
 | 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (merged to local `dev`) |
-| 2-18 | Session Start Full Learning Path Integration | `feature/session-full-integration` | ✅ Done (committed, not merged) |
+| 2-18 | Session Start Full Learning Path Integration | `feature/session-full-integration` | ✅ Done (merged to local `dev`) |
+| 2-19 | Sprint 3 Integration Test | `dev` | ✅ Done (local `dev`, not pushed) |
 
 ---
 
@@ -61,8 +62,10 @@
 
 - Session start teaches `currentTopic` while a suggestion is waiting, saves topic/grade/difficulty on the session doc, and returns a learning-path summary
 
-**Not built yet (rest of Sprint 3)**
-- Sprint 3 integration test (PR 2-19)
+- Sprint 3 live check: Counting to 10 scored 100 and suggested Counting to 20; approve switched the path; a new session taught Counting to 20; two scores under 50 produced a fingers-and-one-hand reply
+
+**Not built yet (Sprint 4)**
+- Mastery ring, live session panel, topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

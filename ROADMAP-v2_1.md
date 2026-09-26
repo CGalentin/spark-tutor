@@ -27,7 +27,7 @@
 
 - [x] Sprint 1 — Foundation (Grade Bands + Data Model)
 - [x] Sprint 2 — Evaluator Agent (Gemini Flash)
-- [ ] Sprint 3 — Agentic Learning Path
+- [x] Sprint 3 — Agentic Learning Path
 - [ ] Sprint 4 — Parent Dashboard Updates
 
 ---
@@ -400,17 +400,17 @@
 ### PR 2-19 · Sprint 3 Integration Test
 **Branch:** `dev`
 
-- [ ] Full flow test:
+- [x] Full flow test:
   - Start session → chat 6 messages on Math topic → verify evaluation fires
   - Check Firestore: mastery scored + next topic suggested
   - Verify Teacher Agent stays focused on current topic in next messages
   - Call approve endpoint manually (via Postman or curl) → verify topic updates
   - Start new session → verify Teacher prompt now references new approved topic
-- [ ] Test difficulty adaptation:
+- [x] Test difficulty adaptation:
   - Manually set a low mastery score in Firestore → verify Teacher uses easier language
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Verify build passes: `npm run build`
-- [ ] Commit: `chore: sprint 3 complete — agentic learning path fully wired`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Verify build passes: `npm run build`
+- [x] Commit: `chore: sprint 3 complete — agentic learning path fully wired`
 
 ---
 
@@ -567,7 +567,7 @@
 - [x] Grade band prompts working for K, 1, 2, 3
 - [x] Gemini Flash Evaluator scoring mastery after every 6 messages
 - [x] Learning path persisted in Firestore per subject
-- [ ] Teacher Agent adapts based on current topic and mastery history
+- [x] Teacher Agent adapts based on current topic and mastery history
 - [x] Difficulty adapts based on score history (easier/normal/harder)
 - [ ] Parent sees live mastery indicator during active sessions
 - [ ] Parent receives and can act on topic suggestions
