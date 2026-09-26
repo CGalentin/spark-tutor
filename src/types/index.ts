@@ -23,6 +23,10 @@ export type {
   SummaryResponse,
   EvaluateRequest,
   EvaluateResponse,
+  ApproveTopicRequest,
+  ApproveTopicResponse,
+  RejectTopicRequest,
+  RejectTopicResponse,
 } from './api';
 
 export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';

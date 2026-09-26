@@ -136,3 +136,28 @@ export interface EvaluateResponse {
   evaluated: true;
   result: EvaluationResult;
 }
+
+/** Request body sent to POST /api/learning-path/approve. Parent dashboard only. */
+export interface ApproveTopicRequest {
+  subject: Subject;
+  /** Topic the parent is moving the child onto. */
+  approvedTopic: string;
+}
+
+/** Successful response from POST /api/learning-path/approve. */
+export interface ApproveTopicResponse {
+  approved: true;
+  /** The topic that is now current on the learning path. */
+  newTopic: string;
+}
+
+/** Request body sent to POST /api/learning-path/reject. Parent dashboard only. */
+export interface RejectTopicRequest {
+  /** Subject whose suggestion the parent is declining. */
+  subject: Subject;
+}
+
+/** Successful response from POST /api/learning-path/reject. */
+export interface RejectTopicResponse {
+  rejected: true;
+}
