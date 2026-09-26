@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Waiting for review after PR 2-15 (26 Sep 2026).**
+**PR 2-15 merged to local `dev` and pushed to `origin/dev` (26 Sep 2026). Waiting to start PR 2-16.**
 
-v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-14 are merged to local `dev` (and origin/dev). PR 2-15 is on `feature/learning-path-prompt-injection` — do not merge or start 2-16 until the user says "continue". Do not merge to `main`. Do not `vercel --prod` unless asked.
+v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-15 are merged to local `dev` (and origin/dev). Next is PR 2-16 · Parent Topic Approval API. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 
@@ -102,8 +102,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Live check: off-topic "multiplication and dinosaurs" → Blip stayed on counting to 10
 
 ## Up Next (wait for "continue")
-- Merge `feature/learning-path-prompt-injection` → local `dev` (do not push)
-- Then PR 2-16 · Parent Topic Approval API (`feature/parent-topic-approval`)
+- PR 2-16 · Parent Topic Approval API (`feature/parent-topic-approval` off local `dev`)
 
 ---
 
@@ -190,7 +189,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/learning-path-prompt-injection` — PR 2-15 complete, waiting for review. Local `dev` matches `origin/dev`; do not force-push.
+`dev` — PR 2-15 merged and pushed. Next: PR 2-16 after "continue". Do not force-push.
 
 ## Known Issues / Decisions
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.

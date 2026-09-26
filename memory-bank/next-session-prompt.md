@@ -1,7 +1,6 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PR 2-15 is done on `feature/learning-path-prompt-injection` (26 Sep 2026). Waiting for review.
-After you say "continue": merge 2-15 to local `dev`, then start PR 2-16.
+PR 2-15 is merged to local `dev` and pushed to `origin/dev` (26 Sep 2026). Resume with PR 2-16.
 
 Copy everything below the line.
 
@@ -9,9 +8,9 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-15 are complete. 2-15 is on `feature/learning-path-prompt-injection` and is not merged yet.
+PRs 2-01 through 2-15 are complete and merged to local `dev` (and pushed to `origin/dev`). Do not redo them.
 
-I said continue. Merge `feature/learning-path-prompt-injection` into local `dev` (no push). Then start PR 2-16 from local `dev` on branch `feature/parent-topic-approval`. Follow ROADMAP-v2_1.md exactly. After 2-16: stop, summarize, wait for me to say "continue" before merging or starting 2-17.
+Start PR 2-16 from local `dev` on branch `feature/parent-topic-approval`. Follow ROADMAP-v2_1.md exactly. After 2-16: stop, summarize, wait for me to say "continue" before merging or starting 2-17.
 
 What's done through 2-15
 
@@ -19,21 +18,27 @@ Grade-band configs + prompt strings (K–3). Chat API accepts optional grade (de
 
 Topic curriculum map: TOPIC_MAP + getTopics().
 
-Types: LearningPath, TopicMastery, EvaluationResult, LearningPathContext, DifficultyHint. MASTERED_SCORE is 90. mastered is true only when score >= 90.
+Types: LearningPath, TopicMastery, EvaluationResult, LearningPathContext, DifficultyHint. MASTERED_SCORE is 90 (not 80). mastered is true only when score >= 90. Use the shared MASTERED_SCORE constant. Rubric: 71–89 close, 90–100 mastered.
 
 Firestore: Admin CRUD in src/lib/firebase/learningPath.ts (never import from Client Components); subscribeToLearningPath in src/lib/firebase/firestore.ts. Path: users/{parentUID}/learningPath/{subject}.
 
 Session start reads or creates a learning path and returns currentTopic, currentGrade, suggestedNextTopic.
 
-Gemini Flash evaluator: gemini-3.5-flash. evaluateMastery + suggestNextTopic when mastered. Chat fires evaluate at topic boundaries (fire-and-forget).
+Gemini Flash evaluator: getGeminiFlashClient() is a separate singleton from embeddings. Model is gemini-3.5-flash. evaluateMastery(messages, topic, grade) returns EvaluationResult. Prompt lives in src/lib/gemini/buildEvaluatorPrompt.ts. Unreadable JSON falls back to score 0 / mastered false.
 
-Teacher system prompt is 7 layers: 1 BASE_TUTOR_RULES, 2 CHARACTER_VOICE, 3 SUBJECT_CONTEXT, 4 GRADE_BAND, 5 LEARNING_PATH, 6 RAG, 7 MCP. /api/chat fetches getLearningPath each request. difficultyHint is always 'normal' until PR 2-17. Missing path skips Layer 5.
+Topic boundary: detectTopicBoundary in src/lib/mcp/topicBoundary.ts. TOPIC_BLOCK_SIZE = 6. Also true if the last child message says "I'm done" / "im done" / "next topic" / "something else". Count 0 is not a boundary.
+
+POST /api/evaluate: auth, evaluateMastery, saves evaluations[] on the session doc, saveMasteryResult on the learning path. If mastered: parentApproved = false and src/lib/gemini/suggestNextTopic.ts (curriculum + mastery history; rolls to next grade). Saves learningPath.suggestedNextTopic.
+
+Chat: after each mascot reply, increment topicMessageCount, detectTopicBoundary, fire-and-forget POST /api/evaluate, reset the counter. Failures are silent.
+
+Teacher system prompt is 7 layers: 1 BASE_TUTOR_RULES, 2 CHARACTER_VOICE, 3 SUBJECT_CONTEXT, 4 GRADE_BAND, 5 LEARNING_PATH, 6 RAG, 7 MCP. /api/chat fetches getLearningPath each request and injects currentTopic + masteredTopics. difficultyHint is always 'normal' until PR 2-17. Missing path skips Layer 5.
 
 Live check: off-topic "multiplication and dinosaurs" → mascot stayed on Counting to 10.
 
 PR 2-16 · Parent Topic Approval API
 
-Branch: feature/parent-topic-approval (off local `dev` after merging 2-15).
+Branch: feature/parent-topic-approval (off local `dev`).
 
 - Create /src/app/api/learning-path/approve/route.ts — POST:
   - Accepts { subject, approvedTopic }
@@ -48,7 +53,7 @@ Branch: feature/parent-topic-approval (off local `dev` after merging 2-15).
 - npx tsc --noEmit
 - Commit: feat(api): add parent topic approval and rejection endpoints
 
-Tutoring grade is @/constants (src/constants/gradeBands.ts). Do not use RAG GradeBand from @/types.
+Tutoring grade is @/constants (src/constants/gradeBands.ts) — 'K' | '1' | '2' | '3'. Do not use RAG GradeBand from @/types.
 
 Workflow
 

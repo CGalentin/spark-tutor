@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Waiting for review after PR 2-15 (`feature/learning-path-prompt-injection`). | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
+**PR 2-15 merged to `dev` and pushed. Next is PR 2-16. | Sprint 2 complete | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -29,7 +29,7 @@
 
 | PR | Title | Branch | Status |
 |---|---|---|---|
-| 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (waiting for review / merge) |
+| 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (merged to local `dev`, pushed) |
 | 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ⬜ After merge + "continue" |
 
 ---
