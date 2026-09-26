@@ -17,6 +17,22 @@ export const MASTERED_SCORE = 90;
 export type EvaluationConfidence = 'low' | 'medium' | 'high';
 
 /**
+ * How hard Claude should make this topic.
+ * PR 2-15 uses 'normal' as a placeholder; PR 2-17 will pick easier/normal/harder from scores.
+ */
+export type DifficultyHint = 'easier' | 'normal' | 'harder';
+
+/**
+ * Slice of the learning path injected into the Teacher (Claude) system prompt.
+ * Not stored in Firestore — built per chat request from the LearningPath document.
+ */
+export interface LearningPathContext {
+  currentTopic: string;
+  masteredTopics: string[];
+  difficultyHint: DifficultyHint;
+}
+
+/**
  * One scored attempt at a topic.
  * `mastered` is true when score is MASTERED_SCORE (90) or higher.
  */

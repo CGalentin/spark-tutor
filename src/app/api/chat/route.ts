@@ -16,6 +16,7 @@
 import { type NextRequest } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
+import { getLearningPath } from '@/lib/firebase/learningPath';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
 import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
@@ -23,7 +24,13 @@ import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
 import { detectsProblemRequest, generateMathProblem } from '@/lib/mcp/mathProblem';
 import { chatRatelimit } from '@/lib/upstash/ratelimit';
-import type { ChatRequest, Message } from '@/types';
+import {
+  MASTERED_SCORE,
+  type ChatRequest,
+  type LearningPath,
+  type LearningPathContext,
+  type Message,
+} from '@/types';
 
 /** Maps our internal MessageRole to the role format Claude expects. */
 function toClaudeRole(role: Message['role']): 'user' | 'assistant' {
@@ -109,7 +116,7 @@ export async function POST(request: NextRequest) {
 
   // ── 4. MCP routing — detect problem requests before falling through to RAG ──
   // When the child asks for a practice problem, generate one via the MCP tool.
-  // If MCP succeeds, skip RAG and inject the problem as Layer 5 instead.
+  // If MCP succeeds, skip RAG and inject the problem as Layer 7 instead.
   // If MCP fails, fall through to RAG as normal.
   let ragContext: string | undefined;
   let mcpContext: string | undefined;
@@ -142,6 +149,9 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // Learning path is optional — a missing or failed read must not block chat.
+  const learningPathContext = await loadLearningPathContext(parentUID, subject);
+
   // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
   try {
@@ -149,6 +159,7 @@ export async function POST(request: NextRequest) {
       characterId,
       subject,
       gradeBand,
+      learningPathContext,
       ragContext,
       mcpContext,
     });
@@ -228,4 +239,42 @@ export async function POST(request: NextRequest) {
       Connection: 'keep-alive',
     },
   });
+}
+
+/**
+ * Loads the parent's learning path for this subject and maps it for the Teacher prompt.
+ * Returns undefined if the path is missing or Firestore fails — chat still works.
+ */
+async function loadLearningPathContext(
+  parentUID: string,
+  subject: ChatRequest['subject'],
+): Promise<LearningPathContext | undefined> {
+  try {
+    const path = await getLearningPath(parentUID, subject);
+    if (path === null) {
+      return undefined;
+    }
+
+    return toLearningPathContext(path);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Builds the prompt slice from a stored learning path.
+ * Difficulty stays 'normal' until PR 2-17 reads the score history.
+ */
+function toLearningPathContext(path: LearningPath): LearningPathContext {
+  const masteredFromHistory = path.masteryHistory
+    .filter((entry) => entry.mastered || entry.score >= MASTERED_SCORE)
+    .map((entry) => entry.topic);
+
+  const masteredTopics = [...new Set([...path.topicsCompleted, ...masteredFromHistory])];
+
+  return {
+    currentTopic: path.currentTopic,
+    masteredTopics,
+    difficultyHint: 'normal',
+  };
 }

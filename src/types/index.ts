@@ -33,4 +33,6 @@ export type {
   LearningPath,
   EvaluationResult,
   EvaluationConfidence,
+  DifficultyHint,
+  LearningPathContext,
 } from './learningPath';
