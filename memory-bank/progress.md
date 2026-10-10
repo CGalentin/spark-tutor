@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 3 complete and pushed to `origin/dev` (PR 2-19). Next session starts Sprint 4 at PR 2-20. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4 started. PR 2-20 is committed on `feature/mastery-indicator` (not merged, not pushed). Local `dev` still matches `origin/dev`. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -33,7 +33,14 @@
 | 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (merged to local `dev`) |
 | 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (merged to local `dev`) |
 | 2-18 | Session Start Full Learning Path Integration | `feature/session-full-integration` | ✅ Done (merged to local `dev`) |
-| 2-19 | Sprint 3 Integration Test | `dev` | ✅ Done (local `dev`, not pushed) |
+| 2-19 | Sprint 3 Integration Test | `dev` | ✅ Done (pushed to `origin/dev`) |
+
+## v2 Sprint 4 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (not merged, not pushed) |
+| 2-21 | Live Session Panel | `feature/live-session-panel` | ⏳ Next, after "continue" |
 
 ---
 
@@ -63,9 +70,10 @@
 - Session start teaches `currentTopic` while a suggestion is waiting, saves topic/grade/difficulty on the session doc, and returns a learning-path summary
 
 - Sprint 3 live check: Counting to 10 scored 100 and suggested Counting to 20; approve switched the path; a new session taught Counting to 20; two scores under 50 produced a fingers-and-one-hand reply
+- `MasteryIndicator` draws a parent-facing score ring from `topic` and `score` props. It is not on the dashboard yet
 
 **Not built yet (Sprint 4)**
-- Mastery ring, live session panel, topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
+- Live session panel (mounts the ring), topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

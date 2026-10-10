@@ -423,15 +423,17 @@
 ### PR 2-20 · Mastery Indicator Component
 **Branch:** `feature/mastery-indicator`
 
-- [ ] Create `/src/components/parent/MasteryIndicator.tsx`:
+- [x] Create `/src/components/parent/MasteryIndicator.tsx`:
   - Circular progress ring (SVG) showing current topic mastery score 0-100
   - Color coded: red (0-49) → yellow (50-89) → green (90-100)
   - Shows topic name, score, and confidence label ('Building', 'Almost there', 'Mastered!')
   - Animates smoothly when score updates via onSnapshot
   - Uses Shadcn `Badge` for confidence label
-- [ ] Verify accessible: includes `aria-label` with score for screen readers
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(parent-ui): add mastery indicator component with animated progress ring`
+- [x] Verify accessible: includes `aria-label` with score for screen readers
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(parent-ui): add mastery indicator component with animated progress ring`
+
+> **Note:** The ring takes `topic` and `score` as props and eases when `score` changes. It does not subscribe to Firestore and is not on the dashboard. PR 2-21 (`useLiveSession`) feeds the score. Green uses `MASTERED_SCORE` (90). Yellow starts at 50, wider than the evaluator's close band (71–89).
 
 ---
 

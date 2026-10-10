@@ -1,7 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Sprint 3 is complete and pushed to `origin/dev` (26 Sep 2026). Tomorrow starts Sprint 4 at PR 2-20. Do not start it until the next session.**
+**PR 2-20 is committed on `feature/mastery-indicator` (10 Oct 2026). It is not merged into `dev` and not pushed. Wait for "continue" before merging or starting PR 2-21.**
+
+v2 Sprint 3 (PRs 2-01 through 2-19) is on `origin/dev`. Local `dev` still matches `origin/dev` until 2-20 is merged. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `origin/dev`. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -136,8 +138,18 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `npx tsc --noEmit` and `npm run build` passed
   - Live math path for the test parent is now Counting to 20, with those two low scores last, so the next math chat uses easier until two higher scores land
 
+- [x] PR 2-20 · Mastery Indicator Component (`feature/mastery-indicator`)
+  - `src/components/parent/MasteryIndicator.tsx` — SVG ring for a mastery score 0–100
+  - Colors: red 0–49 "Building", yellow 50–89 "Almost there", green 90–100 "Mastered!"
+  - Green uses `MASTERED_SCORE` (90). Yellow starts at 50, wider than the evaluator close band (71–89)
+  - Props: `topic` and `score`. The arc eases over 700ms when `score` changes
+  - Shadcn `Badge` for the label. `aria-label` includes the topic, the score, and the label
+  - Does not subscribe to Firestore. Not mounted on the dashboard (that is PR 2-21)
+  - Checked in a temporary preview (deleted before commit): clicked score buttons 0, 49, 50, 71, 89, 90, 100 and confirmed the label, color, and that the arc eases
+  - Not merged. Not pushed.
+
 ## Up Next
-- Next session: PR 2-20 · Mastery Indicator Component (`feature/mastery-indicator` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue".
+- Wait for "continue". Then merge `feature/mastery-indicator` into local `dev` (no force-push), and start PR 2-21 only (`feature/live-session-panel`). Do not push unless asked.
 
 ---
 
@@ -224,9 +236,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — matches `origin/dev` after the Sprint 3 push. Next session starts PR 2-20 on `feature/mastery-indicator`. Do not force-push. Do not start 2-20 until that session.
+`feature/mastery-indicator` — PR 2-20 committed, not merged, not pushed. Local `dev` still matches `origin/dev`. Do not force-push.
 
 ## Known Issues / Decisions
+- `MasteryIndicator` takes `topic` and `score` only. Do not subscribe to Firestore inside the ring. Do not mount it until PR 2-21.
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.

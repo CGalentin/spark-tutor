@@ -1,6 +1,8 @@
 # Next session prompt — paste this into a new Cursor chat
 
-Sprint 3 is complete and pushed to `origin/dev` (26 Sep 2026). Tomorrow starts Sprint 4 at PR 2-20. Do not redo 2-01 through 2-19. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
+PR 2-20 is committed on `feature/mastery-indicator` (10 Oct 2026). It is not merged into local `dev` and not pushed. Local `dev` still matches `origin/dev`. Do not redo 2-01 through 2-20. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
+
+If the user says "continue": merge `feature/mastery-indicator` into local `dev` first (fast-forward, no force-push), then do PR 2-21 only. After 2-21: stop, summarize, and wait for "continue" before merging or starting 2-22. If they have not said "continue", do not merge and do not start 2-21.
 
 Copy everything below the line.
 
@@ -8,14 +10,16 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-19 are complete and pushed to `origin/dev`. Do not redo them. Local `dev` and `origin/dev` should match. If they do not, stop and tell me. Do not force-push.
+PRs 2-01 through 2-19 are complete and pushed to `origin/dev`. PR 2-20 is committed on `feature/mastery-indicator` and is not merged yet. Do not redo them. Do not force-push.
 
-This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time. Start with PR 2-20 only. After 2-20: stop, summarize, and wait for me to say "continue" before merging or starting 2-21.
+This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time.
+
+When I say "continue": merge `feature/mastery-indicator` into local `dev`, then start PR 2-21 only. After 2-21: stop, summarize, and wait for me to say "continue" before merging or starting 2-22.
 
 Sprint 4 map (do not skip ahead)
 
-- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — start here
-- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`)
+- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — done, waiting to merge
+- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — next, only after "continue"
 - 2-22 TopicSuggestionCard + useLearningPath, calls approve/reject (`feature/topic-suggestion-card`)
 - 2-23 LearningPathHistory timeline (`feature/learning-path-history`)
 - 2-24 Session summary includes mastery (`feature/session-summary-v2`)
@@ -24,24 +28,39 @@ Sprint 4 map (do not skip ahead)
 - 2-27 Production deploy on `main` — only when I explicitly say to deploy. `vercel --prod`, then merge `dev` → `main`. Do not do this early.
 - 2-28 README + CLAUDE.md (`feature/readme-v2`)
 
-PR 2-20 · Mastery Indicator Component
+PR 2-20 is already built (do not redo)
 
-Branch: `feature/mastery-indicator` off local `dev`.
+`src/components/parent/MasteryIndicator.tsx` takes `topic` and `score`. It draws an SVG ring:
 
-Create `/src/components/parent/MasteryIndicator.tsx`:
+- red 0–49, badge "Building"
+- yellow 50–89, badge "Almost there" (wider than the evaluator's close band, 71–89)
+- green 90–100, badge "Mastered!" using `MASTERED_SCORE` (90)
+- Shadcn `Badge`. `aria-label` includes the topic, the score, and the label
+- The arc eases over 700ms when `score` changes. `stroke-dashoffset` is set as CSS so the browser can animate it
+- No Firestore subscription. Not mounted on the dashboard
 
-- Circular progress ring (SVG) for a mastery score from 0 to 100
-- Colors: red 0–49, yellow 50–89, green 90–100
-- Shows the topic name, the numeric score, and a confidence label: "Building" (0–49), "Almost there" (50–89), "Mastered!" (90–100)
-- Use the shared `MASTERED_SCORE` constant (90) for the mastered label. The ring's yellow band is 50–89, which is wider than the evaluator's "close" band (71–89). Follow the ring colors in the roadmap.
-- Animates smoothly when the score prop changes. The live Firestore listener is PR 2-21 (`useLiveSession`). This component should accept the score as a prop and animate when that prop changes. Do not subscribe to Firestore inside the ring, and do not mount it on the dashboard yet.
-- Use the Shadcn `Badge` for the confidence label. Parent UI uses Shadcn. Child UI does not.
-- Accessible: an `aria-label` that includes the topic and the score for screen readers
-- Keep the component under 200 lines
+PR 2-21 · Live Session Panel
+
+Branch: `feature/live-session-panel` off local `dev`, after 2-20 is merged.
+
+Create `/src/components/parent/LiveSessionPanel.tsx`:
+
+- Shows when a session is currently active (`endedAt` is null)
+- Displays current topic, current grade, stars earned so far, and message count
+- Embeds `MasteryIndicator`. Pass the score in as a prop. Do not subscribe inside the ring
+- Shows "No active session" when the child is not learning
+
+Create `/src/hooks/useLiveSession.ts`:
+
+- `onSnapshot` on the latest session doc where `endedAt` is null
+- Returns `{ isActive, currentSession, mastery }`
+- Session live reads already exist: `subscribeToSessions` in `src/lib/firebase/firestore.ts` (client SDK). Do not import `src/lib/firebase/learningPath.ts` from a Client Component
+
+Add `LiveSessionPanel` to the parent dashboard (`src/app/(parent)/dashboard/page.tsx`) above session history.
+
 - `npx tsc --noEmit`
-- Commit: `feat(parent-ui): add mastery indicator component with animated progress ring`
-
-Parent dashboard today lives at `src/app/(parent)/dashboard/page.tsx`. Existing parent components: `src/components/parent/DashboardHeader.tsx`, `src/components/parent/SessionSummaryCard.tsx`. Shadcn pieces are in `src/components/ui/` — do not edit those files; wrap them.
+- Commit: `feat(parent-ui): add live session panel with real-time mastery indicator`
+- Check the parent dashboard in the browser: click the real control. Child chat must keep working.
 
 What is already built (do not redo)
 
@@ -75,8 +94,6 @@ Parent topic API (dashboard wires these in 2-22, not before):
 
 Approve does not roll `currentGrade` when the new topic belongs to the next grade. That is still true.
 
-Live check from 26 Sep 2026 (already done): six Math messages on Counting to 10, evaluate score 100, suggested Counting to 20, approve switched the path, a new session taught Counting to 20, and two scores under 50 produced a one-hand finger-counting reply.
-
 Live data warning
 
 The test parent's math path (`users/7XQyNOHkgAPaNa9e4Fks9xTT4JP2/learningPath/math`) is on **Counting to 20**, grade K, with Counting to 10 in `topicsCompleted`. The latest mastery scores on Counting to 20 are 40 and 30, so the next Math chat uses the **easier** hint until two higher scores are saved. Do not reset that path unless I ask. Reading it is fine. A new session for that parent will start on Counting to 20, not Counting to 10.
@@ -106,5 +123,3 @@ After every PR: `activeContext.md`, `progress.md`, check off `ROADMAP-v2_1.md`, 
 After architecture changes: also `systemPatterns.md` and `techContext.md`.
 
 After product-scope changes: also `projectbrief.md` and `productContext.md`.
-
-After 2-20, wait for my review.

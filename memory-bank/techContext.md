@@ -155,6 +155,7 @@ src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
 src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, stars, topics, encouragement
+src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore; not mounted yet
 
 # Scripts (ts-node, not bundled)
 tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts
