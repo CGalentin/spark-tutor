@@ -207,7 +207,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Merged into local `dev` (fast-forward). Not pushed. `origin/dev` is still `75822ba`.
 
 ## Up Next
-- Next session: PR 2-26 · Final v2 end-to-end test on `dev`. Paste `memory-bank/next-session-prompt.md`. Do not start 2-27 unless the user explicitly says to deploy. Do not push unless asked.
+- Next session: PR 2-26 · Final v2 end-to-end test on `dev`. Paste `memory-bank/next-session-prompt.md`. That prompt records the exact git stop point. Do not redo 2-25 because the live 429 checkbox is still open. Do not start 2-27 unless the user explicitly says to deploy. Do not push unless asked.
 
 ---
 

@@ -1,8 +1,37 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PR 2-25 is merged into local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. Local `dev` is ahead of that commit (PR 2-24 plus PR 2-25). If it is behind, diverged, or missing those commits, stop and tell me. Do not redo PRs 2-01 through 2-25. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
+Stop. Do not start this prompt's work in the same chat that wrote it. The chat that finished PR 2-25 was told not to continue.
 
-Next session starts at PR 2-26 only. Stop after 2-26 and wait. Do not push unless asked.
+## Where the last session stopped
+
+Date: 10 Oct 2026. Sprint 4, PR 2-25 only. PR 2-26 was not started.
+
+`feature/rate-limiting-v2` was created off local `dev`, committed, and fast-forward merged into local `dev`. It is already contained in `dev`. Do not merge it again. Do not recreate the branch.
+
+Local `dev` is ahead of `origin/dev`. Nothing was pushed. Do not push unless asked. Do not force-push. Do not merge to `main`. Do not run `vercel --prod`.
+
+`origin/dev` is still `75822ba` (`docs: point the next session at PR 2-24 after pushing PR 2-23`).
+
+Commits on local `dev` that are not on `origin/dev`, oldest first:
+
+1. `9a71fcb` feat(parent-ui): update session summary with mastery scores and topic suggestion
+2. `0e1755d` docs: check off PR 2-24 and update memory bank
+3. `261ae80` docs: record PR 2-24 merge into local dev and point the next session at PR 2-25
+4. `c954c31` feat(api): add rate limiting to all v2 ai and learning path endpoints
+5. `2cda498` docs: check off PR 2-25 and point the next session at PR 2-26
+6. The docs commit that saved this prompt, sitting on top of `2cda498`
+
+If local `dev` is behind `75822ba`, diverged from it, or missing `9a71fcb` and `c954c31`, stop and tell me.
+
+These files were dirty on purpose and must stay uncommitted: `AGENTS.md`, `CLAUDE.md`, `spark_tutor_build_bible_2.docx`.
+
+## Where the next session begins
+
+PR 2-26 only, on local `dev`. No feature branch. The roadmap commit message is `test: final v2 phase 1 end-to-end test pass`.
+
+After 2-26: stop, summarize, and wait. PR 2-27 is the production deploy. Do it only when I explicitly say to deploy. PR 2-28 is the README. Do not start either one.
+
+One roadmap checkbox from PR 2-25 is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." That is not unfinished code. The 429 sentences are already in the routes. A live 429 could not be shown because Redis did not answer. Do not redo PR 2-25 to close that box. Do not lower a cap. Do not send 60 real `/api/evaluate` calls. Do not fill the parent's approve or reject buckets.
 
 Copy everything below the line.
 
@@ -10,9 +39,9 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-23 are complete and pushed to `origin/dev`. PRs 2-24 and 2-25 are merged into local `dev` and are not pushed. `origin/dev` is still `75822ba`. Local `dev` should be ahead of that commit. If it is behind, diverged, or missing the session-summary or rate-limit commits, stop and tell me. Do not force-push.
+PRs 2-01 through 2-23 are on `origin/dev` at `75822ba`. PRs 2-24 and 2-25 are merged into local `dev` and are not pushed. Confirm `git log --oneline origin/dev..HEAD` shows the session-summary commit `9a71fcb` and the rate-limit commit `c954c31`, and that `dev` is a straight fast-forward ahead of `75822ba`. If it is behind, diverged, or those commits are missing, stop and tell me. Do not force-push.
 
-This is Sprint 4, the last sprint of v2 Phase 1. Do one PR at a time. Start with PR 2-26 only. After 2-26: stop, summarize, and wait. Do not start 2-27 unless I explicitly say to deploy.
+This is Sprint 4. Do one PR at a time. Start with PR 2-26 only. After 2-26: stop, summarize, and wait. Do not start 2-27 unless I explicitly say to deploy.
 
 Sprint 4 map (do not skip ahead)
 
@@ -21,42 +50,62 @@ Sprint 4 map (do not skip ahead)
 - 2-22 TopicSuggestionCard + useLearningPath (`feature/topic-suggestion-card`) — done and pushed
 - 2-23 LearningPathHistory timeline (`feature/learning-path-history`) — done and pushed
 - 2-24 Session summary includes mastery (`feature/session-summary-v2`) — merged into local `dev`, not pushed
-- 2-25 Rate limits (`feature/rate-limiting-v2`) — merged into local `dev`, not pushed
+- 2-25 Rate limits (`feature/rate-limiting-v2`) — merged into local `dev`, not pushed. Do not redo it.
 - 2-26 Final end-to-end test on `dev` — start here
 - 2-27 Production deploy on `main` — only when I explicitly say to deploy. `vercel --prod`, then merge `dev` into `main`. Do not do this early.
 - 2-28 README + CLAUDE.md (`feature/readme-v2`)
 
 PR 2-26 · Final v2 End-to-End Test
 
-Branch: `dev` (no feature branch).
+Branch: `dev`.
 
-Work through the checklist in ROADMAP-v2_1.md for PR 2-26. `npx tsc --noEmit` and `npm run build`. Commit: `test: final v2 phase 1 end-to-end test pass`.
+Work through the PR 2-26 checklist in `ROADMAP-v2_1.md`. Run `npx tsc --noEmit` and `npm run build`. Commit: `test: final v2 phase 1 end-to-end test pass`.
 
-The roadmap says the dashboard shows no active session. This parent still has older sessions that were never ended, so the live card shows an open lesson. Do not close those sessions. Report that, and do not treat it as a failure of the live card.
+Two checklist lines cannot be done as written. Do not "fix" them by changing data:
 
-Do not click **Yes, start this next** unless I ask in this message. Approve changes `currentTopic` and appends Counting to 20 to `topicsCompleted`, which changes the easier-hint scores (40 and 30). The suggestion card is hidden because `suggestedNextTopic` is null. Do not seed a suggestion just to click Approve. If the checklist reaches the approve step, stop and ask me first.
+- "Login as parent → dashboard shows no active session" is false for this parent. Older sessions were never ended, so the live card shows an open lesson. Report that. Do not close those sessions. Do not treat it as a broken live card.
+- "Approve topic from dashboard" would move Math off Counting to 20 and append Counting to 20 to `topicsCompleted`. That changes the easier-hint scores (40 and 30). The suggestion card is hidden because `suggestedNextTopic` is null. Do not seed a suggestion. Do not click **Yes, start this next** unless I ask in this message. If the checklist reaches approve, stop and ask me first.
 
-A 6-message Math chat will call `/api/evaluate`, call Gemini, and write a new score. Do that only as part of this test, and say what score was saved. Do not reset the learning path.
+A 6-message Math chat calls `/api/evaluate`, calls Gemini, and writes a new score onto the learning path. Do that only as this test, and tell me the score that was saved. Do not reset the path.
 
-What PR 2-25 already did (do not redo)
+What PR 2-25 changed (do not redo)
 
-`src/lib/upstash/ratelimit.ts` still builds one Redis client. Missing or empty Upstash env vars leave every limiter null, and null means fail-open. A thrown Redis error also fail-opens. Do not change the chat limit (30/hour, `rl:chat`) or the summary limit (10/hour, `rl:summary`).
+`src/lib/upstash/ratelimit.ts` builds one Redis client. If `UPSTASH_REDIS_REST_URL` or `UPSTASH_REDIS_REST_TOKEN` is missing or empty, the client is null and every limiter stays null. Null means fail-open: the route skips the check. A thrown Redis error is also fail-open, inside try/catch, same as chat and summary.
 
-New limiters, already wired after `verifyAuthToken` and before the body is parsed:
+Existing limits, unchanged:
 
-- `evaluateRatelimit` — sliding window, 60 per parent per hour, prefix `rl:evaluate`, on `/api/evaluate`
-- `approveRatelimit` — sliding window, 20 per parent per hour, prefix `rl:approve`, on `/api/learning-path/approve`
-- `rejectRatelimit` — sliding window, 20 per parent per hour, prefix `rl:reject`, on `/api/learning-path/reject`
+- `chatRatelimit` — sliding window, 30 per parent per hour, prefix `rl:chat`, `/api/chat`
+- `summaryRatelimit` — sliding window, 10 per parent per hour, prefix `rl:summary`, `/api/summary`
 
-429 text, already in the routes:
+Added in `c954c31`:
+
+- `evaluateRatelimit` — `Ratelimit.slidingWindow(60, '1 h')`, prefix `rl:evaluate`, `src/app/api/evaluate/route.ts`
+- `approveRatelimit` — `Ratelimit.slidingWindow(20, '1 h')`, prefix `rl:approve`, `src/app/api/learning-path/approve/route.ts`
+- `rejectRatelimit` — `Ratelimit.slidingWindow(20, '1 h')`, prefix `rl:reject`, `src/app/api/learning-path/reject/route.ts`
+
+The check is step 2. Step 1 is `verifyAuthToken`. The body parse is the next step. The limit key is the parent UID. An anonymous caller is never counted.
+
+429 text already in the routes:
 
 - evaluate: "Too many mastery checks. Please wait a bit before the next one."
 - approve: "Too many topic approvals. Please wait before starting another topic."
 - reject: "Too many topic updates. Please wait before trying that again."
 
-A request with no token is 401 and does not consume a bucket. That was checked with `curl.exe` on 10 Oct 2026: all three posts returned 401 JSON.
+Checked on 10 Oct 2026 with `curl.exe` and no Authorization header. PowerShell `Invoke-WebRequest -SkipHttpErrorCheck` does not work here.
 
-A live 429 was not observed. The Redis host in `.env.local` does not resolve (`ENOTFOUND`), and the stored token is only 8 characters, so the limiter throws and the route lets the request through. The parent's evaluate, approve, and reject buckets were not filled. Do not print the URL or token. Do not edit `.env.local`. Do not lower a cap to force a 429. Do not send 60 real `/api/evaluate` calls.
+- `POST /api/evaluate` → 401 `{"success":false,"error":"Missing or malformed Authorization header."}`
+- `POST /api/learning-path/approve` → the same 401
+- `POST /api/learning-path/reject` → the same 401
+
+Those were JSON, not an HTML 404, so the dev server on port 3000 was healthy. It was left running. Do not kill it. A second `npm run dev` exits because the port is taken.
+
+A live 429 was not observed. A temp script outside the repo called the evaluate limiter for parent `7XQyNOHkgAPaNa9e4Fks9xTT4JP2`. The first Redis call failed with `fetch failed` / `ENOTFOUND` before any count was stored. Public DNS (`1.1.1.1`) also returns `ENOTFOUND` for that Redis host. `upstash.io` itself has no A record (`ENODATA`). The token stored in `.env.local` is 8 characters long, which is not a normal Upstash REST token, so a reachable host would still fail and the route would fail open. The parent's evaluate, approve, and reject buckets were not filled. No Gemini call was made for this proof. The temp script was deleted. Do not print the URL or token. Do not edit or delete `.env.local`.
+
+`npx tsc --noEmit` passed. The pre-commit hook also ran Prettier and ESLint.
+
+Child check after the route edits, still on 10 Oct 2026: Blip, name Buddy, tap Math, `POST /api/session/start` 200, placeholder "Say something...", click End (accessible name "End session"), `POST /api/session/end` 200, heading "Great job today!". No chat message. That created one more ended empty Buddy Math session. It belongs in history with a summary and "No mastery score yet". An earlier empty Buddy session from the same day, used to check the summary card, is the same kind of card. Do not end the older unended sessions.
+
+"Yes, start this next" was not on screen and was not clicked. The math learning path was not changed.
 
 What PR 2-24 already did (do not redo)
 
@@ -72,13 +121,11 @@ What PR 2-24 already did (do not redo)
 - No evaluation shows the plain line "No mastery score yet". Do not paint that as 0 / Building. A real 0 means the evaluator ran and scored zero
 - Parent text on this card is 16px (`text-base`). Shadcn `Badge` is used. Do not edit files in `src/components/ui/`
 
-The only session document with an evaluation, before this test, is the unended 26 Sep 2026 session named Blip: 7 messages, topic Counting to 10, score 100, `suggestedNext` Counting to 20. Its card shows the green badge, "Topic mastered", and "Suggested next: Counting to 20", and it still says "Summary generating — check back in a moment…" because that session was never ended. Do not end it.
-
-On 10 Oct 2026 an empty Math session named Buddy was started and ended with no chat message so the summary card could be checked. Another empty Math session named Buddy was started and ended the same day while checking the rate-limit routes. Both show 0 messages and "No mastery score yet" once the summary arrives. Do not end the older unended sessions.
+The only session document with an evaluation, before the 2-26 test, is the unended 26 Sep 2026 session named Blip: 7 messages, topic Counting to 10, score 100, `suggestedNext` Counting to 20. Its card shows the green badge, "Topic mastered", and "Suggested next: Counting to 20", and it still says "Summary generating — check back in a moment…" because that session was never ended. Do not end it.
 
 What is already built (do not redo)
 
-`LearningPathHistory` sits below session history. Math and Reading each listen with `useLearningPath`. Newest scores first. The latest score on the current topic is marked In progress. When two scores share a timestamp, the later entry in `masteryHistory` wins. Only the five newest stay visible. "Show full history" appears only when that subject has more than five scores. This parent has three, so that button is hidden. Hide Math and Hide Reading open and close each subject. Reading says "No reading topics yet."
+`LearningPathHistory` sits below session history. Math and Reading each listen with `useLearningPath`. Newest scores first. The latest score on the current topic is marked In progress. When two scores share a timestamp, the later entry in `masteryHistory` wins. Only the five newest stay visible. "Show full history" appears only when that subject has more than five scores. This parent has three, so that button is hidden, until a test adds a fourth or fifth. Hide Math and Hide Reading open and close each subject. Reading says "No reading topics yet."
 
 `TopicSuggestionCard` sits above `LiveSessionPanel` for math and for reading. It shows only when `suggestedNextTopic` is set and `parentApproved` is false. Right now the math suggestion is null and `parentApproved` is true, so the card is hidden. Approve posts `{ subject, approvedTopic }` to `/api/learning-path/approve`. Reject posts `{ subject }` to `/api/learning-path/reject`. The hook also returns `error`. It does not import `src/lib/firebase/learningPath.ts`. The evaluator note is looked up from the session evaluation whose `topic` is the current topic and whose `suggestedNext` is the suggestion. If none matches, the card says the evaluator did not leave a note.
 
@@ -92,7 +139,7 @@ Tutoring grade is `@/constants` (`src/constants/gradeBands.ts`): `'K' | '1' | '2
 
 Firestore learning path: `users/{parentUID}/learningPath/{subject}`. Admin CRUD is `src/lib/firebase/learningPath.ts`. Never import that file from a Client Component. Live reads: `subscribeToLearningPath` in `src/lib/firebase/firestore.ts`. It casts `snap.data()` as `LearningPath` and does not fill missing fields.
 
-The test parent's math path (`users/7XQyNOHkgAPaNa9e4Fks9xTT4JP2/learningPath/math`) is on **Counting to 20**, grade K, with Counting to 10 in `topicsCompleted`. `suggestedNextTopic` is null and `parentApproved` is true. History, in saved order, before this test:
+The test parent's math path (`users/7XQyNOHkgAPaNa9e4Fks9xTT4JP2/learningPath/math`) is on **Counting to 20**, grade K, with Counting to 10 in `topicsCompleted`. `suggestedNextTopic` is null and `parentApproved` is true. History, in saved order, before the 2-26 test:
 
 - Counting to 10, score 100, mastered, `2026-09-26T17:55:51.558Z`
 - Counting to 20, score 40, not mastered, `2026-09-26T17:56:08.773Z`
@@ -104,7 +151,7 @@ Approve does not change `currentGrade`. Reject only clears `suggestedNextTopic`.
 
 Production is still the v1 app at https://spark-tutor-app.vercel.app. Do not run `vercel --prod` unless I ask.
 
-I am newer to coding. Explain what each piece does as you build it, in plain language.
+I am newer to coding. Explain what each piece does as you test it, in plain language.
 
 Shell is PowerShell. Use `;` between commands. Do not use `&&`. For git commits, `git commit -m "message"` is fine.
 
