@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-22 is merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-23. Do not start it until that session.**
+**PR 2-23 is committed on `feature/learning-path-history` (10 Oct 2026). It is not merged and not pushed. Next session merges it into local `dev` only after the user says "continue", then starts PR 2-24.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -169,8 +169,18 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Child check: Blip, named Buddy, Math. Chat input was on screen. All Done ended the session. No chat message was sent. Session start and end both returned 200
   - Merged into local `dev` and pushed to `origin/dev`.
 
+- [x] PR 2-23 · Learning Path History (`feature/learning-path-history`)
+  - `LearningPathHistory` sits below session history. Math and Reading each use `useLearningPath` and do not call approve or reject
+  - Newest scores first. The latest score on the current topic is marked In progress. Score colors match the ring: red under 50, yellow through 89, green at 90
+  - Two Counting to 20 scores share the timestamp `2026-09-26T17:56:08.773Z`. The one later in `masteryHistory` (30) is the in-progress score. The 40 is the earlier try. Counting to 10 is 100, Mastered
+  - The five newest stay visible. "Show full history" is rendered only when there are more than five. This parent has three math scores, so that button is not on screen. Hide Math and Hide Reading are the controls that were clicked
+  - Reading has no path, so the card says "No reading topics yet."
+  - Browser check: Hide Math collapsed the scores and Show Math brought them back. Same for Reading. Child chat: Blip named Buddy, Math, session start 200, the input was on screen, End session returned 200, "Great job today!" showed. No chat message was sent
+  - Two earlier tries clicked End before the session id was saved, so those sessions stayed open. They were empty Buddy sessions and were ended afterward with `POST /api/session/end` (200). The older unended sessions were not closed. The learning path was not changed
+  - Not merged. Not pushed.
+
 ## Up Next
-- Next session: PR 2-23 · Learning Path History (`feature/learning-path-history` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
+- When the user says "continue": merge `feature/learning-path-history` into local `dev` (fast-forward), then start PR 2-24 · Session Summary v2 (`feature/session-summary-v2` off that `dev`). Do not push unless asked.
 
 ---
 
@@ -257,7 +267,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — matches `origin/dev` after the Sprint 4 push of PR 2-22. Next session starts PR 2-23 on `feature/learning-path-history`. Do not force-push.
+`feature/learning-path-history` — PR 2-23 is committed here and is not on `dev` yet. Local `dev` still matches `origin/dev` at the PR 2-22 docs commit. Do not force-push.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -269,6 +279,8 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` stays empty until a parent approves a move; approve then appends the topic being left.
 - Approve does not change `currentGrade`. Reject only clears `suggestedNextTopic` (`parentApproved` stays whatever it already was).
 - The evaluator's `reasoning` is stored on session `evaluations[]`, not on the learning path. `TopicSuggestionCard` matches `evaluation.topic` to `currentTopic` and `evaluation.suggestedNext` to `suggestedNextTopic`. A seeded suggestion with no matching evaluation shows the fallback sentence.
+- Counting to 20 scores 40 and 30 share `evaluatedAt` `2026-09-26T17:56:08.773Z`. The timeline breaks the tie by list order, so 30 is In progress. `CardTitle` is a `div`, not a heading.
+- The chat page shows the input as soon as Math is chosen, before `/api/session/start` finishes. `handleEndSession` does nothing while `sessionId` is still null. Wait for start 200 before clicking End.
 - Do not click "Yes, start this next" on the test parent's Math path unless asked. Approve moves `currentTopic` off Counting to 20 and appends it to `topicsCompleted`, which changes the easier-hint scores (40 and 30).
 - The card hides as soon as a button is clicked. A cold dev compile of approve/reject can take about 2 seconds. Wait for HTTP 200 and a later Firestore read before treating a still-present suggestion as a failed save.
 - On this Windows machine, `next dev` has returned an HTML 404 for `POST /api/session/start` and `POST /api/session/end` while the route files were present and sibling routes returned 401. That was a stale Turbopack compile, not a missing route. Restart `npm run dev` or touch the route file, then re-check. Do not leave a `console.log` in the route. The chat page still shows the input if start returns 404, because it falls back to a client session id — confirm the network status is 200.

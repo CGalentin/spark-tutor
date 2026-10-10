@@ -474,22 +474,24 @@
 - [x] Verify TypeScript compiles: `npx tsc --noEmit`
 - [x] Commit: `feat(parent-ui): add topic suggestion card with approve and reject actions`
 
-> **Note:** Math and reading each get a card. The evaluator's note is read from the matching session evaluation, because the learning path document does not store `reasoning`. The card hides as soon as either button is clicked. The hook also returns `error` when the listener fails. Not merged to `dev` yet.
+> **Note:** Math and reading each get a card. The evaluator's note is read from the matching session evaluation, because the learning path document does not store `reasoning`. The card hides as soon as either button is clicked. The hook also returns `error` when the listener fails. Merged and pushed to `origin/dev`.
 
 ---
 
 ### PR 2-23 · Learning Path History View
 **Branch:** `feature/learning-path-history`
 
-- [ ] Create `/src/components/parent/LearningPathHistory.tsx`:
+- [x] Create `/src/components/parent/LearningPathHistory.tsx`:
   - Timeline of mastered topics with scores and dates
   - Groups by subject (Math | Reading)
   - Shows current topic in progress with live score
   - Collapses to show last 5 entries by default, expandable to full history
   - Uses Shadcn `Card`, `Badge`, `Collapsible` components
-- [ ] Add to parent dashboard below session history
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(parent-ui): add learning path history timeline to parent dashboard`
+- [x] Add to parent dashboard below session history
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(parent-ui): add learning path history timeline to parent dashboard`
+
+> **Note:** Newest scores first. The latest score on the current topic is marked In progress. When two scores share a timestamp, the one saved later in `masteryHistory` wins. "Show full history" appears only when a subject has more than five scores. Math and Reading can each be hidden. Not merged to `dev` yet.
 
 ---
 
@@ -575,7 +577,7 @@
 - [x] Learning path persisted in Firestore per subject
 - [x] Teacher Agent adapts based on current topic and mastery history
 - [x] Difficulty adapts based on score history (easier/normal/harder)
-- [ ] Parent sees live mastery indicator during active sessions
+- [x] Parent sees live mastery indicator during active sessions
 - [x] Parent receives and can act on topic suggestions
 - [ ] Session summaries include mastery scores
 - [ ] All new endpoints rate limited

@@ -37,6 +37,7 @@ Children pick one character and give it a custom name. The character's personali
 7. If the evaluator suggests a next topic and the parent has not approved it, a card above the live session asks them to start that topic or keep practicing
 8. Parent clicks "End Session" — Claude generates a summary automatically
 9. Summary appears on parent dashboard within seconds
+10. Below that list, the parent can open a learning-path timeline of scores, including the topic still in progress
 
 **v2 (partially built):** session start reads or creates a learning path and teaches `currentTopic` even when a next topic is suggested. The chat page stores that topic and grade, then sends both on every chat request so Claude uses that grade's voice and stays on that topic until the parent approves a change. If a request omits `grade`, the API still defaults to Kindergarten.
 

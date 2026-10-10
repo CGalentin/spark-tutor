@@ -18,7 +18,7 @@ Spark Tutor is an AI tutoring app for children in Kindergarten through Grade 3. 
 | User | What They Do |
 |---|---|
 | Child (K–3) | Picks a character, names it, chats to learn Math or Reading |
-| Parent | Creates account, views dashboard, reads session summaries, sees a live session card while one is open, and can approve or keep the current topic from a suggestion card |
+| Parent | Creates account, views dashboard, reads session summaries, sees a live session card while one is open, can approve or keep the current topic, and can open a learning-path timeline of scores |
 
 ## COPPA Rules (Non-Negotiable)
 - Never collect child's real name, age, school, photo, or location

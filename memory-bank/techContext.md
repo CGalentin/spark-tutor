@@ -160,6 +160,10 @@ src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, sta
 src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore
 src/components/parent/LiveSessionPanel.tsx ← open-session card; mounts the ring above session history
 src/components/parent/TopicSuggestionCard.tsx ← approve or keep the current topic; above the live session
+src/components/parent/LearningPathHistory.tsx ← timeline card below session history
+src/components/parent/LearningPathSubjectSection.tsx ← Math or Reading scores, newest five visible
+src/components/parent/LearningPathScoreList.tsx ← one score row: topic, grade, band, date
+src/components/ui/collapsible.tsx ← Shadcn collapsible (Base UI). Do not hand-edit
 
 # Scripts (ts-node, not bundled)
 tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts

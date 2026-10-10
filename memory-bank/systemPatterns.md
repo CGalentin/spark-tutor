@@ -205,6 +205,9 @@ Parent opens dashboard:
   → LiveSessionPanel shows topic, grade, stars, messages, and MasteryIndicator
   → useSessionHistory → subscribeToSessions → onSnapshot
   → live list of sessions (updates when summary arrives)
+  → LearningPathHistory below that list, one section per subject
+  → newest mastery scores first; the latest score on currentTopic is marked In progress
+  → more than five scores stay folded until "Show full history"
 ```
 
 ### 11. Parent Topic Approval
