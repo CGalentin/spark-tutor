@@ -15,6 +15,7 @@ import {
 } from '@/lib/firebase/learningPath';
 import { evaluateMastery } from '@/lib/gemini/evaluate';
 import { suggestNextTopic } from '@/lib/gemini/suggestNextTopic';
+import { evaluateRatelimit } from '@/lib/upstash/ratelimit';
 import { isGradeBand } from '@/constants/gradeBands';
 import type {
   ApiResult,
@@ -37,7 +38,28 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 2. Parse and validate request body ───────────────────────────────────
+  // ── 2. Rate limit — 60 requests per user per hour ────────────────────────
+  // evaluateRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks scoring.
+  // This runs before the body is read so a blocked parent never pays for a Gemini call.
+  if (evaluateRatelimit !== null) {
+    try {
+      const { success } = await evaluateRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error: 'Too many mastery checks. Please wait a bit before the next one.',
+          } satisfies ApiResult<never>,
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
+    }
+  }
+
+  // ── 3. Parse and validate request body ───────────────────────────────────
   let body: EvaluateRequest;
   try {
     body = (await request.json()) as EvaluateRequest;
@@ -88,7 +110,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   const sessionMessages: Message[] = messages;
   const trimmedTopic = topic.trim();
 
-  // ── 3. Confirm the session exists under this parent ──────────────────────
+  // ── 4. Confirm the session exists under this parent ──────────────────────
   const sessionRef = adminDb
     .collection('users')
     .doc(parentUID)
@@ -110,7 +132,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 4. Score mastery with Gemini Flash ───────────────────────────────────
+  // ── 5. Score mastery with Gemini Flash ───────────────────────────────────
   let result: EvaluationResult;
   try {
     result = await evaluateMastery(sessionMessages, trimmedTopic, grade);
@@ -139,7 +161,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     };
   }
 
-  // ── 5. Save the evaluation on the session doc (evaluations[]) ────────────
+  // ── 6. Save the evaluation on the session doc (evaluations[]) ────────────
   try {
     await sessionRef.update({
       evaluations: FieldValue.arrayUnion({
@@ -158,7 +180,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 6. Append to the learning-path mastery history ───────────────────────
+  // ── 7. Append to the learning-path mastery history ───────────────────────
   const mastery: TopicMastery = {
     topic: trimmedTopic,
     subject,
@@ -177,7 +199,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 7. If mastered, suggest the next topic and wait for the parent ───────
+  // ── 8. If mastered, suggest the next topic and wait for the parent ───────
   if (result.mastered) {
     try {
       await updateLearningPath(parentUID, subject, {

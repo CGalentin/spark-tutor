@@ -8,6 +8,7 @@
 import { type NextRequest } from 'next/server';
 import { verifyAuthToken } from '@/lib/firebase/admin';
 import { getLearningPath, updateLearningPath } from '@/lib/firebase/learningPath';
+import { rejectRatelimit } from '@/lib/upstash/ratelimit';
 import type { ApiResult, RejectTopicRequest, RejectTopicResponse, Subject } from '@/types';
 
 /** True when the value is a tutoring subject we store a learning path for. */
@@ -27,7 +28,27 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 2. Parse and validate request body ───────────────────────────────────
+  // ── 2. Rate limit — 20 requests per user per hour ────────────────────────
+  // rejectRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks a reject.
+  if (rejectRatelimit !== null) {
+    try {
+      const { success } = await rejectRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error: 'Too many topic updates. Please wait before trying that again.',
+          } satisfies ApiResult<never>,
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
+    }
+  }
+
+  // ── 3. Parse and validate request body ───────────────────────────────────
   let body: RejectTopicRequest;
   try {
     body = (await request.json()) as RejectTopicRequest;
@@ -47,7 +68,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 3. Confirm a learning path exists before clearing the suggestion ─────
+  // ── 4. Confirm a learning path exists before clearing the suggestion ─────
   try {
     const path = await getLearningPath(parentUID, subject);
     if (path === null) {
@@ -66,7 +87,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 4. Drop the suggestion. Leave currentTopic untouched. ────────────────
+  // ── 5. Drop the suggestion. Leave currentTopic untouched. ────────────────
   try {
     await updateLearningPath(parentUID, subject, {
       suggestedNextTopic: null,

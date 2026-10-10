@@ -9,6 +9,7 @@ import { type NextRequest } from 'next/server';
 import { Timestamp as AdminTimestamp } from 'firebase-admin/firestore';
 import { verifyAuthToken } from '@/lib/firebase/admin';
 import { getLearningPath, updateLearningPath } from '@/lib/firebase/learningPath';
+import { approveRatelimit } from '@/lib/upstash/ratelimit';
 import type {
   ApiResult,
   ApproveTopicRequest,
@@ -34,7 +35,27 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  // ── 2. Parse and validate request body ───────────────────────────────────
+  // ── 2. Rate limit — 20 requests per user per hour ────────────────────────
+  // approveRatelimit is null when Upstash env vars are absent (fail-open for local dev).
+  // The try/catch also fail-opens on bad credentials so a wrong token never blocks approval.
+  if (approveRatelimit !== null) {
+    try {
+      const { success } = await approveRatelimit.limit(parentUID);
+      if (!success) {
+        return Response.json(
+          {
+            success: false,
+            error: 'Too many topic approvals. Please wait before starting another topic.',
+          } satisfies ApiResult<never>,
+          { status: 429 },
+        );
+      }
+    } catch {
+      // Upstash connection error (e.g. invalid credentials) — fail open, allow request through
+    }
+  }
+
+  // ── 3. Parse and validate request body ───────────────────────────────────
   let body: ApproveTopicRequest;
   try {
     body = (await request.json()) as ApproveTopicRequest;
@@ -63,7 +84,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const nextTopic = approvedTopic.trim();
 
-  // ── 3. Load the path so we can record the topic we are leaving ───────────
+  // ── 4. Load the path so we can record the topic we are leaving ───────────
   let path: LearningPath | null;
   try {
     path = await getLearningPath(parentUID, subject);
@@ -92,7 +113,7 @@ export async function POST(request: NextRequest): Promise<Response> {
       ? [...path.topicsCompleted, previousTopic]
       : path.topicsCompleted;
 
-  // ── 4. Move the path onto the approved topic ─────────────────────────────
+  // ── 5. Move the path onto the approved topic ─────────────────────────────
   try {
     await updateLearningPath(parentUID, subject, {
       currentTopic: nextTopic,
