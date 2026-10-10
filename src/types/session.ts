@@ -2,7 +2,7 @@
 // All session data is stored under the parent UID in Firestore (COPPA compliance).
 
 import type { GradeBand } from '@/constants/gradeBands';
-import type { DifficultyHint } from './learningPath';
+import type { DifficultyHint, EvaluationResult } from './learningPath';
 
 /** The two subjects available in Spark Tutor. */
 export type Subject = 'math' | 'reading';
@@ -47,6 +47,8 @@ export interface Session {
   currentGrade?: GradeBand;
   /** Difficulty snapshot from session start. Absent on older session documents. */
   difficultyHint?: DifficultyHint;
+  /** Evaluator scores for this session, oldest first. Empty until the first topic block is scored. */
+  evaluations?: EvaluationResult[];
   /** Only present after the agentic summary has been generated. */
   summary?: SessionSummary;
 }

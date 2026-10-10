@@ -14,7 +14,51 @@ import {
 } from 'firebase/firestore';
 import { db } from './config';
 import { isGradeBand } from '@/constants/gradeBands';
-import type { DifficultyHint, LearningPath, Session, Subject } from '@/types';
+import type { DifficultyHint, EvaluationResult, LearningPath, Session, Subject } from '@/types';
+
+/** Reads evaluator scores saved on a session. Skips any entry that is not a real score. */
+function readEvaluations(value: unknown): EvaluationResult[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const evaluations: EvaluationResult[] = [];
+
+  for (const entry of value) {
+    if (typeof entry !== 'object' || entry === null) {
+      continue;
+    }
+
+    const record = entry as Record<string, unknown>;
+    const topic = record['topic'];
+    const score = record['score'];
+
+    if (typeof topic !== 'string' || topic.length === 0) {
+      continue;
+    }
+
+    if (typeof score !== 'number' || !Number.isFinite(score)) {
+      continue;
+    }
+
+    const confidence = record['confidence'];
+    const safeConfidence =
+      confidence === 'low' || confidence === 'medium' || confidence === 'high' ? confidence : 'low';
+
+    const suggestedNext = record['suggestedNext'];
+
+    evaluations.push({
+      topic,
+      score,
+      mastered: record['mastered'] === true,
+      confidence: safeConfidence,
+      suggestedNext: typeof suggestedNext === 'string' ? suggestedNext : null,
+      reasoning: typeof record['reasoning'] === 'string' ? record['reasoning'] : '',
+    });
+  }
+
+  return evaluations;
+}
 
 /** Keeps only a real difficulty hint. Older sessions omit the field. */
 function readDifficultyHint(value: unknown): DifficultyHint | undefined {
@@ -89,6 +133,7 @@ export function subscribeToSessions(
           currentTopic: typeof data['currentTopic'] === 'string' ? data['currentTopic'] : undefined,
           currentGrade: isGradeBand(data['currentGrade']) ? data['currentGrade'] : undefined,
           difficultyHint: readDifficultyHint(data['difficultyHint']),
+          evaluations: readEvaluations(data['evaluations']),
           summary: data['summary']
             ? {
                 topicsCovered: (data['summary']['topicsCovered'] as string[]) ?? [],

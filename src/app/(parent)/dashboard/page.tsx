@@ -1,4 +1,4 @@
-// Parent dashboard — shows session history and agentic summaries.
+// Parent dashboard — live session, then session history and agentic summaries.
 // Auth protection is handled by the parent layout.
 // Uses onSnapshot via useSessionHistory so the summary appears as soon as Claude generates it.
 
@@ -7,6 +7,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
 import { DashboardHeader } from '@/components/parent/DashboardHeader';
+import { LiveSessionPanel } from '@/components/parent/LiveSessionPanel';
 import { SessionSummaryCard } from '@/components/parent/SessionSummaryCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,6 +20,9 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-6">
       {/* Welcome banner with start-session CTA */}
       <DashboardHeader parentEmail={parentEmail} />
+
+      {/* Open session and live mastery ring */}
+      <LiveSessionPanel />
 
       {/* Session history */}
       <Card>
