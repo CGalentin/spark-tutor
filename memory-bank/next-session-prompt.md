@@ -1,8 +1,8 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PR 2-20 is committed on `feature/mastery-indicator` (10 Oct 2026). It is not merged into local `dev` and not pushed. Local `dev` still matches `origin/dev`. Do not redo 2-01 through 2-20. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
+PR 2-21 is committed on `feature/live-session-panel` (10 Oct 2026). It is not merged and not pushed. PR 2-20 is already merged into local `dev`. Local `dev` is ahead of `origin/dev`. Do not redo 2-01 through 2-21. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
 
-If the user says "continue": merge `feature/mastery-indicator` into local `dev` first (fast-forward, no force-push), then do PR 2-21 only. After 2-21: stop, summarize, and wait for "continue" before merging or starting 2-22. If they have not said "continue", do not merge and do not start 2-21.
+If the user says "continue": merge `feature/live-session-panel` into local `dev` first (fast-forward, no force-push), then do PR 2-22 only. After 2-22: stop, summarize, and wait for "continue" before merging or starting 2-23. If they have not said "continue", do not merge and do not start 2-22.
 
 Copy everything below the line.
 
@@ -10,17 +10,17 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-19 are complete and pushed to `origin/dev`. PR 2-20 is committed on `feature/mastery-indicator` and is not merged yet. Do not redo them. Do not force-push.
+PRs 2-01 through 2-19 are complete and pushed to `origin/dev`. PR 2-20 is merged into local `dev`. PR 2-21 is committed on `feature/live-session-panel` and is not merged yet. Do not redo them. Do not force-push.
 
 This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time.
 
-When I say "continue": merge `feature/mastery-indicator` into local `dev`, then start PR 2-21 only. After 2-21: stop, summarize, and wait for me to say "continue" before merging or starting 2-22.
+When I say "continue": merge `feature/live-session-panel` into local `dev`, then start PR 2-22 only. After 2-22: stop, summarize, and wait for me to say "continue" before merging or starting 2-23.
 
 Sprint 4 map (do not skip ahead)
 
-- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — done, waiting to merge
-- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — next, only after "continue"
-- 2-22 TopicSuggestionCard + useLearningPath, calls approve/reject (`feature/topic-suggestion-card`)
+- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — merged to local `dev`
+- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — done, waiting to merge
+- 2-22 TopicSuggestionCard + useLearningPath, calls approve/reject (`feature/topic-suggestion-card`) — next, only after "continue"
 - 2-23 LearningPathHistory timeline (`feature/learning-path-history`)
 - 2-24 Session summary includes mastery (`feature/session-summary-v2`)
 - 2-25 Rate limits: evaluate 60/hour, approve 20/hour, reject 20/hour (`feature/rate-limiting-v2`)
@@ -37,29 +37,39 @@ PR 2-20 is already built (do not redo)
 - green 90–100, badge "Mastered!" using `MASTERED_SCORE` (90)
 - Shadcn `Badge`. `aria-label` includes the topic, the score, and the label
 - The arc eases over 700ms when `score` changes. `stroke-dashoffset` is set as CSS so the browser can animate it
-- No Firestore subscription. Not mounted on the dashboard
+- No Firestore subscription inside the ring. `LiveSessionPanel` mounts it and passes the score
 
-PR 2-21 · Live Session Panel
+PR 2-21 is already built (do not redo)
 
-Branch: `feature/live-session-panel` off local `dev`, after 2-20 is merged.
+`useLiveSession` reuses `subscribeToSessions` and keeps the newest session with no `endedAt`. `mastery` is the last `evaluations[]` score, or 0 before the first score. `LiveSessionPanel` is above session history. It shows topic, grade, stars, messages, and the ring. Empty copy is "No active session".
 
-Create `/src/components/parent/LiveSessionPanel.tsx`:
+This parent still has older sessions that were never ended. The live card therefore shows Counting to 20, grade K, 4 messages, score 0, until a newer open session exists. Do not close those old sessions unless asked.
 
-- Shows when a session is currently active (`endedAt` is null)
-- Displays current topic, current grade, stars earned so far, and message count
-- Embeds `MasteryIndicator`. Pass the score in as a prop. Do not subscribe inside the ring
-- Shows "No active session" when the child is not learning
+A short Math session named Buddy was started and ended on 10 Oct 2026 so the card could be clicked through. No chat message was sent. The learning path was not reset.
 
-Create `/src/hooks/useLiveSession.ts`:
+PR 2-22 · Topic Suggestion Card
 
-- `onSnapshot` on the latest session doc where `endedAt` is null
-- Returns `{ isActive, currentSession, mastery }`
-- Session live reads already exist: `subscribeToSessions` in `src/lib/firebase/firestore.ts` (client SDK). Do not import `src/lib/firebase/learningPath.ts` from a Client Component
+Branch: `feature/topic-suggestion-card` off local `dev`, after 2-21 is merged.
 
-Add `LiveSessionPanel` to the parent dashboard (`src/app/(parent)/dashboard/page.tsx`) above session history.
+Create `/src/components/parent/TopicSuggestionCard.tsx`:
+
+- Appears when `learningPath.suggestedNextTopic` is not null and `parentApproved` is false
+- Shows the topic just finished, the suggested next topic, and the evaluator's short reason
+- "Yes, start this next" calls `POST /api/learning-path/approve`
+- "Keep practicing current topic" calls `POST /api/learning-path/reject`
+- The card leaves after either action
+- Shadcn `Card` and `Button`. Do not edit files in `src/components/ui/`
+
+Create `/src/hooks/useLearningPath.ts`:
+
+- `onSnapshot` via `subscribeToLearningPath` in `src/lib/firebase/firestore.ts`
+- Returns `{ learningPath, approveTopic, rejectTopic, isLoading }`
+- Do not import `src/lib/firebase/learningPath.ts` from a Client Component
+
+Add `TopicSuggestionCard` above `LiveSessionPanel` on the parent dashboard.
 
 - `npx tsc --noEmit`
-- Commit: `feat(parent-ui): add live session panel with real-time mastery indicator`
+- Commit: `feat(parent-ui): add topic suggestion card with approve and reject actions`
 - Check the parent dashboard in the browser: click the real control. Child chat must keep working.
 
 What is already built (do not redo)

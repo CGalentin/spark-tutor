@@ -138,6 +138,7 @@ src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthentica
 src/hooks/useAuth.ts              ← reads from useAuthStore
 src/hooks/useStars.ts             ← awardStar() — updates store + syncs to Firestore
 src/hooks/useSessionHistory.ts    ← onSnapshot subscription to parent's session list
+src/hooks/useLiveSession.ts       ← newest session with no endedAt, plus the latest evaluation score
 
 # Child UI components
 src/components/child/StarBurst.tsx               ← CSS keyframe pop animation overlay
@@ -155,7 +156,8 @@ src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
 src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, stars, topics, encouragement
-src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore; not mounted yet
+src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore
+src/components/parent/LiveSessionPanel.tsx ← open-session card; mounts the ring above session history
 
 # Scripts (ts-node, not bundled)
 tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts

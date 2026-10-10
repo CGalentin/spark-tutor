@@ -440,17 +440,19 @@
 ### PR 2-21 · Live Session Panel
 **Branch:** `feature/live-session-panel`
 
-- [ ] Create `/src/components/parent/LiveSessionPanel.tsx`:
+- [x] Create `/src/components/parent/LiveSessionPanel.tsx`:
   - Shows when a session is currently active (detected via Firestore `endedAt: null`)
   - Displays: current topic, current grade, stars earned so far, message count
   - Embeds `MasteryIndicator` — updates in real time via `onSnapshot`
   - Shows "No active session" state when child is not currently learning
-- [ ] Create `/src/hooks/useLiveSession.ts`:
+- [x] Create `/src/hooks/useLiveSession.ts`:
   - `onSnapshot` on latest session doc (where `endedAt` is null)
   - Returns `{ isActive, currentSession, mastery }`
-- [ ] Add `LiveSessionPanel` to parent dashboard above session history
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(parent-ui): add live session panel with real-time mastery indicator`
+- [x] Add `LiveSessionPanel` to parent dashboard above session history
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(parent-ui): add live session panel with real-time mastery indicator`
+
+> **Note:** `useLiveSession` reuses `subscribeToSessions` and treats a missing `endedAt` as open, because session start does not write that field. `mastery` is the last score in `evaluations[]`, or 0 before the first score. The ring still only receives `topic` and `score`.
 
 ---
 

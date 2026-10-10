@@ -196,6 +196,8 @@ Child taps "All Done!":
   → shows WellDoneScreen
 
 Parent opens dashboard:
+  → useLiveSession → subscribeToSessions → newest session with no endedAt
+  → LiveSessionPanel shows topic, grade, stars, messages, and MasteryIndicator
   → useSessionHistory → subscribeToSessions → onSnapshot
   → live list of sessions (updates when summary arrives)
 ```
@@ -209,7 +211,9 @@ The evaluator never changes `currentTopic`. It only writes `suggestedNextTopic` 
 Both routes verify the Firebase ID token and use the Admin learning-path helpers. Responses use `ApiResult`: `{ approved: true, newTopic }` or `{ rejected: true }`. A missing learning path returns 404. `currentGrade` stays as stored even when the approved topic belongs to the next grade.
 
 ### 12. Parent Mastery Ring
-`MasteryIndicator` (`src/components/parent/MasteryIndicator.tsx`) is presentational. Callers pass `topic` and `score`. The component does not read Firestore, and it is not on the dashboard until PR 2-21 passes a live score in.
+`MasteryIndicator` (`src/components/parent/MasteryIndicator.tsx`) is presentational. Callers pass `topic` and `score`. The component does not read Firestore.
+
+`LiveSessionPanel` uses `useLiveSession`, which listens through `subscribeToSessions` and keeps the newest session that has no `endedAt`. Session start omits `endedAt`, so a missing end time means the session is still open. `mastery` is the last entry in that session's `evaluations[]`, or 0 before the first score. The panel passes that score into the ring.
 
 Bands: red 0–49 "Building", yellow 50–89 "Almost there", green 90–100 "Mastered!". Green uses `MASTERED_SCORE` (90). Yellow starts at 50, which is wider than the evaluator's close band (71–89). The arc eases over 700ms because `stroke-dashoffset` is a CSS value. The label is a Shadcn `Badge`. The `aria-label` includes the topic and the score.
 

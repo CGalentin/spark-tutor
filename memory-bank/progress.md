@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4 started. PR 2-20 is committed on `feature/mastery-indicator` (not merged, not pushed). Local `dev` still matches `origin/dev`. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PR 2-20 is merged into local `dev` (not pushed). PR 2-21 is committed on `feature/live-session-panel` (not merged, not pushed). | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -39,8 +39,8 @@
 
 | PR | Title | Branch | Status |
 |---|---|---|---|
-| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (not merged, not pushed) |
-| 2-21 | Live Session Panel | `feature/live-session-panel` | ⏳ Next, after "continue" |
+| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged to local `dev`, not pushed) |
+| 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (not merged, not pushed) |
 
 ---
 
@@ -70,10 +70,11 @@
 - Session start teaches `currentTopic` while a suggestion is waiting, saves topic/grade/difficulty on the session doc, and returns a learning-path summary
 
 - Sprint 3 live check: Counting to 10 scored 100 and suggested Counting to 20; approve switched the path; a new session taught Counting to 20; two scores under 50 produced a fingers-and-one-hand reply
-- `MasteryIndicator` draws a parent-facing score ring from `topic` and `score` props. It is not on the dashboard yet
+- `MasteryIndicator` draws a parent-facing score ring from `topic` and `score` props
+- The parent dashboard shows `LiveSessionPanel` above session history. It follows the newest session with no end time and passes the latest evaluation score into the ring
 
 **Not built yet (Sprint 4)**
-- Live session panel (mounts the ring), topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
+- Topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list

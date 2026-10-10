@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-20 is committed on `feature/mastery-indicator` (10 Oct 2026). It is not merged into `dev` and not pushed. Wait for "continue" before merging or starting PR 2-21.**
+**PR 2-21 is committed on `feature/live-session-panel` (10 Oct 2026). It is not merged and not pushed. PR 2-20 is already merged into local `dev`. Wait for "continue" before merging 2-21 or starting PR 2-22.**
 
-v2 Sprint 3 (PRs 2-01 through 2-19) is on `origin/dev`. Local `dev` still matches `origin/dev` until 2-20 is merged. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+Local `dev` is 2 commits ahead of `origin/dev` (the 2-20 merge). Do not push. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `origin/dev`. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -146,10 +146,18 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Shadcn `Badge` for the label. `aria-label` includes the topic, the score, and the label
   - Does not subscribe to Firestore. Not mounted on the dashboard (that is PR 2-21)
   - Checked in a temporary preview (deleted before commit): clicked score buttons 0, 49, 50, 71, 89, 90, 100 and confirmed the label, color, and that the arc eases
+  - Merged into local `dev`. Not pushed.
+
+- [x] PR 2-21 · Live Session Panel (`feature/live-session-panel`)
+  - `useLiveSession` listens with `subscribeToSessions` and picks the newest session that has no `endedAt`
+  - `mastery` is the last score in that session's `evaluations[]`, or 0 before the first score
+  - `LiveSessionPanel` sits above session history and passes `topic` and `score` into `MasteryIndicator`
+  - Shows topic, grade, stars, and message count. Empty state text is "No active session"
+  - Browser check: clicked Start a Session, chose Blip, named Buddy, chose Math, then All Done. The card moved from 4 messages to 0 messages and back to 4. Child chat input was on screen. No chat message was sent
   - Not merged. Not pushed.
 
 ## Up Next
-- Wait for "continue". Then merge `feature/mastery-indicator` into local `dev` (no force-push), and start PR 2-21 only (`feature/live-session-panel`). Do not push unless asked.
+- Wait for "continue". Then merge `feature/live-session-panel` into local `dev` (no force-push), and start PR 2-22 only (`feature/topic-suggestion-card`). Do not push unless asked.
 
 ---
 
@@ -236,10 +244,11 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/mastery-indicator` — PR 2-20 committed, not merged, not pushed. Local `dev` still matches `origin/dev`. Do not force-push.
+`feature/live-session-panel` — PR 2-21 committed, not merged, not pushed. Local `dev` has PR 2-20 and is ahead of `origin/dev`. Do not force-push.
 
 ## Known Issues / Decisions
-- `MasteryIndicator` takes `topic` and `score` only. Do not subscribe to Firestore inside the ring. Do not mount it until PR 2-21.
+- `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
+- A session with no `endedAt` counts as live. This parent still has older sessions that were never ended, so the dashboard shows the newest of those (Counting to 20, 4 messages, score 0) even when the child is not at the screen. Do not close those sessions unless asked.
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
