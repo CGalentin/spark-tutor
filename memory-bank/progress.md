@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 and 2-21 are merged and pushed to `origin/dev`. PR 2-22 is committed on `feature/topic-suggestion-card` and is not merged yet. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-22 are merged and pushed to `origin/dev`. Next session starts PR 2-23. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -41,7 +41,7 @@
 |---|---|---|---|
 | 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
-| 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (committed, not merged, not pushed) |
+| 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
 
 ---
 

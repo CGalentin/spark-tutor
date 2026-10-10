@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-22 is committed on `feature/topic-suggestion-card` (10 Oct 2026). It is not merged and not pushed. Next session merges it into local `dev` only after the user says "continue", then starts PR 2-23.**
+**PR 2-22 is merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-23. Do not start it until that session.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -167,10 +167,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Button text is "Yes, start this next" and "Keep practicing current topic"
   - Browser check: a temporary Math suggestion of Shapes was written so the card could be clicked, then "Keep practicing current topic" was clicked. `POST /api/learning-path/reject` returned 200 and cleared the suggestion. `parentApproved` was put back to true afterward. Current topic stayed Counting to 20. Scores stayed 100, 40, 30. "Yes, start this next" was not clicked, because approve would move the lesson
   - Child check: Blip, named Buddy, Math. Chat input was on screen. All Done ended the session. No chat message was sent. Session start and end both returned 200
-  - Not merged. Not pushed.
+  - Merged into local `dev` and pushed to `origin/dev`.
 
 ## Up Next
-- When the user says "continue": merge `feature/topic-suggestion-card` into local `dev` (fast-forward), then start PR 2-23 · Learning Path History (`feature/learning-path-history` off that `dev`). Do not push unless asked.
+- Next session: PR 2-23 · Learning Path History (`feature/learning-path-history` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
 
 ---
 
@@ -257,7 +257,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/topic-suggestion-card` — PR 2-22 is committed here and is not on `dev` yet. Local `dev` still matches `origin/dev` at the PR 2-21 docs commit. Do not force-push.
+`dev` — matches `origin/dev` after the Sprint 4 push of PR 2-22. Next session starts PR 2-23 on `feature/learning-path-history`. Do not force-push.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -268,6 +268,11 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Chat fires `/api/evaluate` at topic boundaries (every 6 child messages or "I'm done" / "next topic" / "something else"). Failures are silent — child UI unchanged.
 - Next-topic pick is `suggestNextTopic()` (curriculum map + mastery history, including next-grade rollover). `topicsCompleted[]` stays empty until a parent approves a move; approve then appends the topic being left.
 - Approve does not change `currentGrade`. Reject only clears `suggestedNextTopic` (`parentApproved` stays whatever it already was).
+- The evaluator's `reasoning` is stored on session `evaluations[]`, not on the learning path. `TopicSuggestionCard` matches `evaluation.topic` to `currentTopic` and `evaluation.suggestedNext` to `suggestedNextTopic`. A seeded suggestion with no matching evaluation shows the fallback sentence.
+- Do not click "Yes, start this next" on the test parent's Math path unless asked. Approve moves `currentTopic` off Counting to 20 and appends it to `topicsCompleted`, which changes the easier-hint scores (40 and 30).
+- The card hides as soon as a button is clicked. A cold dev compile of approve/reject can take about 2 seconds. Wait for HTTP 200 and a later Firestore read before treating a still-present suggestion as a failed save.
+- On this Windows machine, `next dev` has returned an HTML 404 for `POST /api/session/start` and `POST /api/session/end` while the route files were present and sibling routes returned 401. That was a stale Turbopack compile, not a missing route. Restart `npm run dev` or touch the route file, then re-check. Do not leave a `console.log` in the route. The chat page still shows the input if start returns 404, because it falls back to a client session id — confirm the network status is 200.
+- Browser checks in Cursor here have no built-in browser tool. Use playwright-core from a temp folder (not a project dependency), Chrome channel, a custom token, and the Firebase CDN client with the default app name so sign-in persists. Do not print tokens or `.env` values. Do not commit temp scripts.
 - Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI sends `grade` (the session's `currentGrade`) and `currentTopic` on every `/api/chat` request. If `grade` is omitted, the API still defaults to Kindergarten
 - Sprint 3 live run left the test parent's math path on Counting to 20, with scores 40 and 30 last, so the next math chat uses the easier hint until two higher scores are saved
