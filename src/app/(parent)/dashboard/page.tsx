@@ -1,4 +1,4 @@
-// Parent dashboard — topic suggestion, live session, then session history.
+// Parent dashboard — topic suggestion, live session, session history, then learning path.
 // Auth protection is handled by the parent layout.
 // Uses onSnapshot via useSessionHistory so the summary appears as soon as Claude generates it.
 
@@ -7,6 +7,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
 import { DashboardHeader } from '@/components/parent/DashboardHeader';
+import { LearningPathHistory } from '@/components/parent/LearningPathHistory';
 import { LiveSessionPanel } from '@/components/parent/LiveSessionPanel';
 import { SessionSummaryCard } from '@/components/parent/SessionSummaryCard';
 import { TopicSuggestionCard } from '@/components/parent/TopicSuggestionCard';
@@ -60,6 +61,9 @@ export default function DashboardPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mastered topics and the topic still in progress */}
+      <LearningPathHistory />
     </div>
   );
 }
