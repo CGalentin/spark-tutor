@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-23 is committed on `feature/learning-path-history` (10 Oct 2026). It is not merged and not pushed. Next session merges it into local `dev` only after the user says "continue", then starts PR 2-24.**
+**PR 2-23 is merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-24. Do not start it until that session.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -177,10 +177,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Reading has no path, so the card says "No reading topics yet."
   - Browser check: Hide Math collapsed the scores and Show Math brought them back. Same for Reading. Child chat: Blip named Buddy, Math, session start 200, the input was on screen, End session returned 200, "Great job today!" showed. No chat message was sent
   - Two earlier tries clicked End before the session id was saved, so those sessions stayed open. They were empty Buddy sessions and were ended afterward with `POST /api/session/end` (200). The older unended sessions were not closed. The learning path was not changed
-  - Not merged. Not pushed.
+  - Merged into local `dev` and pushed to `origin/dev`.
 
 ## Up Next
-- When the user says "continue": merge `feature/learning-path-history` into local `dev` (fast-forward), then start PR 2-24 · Session Summary v2 (`feature/session-summary-v2` off that `dev`). Do not push unless asked.
+- Next session: PR 2-24 · Session Summary v2 (`feature/session-summary-v2` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
 
 ---
 
@@ -267,7 +267,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/learning-path-history` — PR 2-23 is committed here and is not on `dev` yet. Local `dev` still matches `origin/dev` at the PR 2-22 docs commit. Do not force-push.
+`dev` — matches `origin/dev` after the Sprint 4 push of PR 2-23. Next session starts PR 2-24 on `feature/session-summary-v2`. Do not force-push.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

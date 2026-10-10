@@ -491,7 +491,7 @@
 - [x] Verify TypeScript compiles: `npx tsc --noEmit`
 - [x] Commit: `feat(parent-ui): add learning path history timeline to parent dashboard`
 
-> **Note:** Newest scores first. The latest score on the current topic is marked In progress. When two scores share a timestamp, the one saved later in `masteryHistory` wins. "Show full history" appears only when a subject has more than five scores. Math and Reading can each be hidden. Not merged to `dev` yet.
+> **Note:** Newest scores first. The latest score on the current topic is marked In progress. When two scores share a timestamp, the one saved later in `masteryHistory` wins. "Show full history" appears only when a subject has more than five scores. Math and Reading can each be hidden. Merged and pushed to `origin/dev`.
 
 ---
 
