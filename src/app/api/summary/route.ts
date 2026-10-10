@@ -132,7 +132,13 @@ export async function POST(request: NextRequest): Promise<Response> {
   const subject = (sessionData['subject'] as string | undefined) ?? 'math';
   const mascotName = (sessionData['characterName'] as string | undefined) ?? 'your buddy';
 
-  const userMessage = buildSummaryPrompt({ subject, mascotName, messages: sessionMessages });
+  // Scores live on the session document. The child client does not send them.
+  const userMessage = buildSummaryPrompt({
+    subject,
+    mascotName,
+    messages: sessionMessages,
+    evaluations: sessionData['evaluations'],
+  });
 
   // ── 6. Call Claude for the structured summary ─────────────────────────────
   let summaryData: ClaudeSummaryJson;
