@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-23 is merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-24. Do not start it until that session.**
+**PR 2-24 is committed on `feature/session-summary-v2` (10 Oct 2026). It is not merged into `dev` and not pushed. Wait for "continue" before merging or starting PR 2-25.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -179,8 +179,21 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Two earlier tries clicked End before the session id was saved, so those sessions stayed open. They were empty Buddy sessions and were ended afterward with `POST /api/session/end` (200). The older unended sessions were not closed. The learning path was not changed
   - Merged into local `dev` and pushed to `origin/dev`.
 
+- [x] PR 2-24 · Session Summary v2 (`feature/session-summary-v2`)
+  - `buildSummaryPrompt` now receives the session's `evaluations` array. The summary route reads that array off the session document. The child client does not send scores
+  - Claude is told the topic, whether it was mastered (yes when the score is >= 90), the score, and a suggested focus. Those facts stay inside the existing JSON keys: `topicsCovered`, `areasForPractice`, `encouragementNote`. A missing evaluation tells Claude not to invent a score
+  - `SessionSummaryCard` shows the latest evaluation. The badge is red 0–49 "Building", yellow 50–89 "Almost there", green 90–100 "Mastered!". Green uses `MASTERED_SCORE` (90)
+  - "Topic mastered" appears only at 90 or above. "Suggested next: [topic]" appears when that evaluation's `suggestedNext` is a non-empty string
+  - No evaluation shows the plain line "No mastery score yet". A real score of 0 would still be the red Building badge, because that means the evaluator ran
+  - Parent-facing text on this card is 16px. Shadcn `Badge` is used. Files in `src/components/ui/` were not edited
+  - Browser check: the Sep 26 Blip session (7 messages, still open) shows Counting to 10, "100 · Mastered!", "Topic mastered", and "Suggested next: Counting to 20". It still says "Summary generating" because that session was never ended. It was not closed
+  - Twelve older sessions with no evaluation showed "No mastery score yet", not a zero badge
+  - Child check: Blip, named Buddy, Math. Session start 200, the input was on screen, End session returned 200, "Great job today!" showed. No chat message was sent. The new card shows 0 messages, "No mastery score yet", and a short encouragement quote
+  - The math learning path was not changed: Counting to 20, suggestion null, parentApproved true, scores 100 then 40 then 30. "Yes, start this next" was not on screen and was not clicked
+  - Committed on `feature/session-summary-v2`. Not merged into `dev`. Not pushed.
+
 ## Up Next
-- Next session: PR 2-24 · Session Summary v2 (`feature/session-summary-v2` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
+- Wait for "continue". Then merge `feature/session-summary-v2` into local `dev` (no force-push, no push unless asked) and start PR 2-25 only. Paste `memory-bank/next-session-prompt.md`.
 
 ---
 
@@ -267,7 +280,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — matches `origin/dev` after the Sprint 4 push of PR 2-23. Next session starts PR 2-24 on `feature/session-summary-v2`. Do not force-push.
+`feature/session-summary-v2` — PR 2-24 is committed here and is not merged. Local `dev` still matches `origin/dev` at `75822ba`. Do not force-push. Do not push unless asked.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -298,3 +311,6 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type
 - Messages forwarded from client via `/api/session/end` → `/api/summary` (never persisted individually)
+- The summary prompt reads `evaluations` from the session document. The card badge uses the latest evaluation, not Claude's JSON. No evaluation is "No mastery score yet", not score 0
+- The only session document with an evaluation is the unended Sep 26 Blip session: Counting to 10, score 100, suggestedNext Counting to 20. Its card still says "Summary generating". Do not end it
+- Playwright `networkidle` never finishes on the dashboard because Firestore listeners stay open. Use `domcontentloaded`. Temp browser scripts must be `.cjs` — `.mjs` cannot `require`

@@ -1,8 +1,8 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PRs 2-01 through 2-23 are merged and pushed to `origin/dev` (10 Oct 2026). Local `dev` matches `origin/dev` at the PR 2-23 docs commit. Do not redo them. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
+PR 2-24 is committed on `feature/session-summary-v2` (10 Oct 2026). It is not merged into `dev` and not pushed. Local `dev` still matches `origin/dev` at `75822ba`. Do not redo PRs 2-01 through 2-23. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
 
-Next session starts at PR 2-24 only. Stop after 2-24 and wait. Do not push unless asked.
+If the user says "continue": merge `feature/session-summary-v2` into local `dev` first (fast-forward, no force-push), then start PR 2-25 only. Stop after 2-25 and wait. Do not push unless asked.
 
 Copy everything below the line.
 
@@ -10,9 +10,9 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-23 are complete and pushed to `origin/dev`. Do not redo them. Local `dev` and `origin/dev` should match. If they do not, stop and tell me. Do not force-push.
+PRs 2-01 through 2-23 are complete and pushed to `origin/dev`. PR 2-24 is committed on `feature/session-summary-v2` and is not merged. If I say "continue", merge that branch into local `dev` first, then start PR 2-25 only. If local `dev` and `origin/dev` do not both point at `75822ba` before that merge, stop and tell me. Do not force-push.
 
-This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time. Start with PR 2-24 only. After 2-24: stop, summarize, and wait for me to say "continue" before merging or starting 2-25.
+This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time. After 2-25: stop, summarize, and wait for me to say "continue" before starting 2-26.
 
 Sprint 4 map (do not skip ahead)
 
@@ -20,44 +20,46 @@ Sprint 4 map (do not skip ahead)
 - 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — done and pushed
 - 2-22 TopicSuggestionCard + useLearningPath (`feature/topic-suggestion-card`) — done and pushed
 - 2-23 LearningPathHistory timeline (`feature/learning-path-history`) — done and pushed
-- 2-24 Session summary includes mastery (`feature/session-summary-v2`) — start here
-- 2-25 Rate limits: evaluate 60/hour, approve 20/hour, reject 20/hour (`feature/rate-limiting-v2`)
+- 2-24 Session summary includes mastery (`feature/session-summary-v2`) — committed, not merged, not pushed
+- 2-25 Rate limits: evaluate 60/hour, approve 20/hour, reject 20/hour (`feature/rate-limiting-v2`) — start here after the 2-24 merge
 - 2-26 Final end-to-end test on `dev`
 - 2-27 Production deploy on `main` — only when I explicitly say to deploy. `vercel --prod`, then merge `dev` into `main`. Do not do this early.
 - 2-28 README + CLAUDE.md (`feature/readme-v2`)
 
-PR 2-24 · Session Summary v2
+PR 2-25 · Rate Limiting Update
 
-Branch: `feature/session-summary-v2` off local `dev`.
+Branch: `feature/rate-limiting-v2` off local `dev`, after `feature/session-summary-v2` is merged.
 
-Update `/src/lib/claude/buildSummaryPrompt.ts`:
-
-- Add mastery evaluation data to the summary context
-- Claude includes in the summary: topic mastered yes/no, score achieved, suggested focus for the next session
-
-Update `SessionSummaryCard.tsx`:
-
-- Mastery score badge, color coded red / yellow / green
-- "Topic mastered" when the score is >= 90 (`MASTERED_SCORE`)
-- "Suggested next: [topic]" when a suggestion exists
-
+- Add a rate limit to `/api/evaluate` — max 60 per user per hour
+- Add a rate limit to `/api/learning-path/approve` — max 20 per user per hour
+- Add a rate limit to `/api/learning-path/reject` — max 20 per user per hour
+- Each limited route returns 429 with a plain-English message
 - `npx tsc --noEmit`
-- Commit: `feat(parent-ui): update session summary with mastery scores and topic suggestion`
-- Check the parent dashboard in the browser: click the real control. Child chat must keep working.
+- Commit: `feat(api): add rate limiting to all v2 ai and learning path endpoints`
+- Do not click "Yes, start this next" to test approve. A 401 without a token is enough to prove the route still exists. Do not burn the parent's real approve or reject.
 
-What the summary code does today (do not rediscover this)
+What rate limiting does today (do not rediscover this)
 
-`POST /api/summary` already verifies the Firebase token, rate-limits when Upstash is configured, loads `users/{parentUID}/sessions/{sessionId}`, and calls Claude Haiku (`claude-haiku-4-5-20251001`, max_tokens 600) with `SUMMARY_SYSTEM_PROMPT` plus `buildSummaryPrompt`.
+`src/lib/upstash/ratelimit.ts` builds one Redis client. If `UPSTASH_REDIS_REST_URL` or `UPSTASH_REDIS_REST_TOKEN` is missing, the client is null and every limiter stays null. That is fail-open: local dev without Upstash still works.
 
-Individual chat messages are not stored on the session. The end route forwards the in-memory `messages` array into `/api/summary`. An empty transcript becomes the sentence "The child had a {subject} session with {mascotName} but no messages were exchanged." The JSON keys today are only `topicsCovered`, `areasForPractice`, and `encouragementNote`. A bad Claude reply falls back to a generic practice note. The saved field is `session.summary` (nested, not a subcollection) plus `generatedAt`.
+Existing limiters:
 
-`Session.evaluations[]` is already on the session document. Each entry is an `EvaluationResult`: topic, score, mastered, confidence, suggestedNext, reasoning. The learning path document does not store reasoning. The summary route already has the session document, so it can read `evaluations` there. Do not ask the child client to send mastery scores.
+- `chatRatelimit` — 30 per user per sliding hour, prefix `rl:chat`, on `/api/chat`
+- `summaryRatelimit` — 10 per user per sliding hour, prefix `rl:summary`, on `/api/summary`
 
-`SessionSummaryCard` shows the date, subject badge, message count, stars, topics covered, "Keep Practicing", and the encouragement quote. While `summary` is missing it says "Summary generating — check back in a moment…". Parent text should stay at least 16px. Use Shadcn `Badge`. Do not edit files in `src/components/ui/`.
+Both routes check the limiter after the Firebase token is verified and before the expensive work. A null limiter is skipped. A thrown Upstash error is caught and the request continues. Do not change the chat or summary limits.
 
-Score colors, same as the ring: red 0–49 Building, yellow 50–89 Almost there, green 90–100 Mastered!. Green starts at `MASTERED_SCORE` (90), not at the evaluator's "close" band (71).
+Add three new exports in that same file, same fail-open shape, separate prefixes (`rl:evaluate`, `rl:approve`, `rl:reject`). Wire each route the same way as `/api/summary`: after auth, before the body is parsed. 429 message is plain English for a parent. Evaluate can say the topic could not be scored right now. Approve and reject can say to wait before trying that action again.
 
-A session with no evaluation has no score. Do not paint that as 0 / Building, because 0 means the evaluator ran and scored zero. Show a plain "No mastery score yet" line instead. Several empty Buddy sessions from 10 Oct 2026 have no messages and no evaluations. Their cards should still look fine.
+What PR 2-24 already did (do not redo)
+
+`POST /api/summary` passes `session.evaluations` into `buildSummaryPrompt`. The child client does not send scores. JSON keys are still only `topicsCovered`, `areasForPractice`, and `encouragementNote`. Claude is told mastered yes/no (score >= 90), the score, and a suggested focus. No evaluation tells Claude not to invent a score. The saved field is still `session.summary` plus `generatedAt`.
+
+`SessionSummaryCard` reads the latest evaluation. The badge is `score · Building` (red, 0–49), `Almost there` (yellow, 50–89), or `Mastered!` (green, 90–100). "Topic mastered" shows at `MASTERED_SCORE` (90). "Suggested next: [topic]" shows when that evaluation's `suggestedNext` is a non-empty string. No evaluation is the plain line "No mastery score yet". Parent text on the card is 16px. Shadcn `Badge` is used. Do not edit `src/components/ui/`.
+
+The only session document with an evaluation is the unended 26 Sep 2026 Blip session: 7 messages, Counting to 10, score 100, suggestedNext Counting to 20. Its card shows the green badge and still says "Summary generating" because it was never ended. Do not end it.
+
+On 10 Oct 2026 an empty Math session named Buddy was started and ended with no chat message so the new card could be checked. It shows 0 messages, "No mastery score yet", and a short encouragement quote. Topic and practice lists on that summary are empty. The learning path was not reset.
 
 What is already built (do not redo)
 
@@ -67,9 +69,7 @@ What is already built (do not redo)
 
 `MasteryIndicator` takes `topic` and `score`. It does not subscribe to Firestore. `LiveSessionPanel` mounts it. `useLiveSession` keeps the newest session with no `endedAt`. `mastery` is the last `evaluations[]` score, or 0 before the first score. Empty copy is "No active session".
 
-This parent still has older sessions that were never ended. The live card therefore shows Counting to 20, grade K, 4 messages, score 0, until a newer open session exists. Do not close those old sessions unless asked.
-
-On 10 Oct 2026 several short Math sessions named Buddy were started and ended with no chat message. They belong in session history with a summary and no mastery score. The learning path was not reset.
+This parent still has older sessions that were never ended. The live card therefore shows an open session until a newer open session exists. Do not close those old sessions unless asked.
 
 Tutoring grade is `@/constants` (`src/constants/gradeBands.ts`): `'K' | '1' | '2' | '3'`. RAG chunk grade is `@/types` (`src/types/rag.ts`): `'K' | '1' | 'K-1'`. Never mix them. `@/types` re-exports the RAG `GradeBand`. Import the tutoring one from `@/constants`.
 
@@ -97,28 +97,24 @@ Do not push unless I ask. Do not force-push.
 
 Leave uncommitted `AGENTS.md`, `CLAUDE.md`, and `spark_tutor_build_bible_2.docx` alone. Do not commit them.
 
-Parent UI changes must be checked in the browser before you call the PR done. Child chat must keep working.
-
 After the PR: update `activeContext.md`, `progress.md`, check off `ROADMAP-v2_1.md`, and refresh `next-session-prompt.md`. Then stop and wait.
 
 Hard parts from the last sessions (do not rediscover these)
 
-These slowed PR 2-22 and PR 2-23. Read them before a browser check or before touching the learning path.
+1. There is no Cursor browser tool in this workspace. Check the dashboard with playwright-core installed in `%TEMP%\spark-playwright`, not added to this repo. Use `channel: 'chrome'`. Sign in with a Firebase Admin custom token and the Firebase CDN client `12.14.0` (`firebase-app-compat.js` and `firebase-auth-compat.js`) on the default app name, so IndexedDB persistence matches the Next app, then reload `/dashboard`. Do not print the token or any `.env` value. Delete temp scripts before the commit. `npx -p playwright-core` did not resolve for a local script. Set `NODE_PATH` to the temp install and to this project's `node_modules`. `firebase-admin` resolves from this project's `node_modules`. Temp scripts must be `.cjs`. A `.mjs` file throws `require is not defined`. `page.goto` with `networkidle` never finishes on the dashboard because Firestore listeners stay open. Use `domcontentloaded`.
 
-1. There is no Cursor browser tool in this workspace. Check the dashboard with playwright-core installed in `%TEMP%\spark-playwright`, not added to this repo. Use `channel: 'chrome'`. Sign in with a Firebase Admin custom token and the Firebase CDN client `12.14.0` (`firebase-app-compat.js` and `firebase-auth-compat.js`) on the default app name, so IndexedDB persistence matches the Next app, then reload `/dashboard`. Do not print the token or any `.env` value. Delete temp scripts before the commit. `npx -p playwright-core` did not resolve for a local script. Set `NODE_PATH` to the temp install. `firebase-admin` resolves from this project's `node_modules`.
-
-2. Shadcn `CardTitle` and `CardDescription` are `div`s, not headings. `getByRole('heading', { name: 'Learning path' })` does not find that card. The real heading on the dashboard is "Parent Dashboard". "Great job today!" on the child side is an `h1`, so a heading lookup works there. "Counting to 20" appears twice in the timeline. "In progress" also appears in the card description, so use exact text for the badge. Scope lookups to the card that contains the text "Learning path", or the live-session card will match the same topic.
+2. Shadcn `CardTitle` and `CardDescription` are `div`s, not headings. `getByRole('heading', { name: 'Learning path' })` does not find that card. The real heading on the dashboard is "Parent Dashboard". "Great job today!" on the child side is an `h1`, so a heading lookup works there. "Counting to 20" appears in the timeline and on the live card. Scope session cards to the `[data-slot="card"]` that contains "Recent Sessions". The mastered badge "100 · Mastered!" and the line "Topic mastered" belong to the unended Sep 26 Blip session.
 
 3. The chat page sets the subject, and shows "Say something...", as soon as Math is tapped. `POST /api/session/start` may still be in flight. `handleEndSession` returns immediately while `sessionId` is still null, and no end request is sent. The session stays open, and the live card then shows that new empty session instead of the old one. Wait for start status 200, pause briefly so React can store the id, then click End. The button's visible text is "All Done!" and its accessible name is "End session". Confirm end status 200 and the heading "Great job today!". The subject picker comes before the input. Click Math before waiting for the placeholder.
 
-4. On 10 Oct 2026 that early End click left two empty Buddy sessions open. They were closed afterward with `POST /api/session/end` (200 each). Another empty Buddy session was started and ended on purpose so the input and the Well Done screen could be checked. No chat message was sent in any of them. Do not close the older unended sessions. Those are why the live card still shows Counting to 20, grade K, 4 messages, score 0.
+4. Do not close the older unended sessions. One of them is why the live card still shows an open lesson. Another is the Sep 26 Blip session with the score 100 evaluation. Ending that one would finally generate its summary. Do not do that unless asked.
 
 5. A cold Turbopack compile can take about 2 seconds. The topic card hides as soon as a button is clicked, before the API finishes. Wait for HTTP 200 and read Firestore again after the response. An early read that still shows `suggestedNextTopic` is the optimistic hide, not a failed save. Reject only clears the suggestion. It does not set `parentApproved` back to true.
 
-6. On this machine, `POST /api/session/start` and `POST /api/session/end` once returned a Next.js HTML 404 while the route files existed and `/api/chat` returned 401. That was a stale Turbopack dev server, not a missing route. Restart `npm run dev` and re-check. Do not rewrite the route. Do not leave a `console.log` in a route file. The chat page still shows the input if start returns 404, because it falls back to a client session id. Confirm the network status is 200.
+6. On this machine, `POST /api/session/start` and `POST /api/session/end` once returned a Next.js HTML 404 while the route files existed and `/api/chat` returned 401. That was a stale Turbopack dev server, not a missing route. Restart `npm run dev` and re-check. Do not rewrite the route. Do not leave a `console.log` in a route file. The chat page still shows the input if start returns 404, because it falls back to a client session id. Confirm the network status is 200. Port 3000 may already be taken by a healthy `next dev`. A second `npm run dev` exits. If `POST /api/session/start` returns 401 with no token, the route is there. Do not kill that process.
 
 7. PowerShell on this Windows machine: use `;` between commands. `Invoke-WebRequest -SkipHttpErrorCheck` is not supported. Use `curl.exe` to see error status codes. Quote paths that contain `(parent)`.
 
-8. ESLint `react-hooks/refs` forbids reading or writing a ref during render. Reset a click-lock ref inside `useEffect`. The pre-commit hook runs `npx tsc --noEmit`, `npx prettier --check src/`, and `npx eslint src/ --ext .ts,.tsx`. A docs-only commit still runs it. The new `src/components/ui/collapsible.tsx` was added with `npx shadcn@latest add collapsible` and then formatted with Prettier. Do not hand-edit files in `src/components/ui/`. Leave `AGENTS.md`, `CLAUDE.md`, and `spark_tutor_build_bible_2.docx` uncommitted.
+8. ESLint `react-hooks/refs` forbids reading or writing a ref during render. Reset a click-lock ref inside `useEffect`. The pre-commit hook runs `npx tsc --noEmit`, `npx prettier --check src/`, and `npx eslint src/ --ext .ts,.tsx`. A docs-only commit still runs it. Do not hand-edit files in `src/components/ui/`. Leave `AGENTS.md`, `CLAUDE.md`, and `spark_tutor_build_bible_2.docx` uncommitted.
 
 9. Do not click "Yes, start this next" on this parent's Math path unless I ask. Approve changes `currentTopic` and appends Counting to 20 to `topicsCompleted`, which changes the easier-hint scores.

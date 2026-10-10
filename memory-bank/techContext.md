@@ -96,7 +96,7 @@ src/lib/gemini/suggestNextTopic.ts ← suggestNextTopic(subject, grade, complete
 src/lib/claude/client.ts          ← Anthropic SDK singleton
 src/lib/claude/adaptDifficulty.ts   ← getDifficultyHint() from the last two scores on the current topic
 src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child chat; Layer 5 = learning path + difficulty line)
-src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
+src/lib/claude/buildSummaryPrompt.ts ← transcript plus session evaluations for the parent summary
 
 # API Routes
 src/app/api/chat/route.ts              ← SSE streaming chat; uses request grade + currentTopic in the prompt; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
@@ -108,7 +108,7 @@ src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic;
 src/app/api/session/start/route.ts     ← reads or creates learning path first; teaches currentTopic while a suggestion waits; saves topic, grade, difficultyHint on the session; returns sessionId + learningPath summary
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
-src/app/api/summary/route.ts           ← sends transcript to Claude; saves summary.* to session doc
+src/app/api/summary/route.ts           ← sends transcript and session evaluations to Claude; saves summary.* to session doc
 
 # Types
 src/types/index.ts                ← central re-export for all shared types
@@ -156,7 +156,7 @@ src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE
 
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
-src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, stars, topics, encouragement
+src/components/parent/SessionSummaryCard.tsx ← date, subject, stars, mastery badge, topics, encouragement
 src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore
 src/components/parent/LiveSessionPanel.tsx ← open-session card; mounts the ring above session history
 src/components/parent/TopicSuggestionCard.tsx ← approve or keep the current topic; above the live session

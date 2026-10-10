@@ -191,7 +191,8 @@ Child taps "All Done!":
   → handleEndSession → POST /api/session/end
   → writes endedAt, final starsEarned, messageCount
   → fire-and-forget: POST /api/summary (with messages array)
-    → Claude analyzes transcript → JSON summary
+    → Claude analyzes transcript plus session.evaluations → JSON summary
+    → mastered yes/no, the score, and a suggested focus stay inside the existing three JSON keys
     → saves to session.summary (nested field, not subcollection)
   → shows WellDoneScreen
 
@@ -205,6 +206,10 @@ Parent opens dashboard:
   → LiveSessionPanel shows topic, grade, stars, messages, and MasteryIndicator
   → useSessionHistory → subscribeToSessions → onSnapshot
   → live list of sessions (updates when summary arrives)
+  → each SessionSummaryCard shows the latest evaluations[] score
+    → badge bands match the ring; "Topic mastered" at score >= 90
+    → "Suggested next: [topic]" when that evaluation has a suggestion
+    → no evaluation shows "No mastery score yet" (not a fake 0)
   → LearningPathHistory below that list, one section per subject
   → newest mastery scores first; the latest score on currentTopic is marked In progress
   → more than five scores stay folded until "Show full history"

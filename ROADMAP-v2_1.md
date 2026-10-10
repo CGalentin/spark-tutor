@@ -498,15 +498,17 @@
 ### PR 2-24 · Session Summary v2
 **Branch:** `feature/session-summary-v2`
 
-- [ ] Update `/src/lib/claude/buildSummaryPrompt.ts`:
+- [x] Update `/src/lib/claude/buildSummaryPrompt.ts`:
   - Add mastery evaluation data to summary context
   - Claude now includes in summary: topic mastered yes/no, score achieved, suggested focus for next session
-- [ ] Update `SessionSummaryCard.tsx`:
+- [x] Update `SessionSummaryCard.tsx`:
   - Add mastery score badge (color coded red/yellow/green)
   - Add "Topic mastered ✓" indicator when score >= 90
   - Add "Suggested next: [topic]" line when suggestion exists
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(parent-ui): update session summary with mastery scores and topic suggestion`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(parent-ui): update session summary with mastery scores and topic suggestion`
+
+> **Note:** The summary route passes `session.evaluations` into the prompt. The child client does not send scores. JSON keys stay `topicsCovered`, `areasForPractice`, and `encouragementNote`. The card reads the latest evaluation: a badge (`score · Building / Almost there / Mastered!`), "Topic mastered" at `MASTERED_SCORE` (90), and "Suggested next: [topic]" when that evaluation has a suggestion. No evaluation shows "No mastery score yet", not a 0. Committed on `feature/session-summary-v2`. Not merged and not pushed.
 
 ---
 
@@ -579,7 +581,7 @@
 - [x] Difficulty adapts based on score history (easier/normal/harder)
 - [x] Parent sees live mastery indicator during active sessions
 - [x] Parent receives and can act on topic suggestions
-- [ ] Session summaries include mastery scores
+- [x] Session summaries include mastery scores
 - [ ] All new endpoints rate limited
 - [x] Zero TypeScript errors
 - [ ] Zero ESLint warnings

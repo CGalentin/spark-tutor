@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 through 2-23 are merged and pushed to `origin/dev`. Next session starts PR 2-24. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-23 are on `origin/dev`. PR 2-24 is committed on `feature/session-summary-v2` and is not merged or pushed. Next step is to wait for "continue", then merge and start PR 2-25. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -43,6 +43,7 @@
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Committed, not merged, not pushed |
 
 ---
 
@@ -76,9 +77,10 @@
 - The parent dashboard shows `LiveSessionPanel` above session history. It follows the newest session with no end time and passes the latest evaluation score into the ring
 - A topic suggestion card sits above the live session for math and for reading. It appears only while a next topic is waiting for the parent. Approve and reject go through the existing API routes
 - Below session history, a learning-path timeline groups Math and Reading. The current topic shows its latest score as In progress. More than five scores fold behind "Show full history"
+- A finished session card shows the latest mastery score from that session's `evaluations`. No evaluation stays a plain "No mastery score yet" line. The summary prompt is given those same scores, and the saved JSON keys are unchanged
 
 **Not built yet (Sprint 4)**
-- Summary v2, rate limits on the new endpoints
+- Rate limits on evaluate, approve, and reject
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
