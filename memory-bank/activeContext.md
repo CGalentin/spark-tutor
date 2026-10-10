@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-25 is merged into local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. Local `dev` is ahead of that commit. Next session starts at PR 2-26. Do not start it until the user says continue. Do not deploy.**
+**PR 2-26 was tested on local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. A Math session saved mastery score 92 and suggested Shapes. Approve and reject were not clicked. Do not deploy. Do not click the suggestion card unless the user asks.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -206,8 +206,21 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - "Yes, start this next" was not on screen and was not clicked. The math path was not changed
   - Merged into local `dev` (fast-forward). Not pushed. `origin/dev` is still `75822ba`.
 
+- [x] PR 2-26 · Final v2 End-to-End Test (`dev`)
+  - The dashboard does not say "No active session". After the test session ended, the live card returned to an older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0. Those older sessions were not closed. The Sep 26 Blip session (score 100, summary still generating) was not ended
+  - Child check: Blip, named Buddy, Math. Session start 200, Counting to 20, grade K, difficulty hint easier. Six chats each returned 200. No second dev server was started
+  - The live ring updated during the open session from 0 / Building to 92 / Mastered!, with 6 messages and 1 star
+  - Gemini saved score 92, mastered true, confidence high, suggested next Shapes. The suggestion card appeared and quoted the evaluator note. Approve was not clicked. Reject was not clicked
+  - End returned 200. The child saw "Great job today!". The new session card shows "92 · Mastered!", "Topic mastered", "Suggested next: Shapes", and a summary. The practice line is "Learning about shapes". The encouragement note includes the score 92
+  - The timeline shows 92 at the top. It is not marked In progress, because that badge is only added when the latest score on the current topic is under 90. Four scores, so "Show full history" stays hidden. Reading still has no path
+  - Easier language showed up in this session (fingers, slow counting, extra praise) because the prior Counting to 20 scores were 40 and 30. After the 92, the last two scores on that topic are 30 and 92, so the next Math chat uses the normal hint
+  - Grade check used two extra `/api/chat` calls and a fake session id, so they did not write a score. Kindergarten stopped after 10 and asked for the next number. Grade 2 counted through 20, then asked what comes after 10
+  - Math path now: current topic Counting to 20, grade K, Counting to 10 completed, suggestion Shapes, parentApproved false. History is 100, then 40, then 30, then 92
+  - `npx tsc --noEmit` and `npm run build` passed. Not pushed
+
 ## Up Next
-- Next session: PR 2-26 · Final v2 end-to-end test on `dev`. Paste `memory-bank/next-session-prompt.md`. That prompt records the exact git stop point. Do not redo 2-25 because the live 429 checkbox is still open. Do not start 2-27 unless the user explicitly says to deploy. Do not push unless asked.
+- Stop and wait. The suggestion card is on the dashboard (Shapes). Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
+- Do not start PR 2-27 unless the user explicitly says to deploy. Do not start PR 2-28. Do not push unless asked. Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box.
 
 ---
 
@@ -294,11 +307,11 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — local `dev` is ahead of `origin/dev` (`75822ba`) by the PR 2-24 commits plus PR 2-25 (`c954c31`). None of that is pushed. Do not force-push. Do not push unless asked. Next session starts PR 2-26 on `dev`.
+`dev` — local `dev` is ahead of `origin/dev` (`75822ba`) by PRs 2-24 and 2-25 plus the PR 2-26 test commit. None of that is pushed. Do not force-push. Do not push unless asked. Do not deploy unless asked.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
-- A session with no `endedAt` counts as live. This parent still has older sessions that were never ended, so the dashboard shows the newest of those (Counting to 20, 4 messages, score 0) even when the child is not at the screen. Do not close those sessions unless asked.
+- A session with no `endedAt` counts as live. After the PR 2-26 session was ended, the dashboard again shows an older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0. Do not close those sessions unless asked.
 - Evaluator uses `gemini-3.5-flash` (`gemini-2.0-flash` shut down 1 Jun 2026). Prompt lives in `buildEvaluatorPrompt.ts`.
 - `MASTERED_SCORE` is 90 — `mastered` is true only when the evaluator score is 90 or higher.
 - Unreadable evaluator JSON falls back to score 0 / mastered false so a bad model reply never auto-advances.
@@ -308,13 +321,13 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - The evaluator's `reasoning` is stored on session `evaluations[]`, not on the learning path. `TopicSuggestionCard` matches `evaluation.topic` to `currentTopic` and `evaluation.suggestedNext` to `suggestedNextTopic`. A seeded suggestion with no matching evaluation shows the fallback sentence.
 - Counting to 20 scores 40 and 30 share `evaluatedAt` `2026-09-26T17:56:08.773Z`. The timeline breaks the tie by list order, so 30 is In progress. `CardTitle` is a `div`, not a heading.
 - The chat page shows the input as soon as Math is chosen, before `/api/session/start` finishes. `handleEndSession` does nothing while `sessionId` is still null. Wait for start 200 before clicking End.
-- Do not click "Yes, start this next" on the test parent's Math path unless asked. Approve moves `currentTopic` off Counting to 20 and appends it to `topicsCompleted`, which changes the easier-hint scores (40 and 30).
+- Do not click "Yes, start this next" unless the user asks. The card is visible: suggested next is Shapes, current topic is still Counting to 20, and `parentApproved` is false. Approve would move the topic and append Counting to 20 to `topicsCompleted`. Do not click "Keep practicing current topic" unless asked. Reject would clear Shapes and would not set `parentApproved` back to true.
 - The card hides as soon as a button is clicked. A cold dev compile of approve/reject can take about 2 seconds. Wait for HTTP 200 and a later Firestore read before treating a still-present suggestion as a failed save.
 - On this Windows machine, `next dev` has returned an HTML 404 for `POST /api/session/start` and `POST /api/session/end` while the route files were present and sibling routes returned 401. That was a stale Turbopack compile, not a missing route. Restart `npm run dev` or touch the route file, then re-check. Do not leave a `console.log` in the route. The chat page still shows the input if start returns 404, because it falls back to a client session id — confirm the network status is 200.
 - Browser checks in Cursor here have no built-in browser tool. Use playwright-core from a temp folder (not a project dependency), Chrome channel, a custom token, and the Firebase CDN client with the default app name so sign-in persists. Do not print tokens or `.env` values. Do not commit temp scripts.
 - Sprint 2 live run scored 65 on Counting to 10 (not mastered), so `suggestedNextTopic` stayed null. `vercel --prod` was skipped.
 - Child UI sends `grade` (the session's `currentGrade`) and `currentTopic` on every `/api/chat` request. If `grade` is omitted, the API still defaults to Kindergarten
-- Sprint 3 live run left the test parent's math path on Counting to 20, with scores 40 and 30 last, so the next math chat uses the easier hint until two higher scores are saved
+- The PR 2-26 Math test appended score 92 on Counting to 20 at `2026-10-10T23:03:46.508Z`. The last two scores on that topic are now 30 and 92, so the next Math chat uses the normal hint. The easier hint was confirmed in the test session itself, before this score was saved
 - Teacher prompt Layer 5 difficulty comes from `getDifficultyHint`: last two scores on the current topic, both under 50 → easier, both over 85 → harder, otherwise normal. One score stays normal.
 - New learning paths default to grade K and the first TopicMap topic; existing paths are reused as-is
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
@@ -326,6 +339,6 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type
 - Messages forwarded from client via `/api/session/end` → `/api/summary` (never persisted individually)
 - The summary prompt reads `evaluations` from the session document. The card badge uses the latest evaluation, not Claude's JSON. No evaluation is "No mastery score yet", not score 0
-- The only session document with an evaluation is the unended Sep 26 Blip session: Counting to 10, score 100, suggestedNext Counting to 20. Its card still says "Summary generating". Do not end it
+- The unended Sep 26 Blip session still has the only older evaluation: Counting to 10, score 100, suggestedNext Counting to 20. Its card still says "Summary generating". Do not end it. The 10 Oct 2026 Buddy session is ended and has its own evaluation: Counting to 20, score 92, suggestedNext Shapes
 - Playwright `networkidle` never finishes on the dashboard because Firestore listeners stay open. Use `domcontentloaded`. Temp browser scripts must be `.cjs` — `.mjs` cannot `require`
 - Evaluate, approve, and reject are rate limited after auth and before the body parse. A Redis error fail-opens. The host in `.env.local` does not resolve, so a local 429 could not be shown and no parent bucket was filled. Do not lower the caps to force a 429. Do not send real evaluate calls just to fill the bucket

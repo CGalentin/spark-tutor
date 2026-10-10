@@ -531,18 +531,26 @@
 
 - [ ] Full flow test:
   - [ ] Login as parent → dashboard shows no active session
-  - [ ] Start session as child (K, Math) → dashboard shows LiveSessionPanel
-  - [ ] Send 6 messages → verify MasteryIndicator updates in real time on dashboard
-  - [ ] If mastered: verify TopicSuggestionCard appears on dashboard
+  - [x] Start session as child (K, Math) → dashboard shows LiveSessionPanel
+  - [x] Send 6 messages → verify MasteryIndicator updates in real time on dashboard
+  - [x] If mastered: verify TopicSuggestionCard appears on dashboard
   - [ ] Approve topic from dashboard → verify next session uses new topic
-  - [ ] End session → verify updated SessionSummaryCard shows mastery score
-  - [ ] Check LearningPathHistory — verify mastered topic appears in timeline
-- [ ] Test difficulty adaptation: low mastery → verify easier language in next session
-- [ ] Test grade band: grade 2 session → verify more complex Claude responses
+  - [x] End session → verify updated SessionSummaryCard shows mastery score
+  - [x] Check LearningPathHistory — verify mastered topic appears in timeline
+- [x] Test difficulty adaptation: low mastery → verify easier language in next session
+- [x] Test grade band: grade 2 session → verify more complex Claude responses
 - [ ] Test reject flow: reject topic suggestion → verify current topic stays active
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Verify build passes: `npm run build`
-- [ ] Commit: `test: final v2 phase 1 end-to-end test pass`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Verify build passes: `npm run build`
+- [x] Commit: `test: final v2 phase 1 end-to-end test pass`
+
+> **Note:** Tested on local `dev` on 10 Oct 2026. Not pushed. "No active session" is false. After this test ended, the live card returned to an older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0. Those older sessions were not closed. The Sep 26 Blip session with score 100 was not ended.
+>
+> Child flow: Blip, named Buddy, Math. Session start 200 on Counting to 20, grade K, difficulty hint easier. Six chats each returned 200. The live ring moved from 0 / Building to 92 / Mastered! while the session was still open. The saved score is 92, mastered, confidence high, suggested next Shapes. The suggestion card showed that note. Approve was not clicked. Reject was not clicked. `currentTopic` is still Counting to 20. `topicsCompleted` is still only Counting to 10. `parentApproved` is now false, because the evaluator wrote a suggestion. `suggestedNextTopic` is Shapes.
+>
+> End returned 200 and the child saw "Great job today!". The new history card shows "92 · Mastered!", "Topic mastered", "Suggested next: Shapes", and a summary whose practice note is "Learning about shapes". The timeline lists 92 at the top. That row is not marked In progress, because the badge is only added when the latest score on the current topic is under 90. "Show full history" stays hidden. Reading still has no path.
+>
+> The session used easier language (fingers, slow steps, extra praise) because the previous Counting to 20 scores were 40 and 30. After this 92, the last two scores on that topic are 30 and 92, so the next Math chat uses the normal hint. A separate grade K reply stopped after 10 and asked for the next number. A grade 2 reply counted through 20, then asked what comes after 10. Those two calls did not write a score. Do not click the suggestion card unless asked.
 
 ---
 
