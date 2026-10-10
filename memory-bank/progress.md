@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 through 2-23 are on `origin/dev`. PR 2-24 is committed on `feature/session-summary-v2` and is not merged or pushed. Next step is to wait for "continue", then merge and start PR 2-25. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-23 are on `origin/dev`. PR 2-24 is merged into local `dev` and is not pushed. Next session starts PR 2-25. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -43,7 +43,7 @@
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
-| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Committed, not merged, not pushed |
+| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged into local `dev`, not pushed |
 
 ---
 

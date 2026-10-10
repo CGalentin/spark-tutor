@@ -508,7 +508,7 @@
 - [x] Verify TypeScript compiles: `npx tsc --noEmit`
 - [x] Commit: `feat(parent-ui): update session summary with mastery scores and topic suggestion`
 
-> **Note:** The summary route passes `session.evaluations` into the prompt. The child client does not send scores. JSON keys stay `topicsCovered`, `areasForPractice`, and `encouragementNote`. The card reads the latest evaluation: a badge (`score · Building / Almost there / Mastered!`), "Topic mastered" at `MASTERED_SCORE` (90), and "Suggested next: [topic]" when that evaluation has a suggestion. No evaluation shows "No mastery score yet", not a 0. Committed on `feature/session-summary-v2`. Not merged and not pushed.
+> **Note:** The summary route passes `session.evaluations` into the prompt. The child client does not send scores. JSON keys stay `topicsCovered`, `areasForPractice`, and `encouragementNote`. The card reads the latest evaluation: a badge (`score · Building / Almost there / Mastered!`), "Topic mastered" at `MASTERED_SCORE` (90), and "Suggested next: [topic]" when that evaluation has a suggestion. No evaluation shows "No mastery score yet", not a 0. Merged into local `dev`. Not pushed.
 
 ---
 

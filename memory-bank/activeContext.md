@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-24 is committed on `feature/session-summary-v2` (10 Oct 2026). It is not merged into `dev` and not pushed. Wait for "continue" before merging or starting PR 2-25.**
+**PR 2-24 is merged into local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. Next session starts at PR 2-25. Do not start it until that session.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -190,10 +190,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Twelve older sessions with no evaluation showed "No mastery score yet", not a zero badge
   - Child check: Blip, named Buddy, Math. Session start 200, the input was on screen, End session returned 200, "Great job today!" showed. No chat message was sent. The new card shows 0 messages, "No mastery score yet", and a short encouragement quote
   - The math learning path was not changed: Counting to 20, suggestion null, parentApproved true, scores 100 then 40 then 30. "Yes, start this next" was not on screen and was not clicked
-  - Committed on `feature/session-summary-v2`. Not merged into `dev`. Not pushed.
+  - Merged into local `dev` (fast-forward). Not pushed. `origin/dev` is still `75822ba`.
 
 ## Up Next
-- Wait for "continue". Then merge `feature/session-summary-v2` into local `dev` (no force-push, no push unless asked) and start PR 2-25 only. Paste `memory-bank/next-session-prompt.md`.
+- Next session: PR 2-25 · Rate limits (`feature/rate-limiting-v2` off local `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait. Do not push unless asked.
 
 ---
 
@@ -280,7 +280,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/session-summary-v2` — PR 2-24 is committed here and is not merged. Local `dev` still matches `origin/dev` at `75822ba`. Do not force-push. Do not push unless asked.
+`dev` — local `dev` is ahead of `origin/dev` (`75822ba`). The PR 2-24 commits are on local `dev` and are not pushed. Do not force-push. Do not push unless asked. Next session starts PR 2-25 on `feature/rate-limiting-v2`.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
