@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-26 was tested on local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. A Math session saved mastery score 92 and suggested Shapes. Approve and reject were not clicked. Do not deploy. Do not click the suggestion card unless the user asks.**
+**PR 2-26 is on `origin/dev` (10 Oct 2026). It is not merged to `main`, and production was not deployed. A Math session saved mastery score 92 and suggested Shapes. The user said to leave that card. Do not click it unless asked. Do not deploy unless the user explicitly says to deploy.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -216,11 +216,13 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Easier language showed up in this session (fingers, slow counting, extra praise) because the prior Counting to 20 scores were 40 and 30. After the 92, the last two scores on that topic are 30 and 92, so the next Math chat uses the normal hint
   - Grade check used two extra `/api/chat` calls and a fake session id, so they did not write a score. Kindergarten stopped after 10 and asked for the next number. Grade 2 counted through 20, then asked what comes after 10
   - Math path now: current topic Counting to 20, grade K, Counting to 10 completed, suggestion Shapes, parentApproved false. History is 100, then 40, then 30, then 92
-  - `npx tsc --noEmit` and `npm run build` passed. Not pushed
+  - `npx tsc --noEmit` and `npm run build` passed. Pushed to `origin/dev` on 10 Oct 2026. Not merged to `main`
+  - The user said to leave the Shapes card. Do not click either button unless asked
 
 ## Up Next
-- Stop and wait. The suggestion card is on the dashboard (Shapes). Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not start PR 2-27 unless the user explicitly says to deploy. Do not start PR 2-28. Do not push unless asked. Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box.
+- Next session is PR 2-27, the production deploy, and only when the user explicitly says to deploy. Then stop. Do not start PR 2-28 in that same step unless asked.
+- The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
 ---
 
@@ -307,7 +309,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — local `dev` is ahead of `origin/dev` (`75822ba`) by PRs 2-24 and 2-25 plus the PR 2-26 test commit. None of that is pushed. Do not force-push. Do not push unless asked. Do not deploy unless asked.
+`dev` — local `dev` matches `origin/dev` after the 10 Oct 2026 push. `main` is still the v1 production branch. Do not force-push. Do not merge to `main` unless the user explicitly says to deploy.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

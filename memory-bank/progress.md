@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 through 2-23 are on `origin/dev`. PRs 2-24, 2-25, and the 2-26 test are on local `dev` and are not pushed. A suggestion for Shapes is waiting. Do not approve or reject it unless asked. Do not deploy. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-26 are on `origin/dev`. They are not merged to `main`. The Shapes suggestion card stays until the user asks to press it. Next session is the production deploy, only when the user says to deploy. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -43,9 +43,9 @@
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
-| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged into local `dev`, not pushed |
-| 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ Merged into local `dev`, not pushed |
-| 2-26 | Final v2 End-to-End Test | `dev` | ✅ Tested on local `dev`, not pushed. Approve and reject were not clicked |
+| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
+| 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
+| 2-26 | Final v2 End-to-End Test | `dev` | ✅ Pushed to `origin/dev`. Shapes card left in place. Not on `main` |
 
 ---
 

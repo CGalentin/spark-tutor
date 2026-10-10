@@ -1,44 +1,24 @@
 # Next session prompt — paste this into a new Cursor chat
 
-Stop. Do not start this prompt's work in the same chat that wrote it. The chat that finished PR 2-26 was told to stop and wait.
+Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 10 Oct 2026. Sprint 4, PR 2-26 was tested on local `dev`. PR 2-27 was not started.
+Date: 10 Oct 2026. Sprint 4, PR 2-26 is done and pushed to `origin/dev`. PR 2-27 was not started. Production was not deployed. `main` was not updated.
 
-`origin/dev` is still `75822ba` (`docs: point the next session at PR 2-24 after pushing PR 2-23`).
+Local `dev` and `origin/dev` should match. `git status -sb` should show `dev...origin/dev` with no ahead or behind. The test commit is `dc0a074` (`test: final v2 phase 1 end-to-end test pass`). The tip commit records leaving the Shapes card and points this session at the deploy.
 
-Local `dev` is a straight fast-forward ahead of that commit. Nothing was pushed. Do not push unless asked. Do not force-push. Do not merge to `main`. Do not run `vercel --prod`.
+`feature/session-summary-v2` and `feature/rate-limiting-v2` are already contained in `dev`. Do not merge them again. Do not recreate them.
 
-Commits on local `dev` that are not on `origin/dev`, oldest first:
+If `dev` is behind `origin/dev`, diverged, or missing `9a71fcb`, `c954c31`, or `dc0a074`, stop and tell me. Do not force-push.
 
-1. `9a71fcb` feat(parent-ui): update session summary with mastery scores and topic suggestion
-2. `0e1755d` docs: check off PR 2-24 and update memory bank
-3. `261ae80` docs: record PR 2-24 merge into local dev and point the next session at PR 2-25
-4. `c954c31` feat(api): add rate limiting to all v2 ai and learning path endpoints
-5. `2cda498` docs: check off PR 2-25 and point the next session at PR 2-26
-6. `3a94214` docs: record the PR 2-25 stop point for the next session
-7. The test commit that saved this prompt: `test: final v2 phase 1 end-to-end test pass`
+These files are dirty on purpose and must stay uncommitted: `AGENTS.md`, `CLAUDE.md`, `spark_tutor_build_bible_2.docx`.
 
-If local `dev` is behind `75822ba`, diverged from it, or missing `9a71fcb` or `c954c31`, stop and tell me. Do not merge `feature/rate-limiting-v2` again. Do not recreate it.
+## Where this session begins
 
-These files were dirty on purpose and must stay uncommitted: `AGENTS.md`, `CLAUDE.md`, `spark_tutor_build_bible_2.docx`.
+PR 2-27 only. This message is the go-ahead to deploy. Do not start PR 2-28 in this same session.
 
-## Where the next session begins
-
-Do not redo PR 2-26. Do not send another 6-message Math chat unless I ask. That test already called Gemini and saved a score.
-
-Do not start PR 2-27 unless I explicitly say to deploy. PR 2-27 is `vercel --prod`, then merge `dev` into `main`. Do not start PR 2-28.
-
-The suggestion card is on the parent dashboard. Suggested next is **Shapes**. Do not click **Yes, start this next** unless I ask in that message. Do not click **Keep practicing current topic** unless I ask in that message. Do not seed a different suggestion.
-
-One roadmap checkbox from PR 2-25 is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." Do not redo PR 2-25 to close it. Do not lower a cap. Do not fill a rate-limit bucket.
-
-Three PR 2-26 boxes are still open on purpose:
-
-- "Dashboard shows no active session" is false. An older session was never ended.
-- "Approve topic from dashboard" was not clicked.
-- "Test reject flow" was not clicked, because reject would clear the real Shapes suggestion.
+Leave the Shapes card alone. On 10 Oct 2026 I said to leave it. Do not click **Yes, start this next** or **Keep practicing current topic**. Do not ask again.
 
 Copy everything below the line.
 
@@ -46,48 +26,46 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-Confirm `git log --oneline origin/dev..HEAD` is a straight fast-forward from `75822ba` and includes `9a71fcb`, `c954c31`, and a commit whose message is `test: final v2 phase 1 end-to-end test pass`. If `dev` is behind, diverged, or those commits are missing, stop and tell me. Do not force-push. Do not push unless I ask.
+Confirm local `dev` matches `origin/dev`, and that `git log --oneline` contains `dc0a074`, `c954c31`, and `9a71fcb`. If `dev` is behind, diverged, or those commits are missing, stop and tell me. Do not force-push.
 
-PR 2-26 already ran. Do not repeat it. Wait for my instruction.
+This is Sprint 4. Do PR 2-27 only. I am explicitly saying to deploy. After 2-27, stop and wait. Do not start PR 2-28 unless I ask in that same message.
 
-If I explicitly say to deploy, that is PR 2-27 only. Do not start PR 2-28 in the same step.
+Sprint 4 map
 
-If I explicitly say to approve the suggestion, click **Yes, start this next** once, then tell me the new current topic. Approve appends Counting to 20 to `topicsCompleted` and does not change `currentGrade`.
+- 2-20 through 2-23 are done and were already on `origin/dev`
+- 2-24 session summary with mastery is on `origin/dev`
+- 2-25 rate limits are on `origin/dev`. Do not redo them
+- 2-26 final end-to-end test is on `origin/dev`. Do not redo the 6-message chat
+- 2-27 production deploy — start here
+- 2-28 README + CLAUDE.md — do not start this session
 
-If I explicitly say to reject the suggestion, click **Keep practicing current topic** once. Reject only clears `suggestedNextTopic`. It does not set `parentApproved` back to true. Current topic stays Counting to 20.
+PR 2-27 · v2 Production Deploy
 
-If I do not mention approve, reject, or deploy, stop and ask. Do not choose for me.
+Branch: `main`.
 
-What the 2-26 test changed
+Work through the PR 2-27 checklist in `ROADMAP-v2_1.md`.
 
-On 10 Oct 2026 a child session used Blip, the name Buddy, and Math. `POST /api/session/start` returned 200. Topic was Counting to 20, grade K, difficulty hint easier. Six chats each returned 200. `POST /api/evaluate` returned 200 and saved score **92**, mastered, confidence high, suggested next **Shapes**. `POST /api/session/end` returned 200. The heading "Great job today!" showed.
+1. Confirm whether any environment variable names were added after the current Vercel project settings. Do not print values. The rate-limit work reused the existing Upstash variables. Do not edit `.env.local`.
+2. Run `npm run build` and confirm zero errors.
+3. Run `vercel --prod`.
+4. Smoke test the live URL with a short child flow and a look at the parent dashboard. Do not send another 6-message Math chat. Do not click the Shapes card.
+5. Merge `dev` into `main`. Push `main`. Do not force-push.
+6. Commit on the result: `chore: v2 phase 1 production deploy — AI intelligence layer live`.
+7. Update `activeContext.md`, `progress.md`, check off `ROADMAP-v2_1.md`, and refresh `next-session-prompt.md` so the next session starts at PR 2-28. Then stop.
 
-The live ring updated during that open session from 0 / Building to 92 / Mastered!. The new session card shows "92 · Mastered!", "Topic mastered", "Suggested next: Shapes", and a summary. The practice note is "Learning about shapes". The encouragement note mentions the score 92.
+Leave the Shapes suggestion in place. Math stays on Counting to 20. `suggestedNextTopic` is Shapes. `parentApproved` is false. `topicsCompleted` is still only Counting to 10. History in saved order: Counting to 10 score 100 at `2026-09-26T17:55:51.558Z`, Counting to 20 score 40 and score 30 both at `2026-09-26T17:56:08.773Z`, then Counting to 20 score 92 at `2026-10-10T23:03:46.508Z`. The last two scores are 30 and 92, so the next Math chat uses the normal hint. Do not reset the path.
 
-The learning path `users/7XQyNOHkgAPaNa9e4Fks9xTT4JP2/learningPath/math` is still on Counting to 20, grade K. `topicsCompleted` is still only Counting to 10. `suggestedNextTopic` is Shapes. `parentApproved` is false. History, in saved order:
+Do not close older unended sessions. One of them is why the live card still shows an open lesson after the test session ended: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0. Do not end the 26 Sep 2026 Blip session. It has 7 messages, Counting to 10, score 100, suggested next Counting to 20, and it still says the summary is generating.
 
-- Counting to 10, score 100, mastered, `2026-09-26T17:55:51.558Z`
-- Counting to 20, score 40, not mastered, `2026-09-26T17:56:08.773Z`
-- Counting to 20, score 30, not mastered, same timestamp as the 40
-- Counting to 20, score 92, mastered, `2026-10-10T23:03:46.508Z`
+One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." The 429 sentences are already in the routes. A live 429 could not be shown because Redis did not answer. Do not redo 2-25 to close that box. Do not lower a cap. Do not fill a rate-limit bucket. Do not print the Redis URL or token.
 
-The last two scores on Counting to 20 are 30 and 92, so the next Math chat uses the **normal** hint. The easier hint was already confirmed in the test session, before this 92 was saved. Do not reset the path.
+Three PR 2-26 boxes stay open on purpose: the dashboard does have an older open session, approve was not clicked, and reject was not clicked.
 
-The timeline shows 92 at the top and does not mark that row In progress. That badge is only added when the latest score on the current topic is under 90. There are four scores, so "Show full history" stays hidden. Reading has no learning path.
+What the 2-26 test already proved
 
-After the test session ended, the live card returned to an older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0, with the line about the score showing up after a topic block. Do not close that session. Do not end the unended 26 Sep 2026 Blip session (7 messages, Counting to 10, score 100, suggested next Counting to 20, summary still generating).
+Blip, name Buddy, tap Math, `POST /api/session/start` 200, six chats each 200, `POST /api/evaluate` 200, saved score 92, mastered, suggested next Shapes. The live ring changed from 0 / Building to 92 / Mastered! while the session was open. `POST /api/session/end` 200 and the heading "Great job today!" showed. The session card shows "92 · Mastered!", "Topic mastered", "Suggested next: Shapes", and a summary whose practice note is "Learning about shapes".
 
-What not to redo
-
-PR 2-25 rate limits are in `src/lib/upstash/ratelimit.ts`. Missing Upstash env vars, or a Redis error, fail open. Chat is 30/hour. Summary is 10/hour. Evaluate is 60/hour (`rl:evaluate`). Approve is 20/hour (`rl:approve`). Reject is 20/hour (`rl:reject`). The check is after `verifyAuthToken` and before the body is parsed. A live 429 was not shown because Redis did not answer. Do not print the Redis URL or token. Do not edit `.env.local`.
-
-PR 2-24 summary behavior is unchanged. The card reads `session.evaluations`. No evaluation shows "No mastery score yet". Do not edit `src/components/ui/`.
-
-Tutoring grade is `@/constants` (`'K' | '1' | '2' | '3'`). RAG grade is `@/types` (`'K' | '1' | 'K-1'`). Never mix them. `MASTERED_SCORE` is 90.
-
-Port 3000 was already serving `next dev` during the test. Leave a healthy server running. A second `npm run dev` exits. `POST /api/session/start` with no token returned 401 JSON, not an HTML 404.
-
-I am newer to coding. Explain what each step does in plain language.
+I am newer to coding. Explain what each deploy step does in plain language before you run it, and tell me the live URL when it is done.
 
 Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
