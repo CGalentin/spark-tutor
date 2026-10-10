@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-24 is merged into local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. Next session starts at PR 2-25. Do not start it until that session.**
+**PR 2-25 is merged into local `dev` (10 Oct 2026) and is not pushed. `origin/dev` is still `75822ba`. Local `dev` is ahead of that commit. Next session starts at PR 2-26. Do not start it until the user says continue. Do not deploy.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -190,10 +190,24 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Twelve older sessions with no evaluation showed "No mastery score yet", not a zero badge
   - Child check: Blip, named Buddy, Math. Session start 200, the input was on screen, End session returned 200, "Great job today!" showed. No chat message was sent. The new card shows 0 messages, "No mastery score yet", and a short encouragement quote
   - The math learning path was not changed: Counting to 20, suggestion null, parentApproved true, scores 100 then 40 then 30. "Yes, start this next" was not on screen and was not clicked
+  - Merged into local `dev` (fast-forward). Not pushed. `origin/dev` was still `75822ba` at the start of PR 2-25.
+
+- [x] PR 2-25 · Rate Limiting Update (`feature/rate-limiting-v2`)
+  - `evaluateRatelimit` is 60 per parent per hour, prefix `rl:evaluate`, on `POST /api/evaluate`
+  - `approveRatelimit` is 20 per parent per hour, prefix `rl:approve`, on `POST /api/learning-path/approve`
+  - `rejectRatelimit` is 20 per parent per hour, prefix `rl:reject`, on `POST /api/learning-path/reject`
+  - Chat stays 30/hour (`rl:chat`). Summary stays 10/hour (`rl:summary`). The three new counters do not share a bucket
+  - Each check runs after `verifyAuthToken` and before the body is parsed. A missing token is still 401 and does not count
+  - A blocked parent gets HTTP 429 in plain English. Evaluate: "Too many mastery checks. Please wait a bit before the next one." Approve: "Too many topic approvals. Please wait before starting another topic." Reject: "Too many topic updates. Please wait before trying that again."
+  - Null limiter or a Redis error still fail open, same as chat and summary
+  - No-token curls: evaluate, approve, and reject each returned 401 JSON, not an HTML 404. The dev server on port 3000 was left running
+  - A live 429 was not observed. The Redis host in `.env.local` does not resolve (`ENOTFOUND` on 1.1.1.1), and the stored token is only 8 characters, so the limiter throws and the route would let the request through. The parent's evaluate, approve, and reject buckets were not filled. No Gemini call was made. Do not print the URL or token
+  - Child check: Blip, named Buddy, Math. Session start 200, "Say something..." was on screen, End session returned 200, "Great job today!" showed. No chat message was sent. Older unended sessions were not closed
+  - "Yes, start this next" was not on screen and was not clicked. The math path was not changed
   - Merged into local `dev` (fast-forward). Not pushed. `origin/dev` is still `75822ba`.
 
 ## Up Next
-- Next session: PR 2-25 · Rate limits (`feature/rate-limiting-v2` off local `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait. Do not push unless asked.
+- Next session: PR 2-26 · Final v2 end-to-end test on `dev`. Paste `memory-bank/next-session-prompt.md`. Do not start 2-27 unless the user explicitly says to deploy. Do not push unless asked.
 
 ---
 
@@ -280,7 +294,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — local `dev` is ahead of `origin/dev` (`75822ba`). The PR 2-24 commits are on local `dev` and are not pushed. Do not force-push. Do not push unless asked. Next session starts PR 2-25 on `feature/rate-limiting-v2`.
+`dev` — local `dev` is ahead of `origin/dev` (`75822ba`) by the PR 2-24 commits plus PR 2-25 (`c954c31`). None of that is pushed. Do not force-push. Do not push unless asked. Next session starts PR 2-26 on `dev`.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -314,3 +328,4 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 - The summary prompt reads `evaluations` from the session document. The card badge uses the latest evaluation, not Claude's JSON. No evaluation is "No mastery score yet", not score 0
 - The only session document with an evaluation is the unended Sep 26 Blip session: Counting to 10, score 100, suggestedNext Counting to 20. Its card still says "Summary generating". Do not end it
 - Playwright `networkidle` never finishes on the dashboard because Firestore listeners stay open. Use `domcontentloaded`. Temp browser scripts must be `.cjs` — `.mjs` cannot `require`
+- Evaluate, approve, and reject are rate limited after auth and before the body parse. A Redis error fail-opens. The host in `.env.local` does not resolve, so a local 429 could not be shown and no parent bucket was filled. Do not lower the caps to force a 429. Do not send real evaluate calls just to fill the bucket

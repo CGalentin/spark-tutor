@@ -515,12 +515,14 @@
 ### PR 2-25 · Rate Limiting Update
 **Branch:** `feature/rate-limiting-v2`
 
-- [ ] Add rate limit to `/api/evaluate` — max 60 per user per hour (fires frequently)
-- [ ] Add rate limit to `/api/learning-path/approve` — max 20 per user per hour
-- [ ] Add rate limit to `/api/learning-path/reject` — max 20 per user per hour
+- [x] Add rate limit to `/api/evaluate` — max 60 per user per hour (fires frequently)
+- [x] Add rate limit to `/api/learning-path/approve` — max 20 per user per hour
+- [x] Add rate limit to `/api/learning-path/reject` — max 20 per user per hour
 - [ ] Verify all new endpoints return 429 with plain-English message on limit hit
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(api): add rate limiting to all v2 ai and learning path endpoints`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(api): add rate limiting to all v2 ai and learning path endpoints`
+
+> **Note:** The 429 text is in each route, after auth and before the body is read. No-token posts returned 401, so they did not count. A live 429 was not returned: the Redis host in `.env.local` does not resolve, and the limiter fail-opens on that error. The parent's evaluate, approve, and reject buckets were not filled. Chat is still 30/hour and summary is still 10/hour. Merged into local `dev`. Not pushed.
 
 ---
 
@@ -582,7 +584,7 @@
 - [x] Parent sees live mastery indicator during active sessions
 - [x] Parent receives and can act on topic suggestions
 - [x] Session summaries include mastery scores
-- [ ] All new endpoints rate limited
+- [x] All new endpoints rate limited
 - [x] Zero TypeScript errors
 - [ ] Zero ESLint warnings
 - [ ] Live on Vercel with zero build errors
