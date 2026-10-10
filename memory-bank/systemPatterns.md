@@ -174,7 +174,7 @@ Each chat message:
     → if mastered: suggestNextTopic() (TOPIC_MAP + mastery history; next grade if current grade is done)
       → learningPath.suggestedNextTopic + parentApproved false
 
-Parent confirms (dashboard calls these in Sprint 4; no child UI):
+Parent confirms (dashboard card, no child UI):
   → POST /api/learning-path/approve { subject, approvedTopic }
     → currentTopic = approvedTopic, parentApproved true, parentApprovedAt now
     → suggestedNextTopic null
@@ -196,6 +196,11 @@ Child taps "All Done!":
   → shows WellDoneScreen
 
 Parent opens dashboard:
+  → useLearningPath → subscribeToLearningPath for math and for reading
+  → TopicSuggestionCard shows above the live session only when suggestedNextTopic is set and parentApproved is false
+  → "Yes, start this next" → POST /api/learning-path/approve
+  → "Keep practicing current topic" → POST /api/learning-path/reject
+  → the card hides immediately; the listener hides it again when the suggestion is cleared
   → useLiveSession → subscribeToSessions → newest session with no endedAt
   → LiveSessionPanel shows topic, grade, stars, messages, and MasteryIndicator
   → useSessionHistory → subscribeToSessions → onSnapshot
@@ -209,6 +214,8 @@ The evaluator never changes `currentTopic`. It only writes `suggestedNextTopic` 
 - **Reject** (`POST /api/learning-path/reject`): body `{ subject }`. Sets `suggestedNextTopic` to null. Does not change `currentTopic`, `currentGrade`, `parentApproved`, or `topicsCompleted`.
 
 Both routes verify the Firebase ID token and use the Admin learning-path helpers. Responses use `ApiResult`: `{ approved: true, newTopic }` or `{ rejected: true }`. A missing learning path returns 404. `currentGrade` stays as stored even when the approved topic belongs to the next grade.
+
+The parent dashboard calls these from `TopicSuggestionCard` through `useLearningPath`. The hook uses the client listener `subscribeToLearningPath`. It does not import `learningPath.ts`. The evaluator's short reason is not stored on the learning path. The card finds it on the newest session evaluation whose topic is the current topic and whose `suggestedNext` is the suggestion. If that note is missing, the card says the evaluator did not leave one.
 
 ### 12. Parent Mastery Ring
 `MasteryIndicator` (`src/components/parent/MasteryIndicator.tsx`) is presentational. Callers pass `topic` and `score`. The component does not read Firestore.

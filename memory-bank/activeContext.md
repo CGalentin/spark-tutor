@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PRs 2-20 and 2-21 are merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-22. Do not start it until that session.**
+**PR 2-22 is committed on `feature/topic-suggestion-card` (10 Oct 2026). It is not merged and not pushed. Next session merges it into local `dev` only after the user says "continue", then starts PR 2-23.**
 
 Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -156,8 +156,21 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Browser check: clicked Start a Session, chose Blip, named Buddy, chose Math, then All Done. The card moved from 4 messages to 0 messages and back to 4. Child chat input was on screen. No chat message was sent
   - Merged into local `dev` and pushed to `origin/dev`.
 
+- [x] PR 2-22 · Topic Suggestion Card (`feature/topic-suggestion-card`)
+  - `useLearningPath(subject)` listens with `subscribeToLearningPath` and returns the path plus `approveTopic` and `rejectTopic`
+  - Approve posts `{ subject, approvedTopic }` to `/api/learning-path/approve`. Reject posts `{ subject }` to `/api/learning-path/reject`
+  - The hook also returns `error` when the listener fails. It does not import the Admin learning-path file
+  - `TopicSuggestionCard` shows for math and for reading, above `LiveSessionPanel`, only when `suggestedNextTopic` is set and `parentApproved` is false
+  - It shows the current topic as the one just finished, the suggested next topic, and the evaluator note
+  - That note is on the session evaluation (`topic` + `suggestedNext` match). The learning path document does not store `reasoning`. If none matches, the card says the evaluator did not leave a note
+  - Either button hides the card immediately. If the save fails, the card comes back with the error
+  - Button text is "Yes, start this next" and "Keep practicing current topic"
+  - Browser check: a temporary Math suggestion of Shapes was written so the card could be clicked, then "Keep practicing current topic" was clicked. `POST /api/learning-path/reject` returned 200 and cleared the suggestion. `parentApproved` was put back to true afterward. Current topic stayed Counting to 20. Scores stayed 100, 40, 30. "Yes, start this next" was not clicked, because approve would move the lesson
+  - Child check: Blip, named Buddy, Math. Chat input was on screen. All Done ended the session. No chat message was sent. Session start and end both returned 200
+  - Not merged. Not pushed.
+
 ## Up Next
-- Next session: PR 2-22 · Topic Suggestion Card (`feature/topic-suggestion-card` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
+- When the user says "continue": merge `feature/topic-suggestion-card` into local `dev` (fast-forward), then start PR 2-23 · Learning Path History (`feature/learning-path-history` off that `dev`). Do not push unless asked.
 
 ---
 
@@ -244,7 +257,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — matches `origin/dev` after the Sprint 4 push of PRs 2-20 and 2-21. Next session starts PR 2-22 on `feature/topic-suggestion-card`. Do not force-push.
+`feature/topic-suggestion-card` — PR 2-22 is committed here and is not on `dev` yet. Local `dev` still matches `origin/dev` at the PR 2-21 docs commit. Do not force-push.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

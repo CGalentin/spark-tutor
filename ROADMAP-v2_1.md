@@ -459,7 +459,7 @@
 ### PR 2-22 · Topic Suggestion Card
 **Branch:** `feature/topic-suggestion-card`
 
-- [ ] Create `/src/components/parent/TopicSuggestionCard.tsx`:
+- [x] Create `/src/components/parent/TopicSuggestionCard.tsx`:
   - Appears when `learningPath.suggestedNextTopic` is not null and `parentApproved` is false
   - Shows: current topic completed, suggested next topic, brief reason from Evaluator
   - Two action buttons:
@@ -467,12 +467,14 @@
     - "Keep practicing current topic" → calls `/api/learning-path/reject`
   - Card disappears after either action (optimistic UI update)
   - Uses Shadcn `Card`, `Button` components
-- [ ] Create `/src/hooks/useLearningPath.ts`:
+- [x] Create `/src/hooks/useLearningPath.ts`:
   - `onSnapshot` subscription to `learningPath` doc
   - Returns `{ learningPath, approveTopic, rejectTopic, isLoading }`
-- [ ] Add `TopicSuggestionCard` to parent dashboard — renders above `LiveSessionPanel`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(parent-ui): add topic suggestion card with approve and reject actions`
+- [x] Add `TopicSuggestionCard` to parent dashboard — renders above `LiveSessionPanel`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(parent-ui): add topic suggestion card with approve and reject actions`
+
+> **Note:** Math and reading each get a card. The evaluator's note is read from the matching session evaluation, because the learning path document does not store `reasoning`. The card hides as soon as either button is clicked. The hook also returns `error` when the listener fails. Not merged to `dev` yet.
 
 ---
 
@@ -574,7 +576,7 @@
 - [x] Teacher Agent adapts based on current topic and mastery history
 - [x] Difficulty adapts based on score history (easier/normal/harder)
 - [ ] Parent sees live mastery indicator during active sessions
-- [ ] Parent receives and can act on topic suggestions
+- [x] Parent receives and can act on topic suggestions
 - [ ] Session summaries include mastery scores
 - [ ] All new endpoints rate limited
 - [x] Zero TypeScript errors

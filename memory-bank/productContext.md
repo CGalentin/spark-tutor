@@ -34,8 +34,9 @@ Children pick one character and give it a custom name. The character's personali
 4. Child chats with their named mascot — mascot uses Socratic questions to guide learning
 5. Stars are awarded when the child reaches correct answers
 6. While that session has no end time, the parent dashboard shows a live card with the topic, grade, stars, message count, and mastery ring
-7. Parent clicks "End Session" — Claude generates a summary automatically
-8. Summary appears on parent dashboard within seconds
+7. If the evaluator suggests a next topic and the parent has not approved it, a card above the live session asks them to start that topic or keep practicing
+8. Parent clicks "End Session" — Claude generates a summary automatically
+9. Summary appears on parent dashboard within seconds
 
 **v2 (partially built):** session start reads or creates a learning path and teaches `currentTopic` even when a next topic is suggested. The chat page stores that topic and grade, then sends both on every chat request so Claude uses that grade's voice and stays on that topic until the parent approves a change. If a request omits `grade`, the API still defaults to Kindergarten.
 

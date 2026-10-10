@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 and 2-21 are merged and pushed to `origin/dev`. Next session starts PR 2-22. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 and 2-21 are merged and pushed to `origin/dev`. PR 2-22 is committed on `feature/topic-suggestion-card` and is not merged yet. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -41,6 +41,7 @@
 |---|---|---|---|
 | 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (committed, not merged, not pushed) |
 
 ---
 
@@ -72,9 +73,10 @@
 - Sprint 3 live check: Counting to 10 scored 100 and suggested Counting to 20; approve switched the path; a new session taught Counting to 20; two scores under 50 produced a fingers-and-one-hand reply
 - `MasteryIndicator` draws a parent-facing score ring from `topic` and `score` props
 - The parent dashboard shows `LiveSessionPanel` above session history. It follows the newest session with no end time and passes the latest evaluation score into the ring
+- A topic suggestion card sits above the live session for math and for reading. It appears only while a next topic is waiting for the parent. Approve and reject go through the existing API routes
 
 **Not built yet (Sprint 4)**
-- Topic suggestion card, learning-path history, summary v2, rate limits on the new endpoints
+- Learning-path history, summary v2, rate limits on the new endpoints
 
 **Still v1 in production**
 - Child UI, RAG corpus (K-1 chunks), parent dashboard session list
