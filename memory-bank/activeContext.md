@@ -1,9 +1,9 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-21 is committed on `feature/live-session-panel` (10 Oct 2026). It is not merged and not pushed. PR 2-20 is already merged into local `dev`. Wait for "continue" before merging 2-21 or starting PR 2-22.**
+**PRs 2-20 and 2-21 are merged into local `dev` and pushed to `origin/dev` (10 Oct 2026). Next session starts at PR 2-22. Do not start it until that session.**
 
-Local `dev` is 2 commits ahead of `origin/dev` (the 2-20 merge). Do not push. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
 v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `origin/dev`. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
 
@@ -146,7 +146,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - Shadcn `Badge` for the label. `aria-label` includes the topic, the score, and the label
   - Does not subscribe to Firestore. Not mounted on the dashboard (that is PR 2-21)
   - Checked in a temporary preview (deleted before commit): clicked score buttons 0, 49, 50, 71, 89, 90, 100 and confirmed the label, color, and that the arc eases
-  - Merged into local `dev`. Not pushed.
+  - Merged into local `dev` and pushed to `origin/dev`.
 
 - [x] PR 2-21 · Live Session Panel (`feature/live-session-panel`)
   - `useLiveSession` listens with `subscribeToSessions` and picks the newest session that has no `endedAt`
@@ -154,10 +154,10 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `LiveSessionPanel` sits above session history and passes `topic` and `score` into `MasteryIndicator`
   - Shows topic, grade, stars, and message count. Empty state text is "No active session"
   - Browser check: clicked Start a Session, chose Blip, named Buddy, chose Math, then All Done. The card moved from 4 messages to 0 messages and back to 4. Child chat input was on screen. No chat message was sent
-  - Not merged. Not pushed.
+  - Merged into local `dev` and pushed to `origin/dev`.
 
 ## Up Next
-- Wait for "continue". Then merge `feature/live-session-panel` into local `dev` (no force-push), and start PR 2-22 only (`feature/topic-suggestion-card`). Do not push unless asked.
+- Next session: PR 2-22 · Topic Suggestion Card (`feature/topic-suggestion-card` off `dev`). Paste `memory-bank/next-session-prompt.md`. Do one PR, then wait for "continue". Do not push unless asked.
 
 ---
 
@@ -244,7 +244,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`feature/live-session-panel` — PR 2-21 committed, not merged, not pushed. Local `dev` has PR 2-20 and is ahead of `origin/dev`. Do not force-push.
+`dev` — matches `origin/dev` after the Sprint 4 push of PRs 2-20 and 2-21. Next session starts PR 2-22 on `feature/topic-suggestion-card`. Do not force-push.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

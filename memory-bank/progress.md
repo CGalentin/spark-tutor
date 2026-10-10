@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PR 2-20 is merged into local `dev` (not pushed). PR 2-21 is committed on `feature/live-session-panel` (not merged, not pushed). | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 and 2-21 are merged and pushed to `origin/dev`. Next session starts PR 2-22. | Live: https://spark-tutor-app.vercel.app**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -39,8 +39,8 @@
 
 | PR | Title | Branch | Status |
 |---|---|---|---|
-| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged to local `dev`, not pushed) |
-| 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (not merged, not pushed) |
+| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
 
 ---
 

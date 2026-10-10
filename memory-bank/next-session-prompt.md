@@ -1,8 +1,6 @@
 # Next session prompt — paste this into a new Cursor chat
 
-PR 2-21 is committed on `feature/live-session-panel` (10 Oct 2026). It is not merged and not pushed. PR 2-20 is already merged into local `dev`. Local `dev` is ahead of `origin/dev`. Do not redo 2-01 through 2-21. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
-
-If the user says "continue": merge `feature/live-session-panel` into local `dev` first (fast-forward, no force-push), then do PR 2-22 only. After 2-22: stop, summarize, and wait for "continue" before merging or starting 2-23. If they have not said "continue", do not merge and do not start 2-22.
+PRs 2-01 through 2-21 are merged and pushed to `origin/dev` (10 Oct 2026). Next session starts Sprint 4 at PR 2-22. Do not redo 2-01 through 2-21. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked (that is PR 2-27, and it still needs an explicit yes).
 
 Copy everything below the line.
 
@@ -10,17 +8,15 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-PRs 2-01 through 2-19 are complete and pushed to `origin/dev`. PR 2-20 is merged into local `dev`. PR 2-21 is committed on `feature/live-session-panel` and is not merged yet. Do not redo them. Do not force-push.
+PRs 2-01 through 2-21 are complete and pushed to `origin/dev`. Do not redo them. Local `dev` and `origin/dev` should match. If they do not, stop and tell me. Do not force-push.
 
-This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time.
-
-When I say "continue": merge `feature/live-session-panel` into local `dev`, then start PR 2-22 only. After 2-22: stop, summarize, and wait for me to say "continue" before merging or starting 2-23.
+This is Sprint 4, the last sprint of v2 Phase 1. The parent should be able to see live mastery and approve the next topic from the dashboard, with no Postman. Do one PR at a time. Start with PR 2-22 only. After 2-22: stop, summarize, and wait for me to say "continue" before merging or starting 2-23.
 
 Sprint 4 map (do not skip ahead)
 
-- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — merged to local `dev`
-- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — done, waiting to merge
-- 2-22 TopicSuggestionCard + useLearningPath, calls approve/reject (`feature/topic-suggestion-card`) — next, only after "continue"
+- 2-20 MasteryIndicator ring (`feature/mastery-indicator`) — done and pushed
+- 2-21 LiveSessionPanel + useLiveSession (`feature/live-session-panel`) — done and pushed
+- 2-22 TopicSuggestionCard + useLearningPath, calls approve/reject (`feature/topic-suggestion-card`) — start here
 - 2-23 LearningPathHistory timeline (`feature/learning-path-history`)
 - 2-24 Session summary includes mastery (`feature/session-summary-v2`)
 - 2-25 Rate limits: evaluate 60/hour, approve 20/hour, reject 20/hour (`feature/rate-limiting-v2`)
@@ -49,7 +45,7 @@ A short Math session named Buddy was started and ended on 10 Oct 2026 so the car
 
 PR 2-22 · Topic Suggestion Card
 
-Branch: `feature/topic-suggestion-card` off local `dev`, after 2-21 is merged.
+Branch: `feature/topic-suggestion-card` off local `dev`.
 
 Create `/src/components/parent/TopicSuggestionCard.tsx`:
 
