@@ -6,7 +6,7 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 Date: 10 Oct 2026. Sprint 4, PR 2-27 is done. v2 is live at https://spark-tutor-app.vercel.app. `dev` was merged into `main` and `main` was pushed. It was not a force-push.
 
-`git log --oneline` should contain the commit `chore: v2 phase 1 production deploy — AI intelligence layer live`, plus `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev`, `origin/dev`, local `main`, and `origin/main` should match. If a branch is behind, diverged, or those commits are missing, stop and tell me. Do not force-push.
+`git log --oneline` should contain `c0576bd` (`chore: v2 phase 1 production deploy — AI intelligence layer live`), plus `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should match `origin/dev`. `origin/main` should contain `c0576bd`. `dev` and `main` are not the same hash, because `main` has a merge commit. If `dev` is behind or diverged, if `main` does not contain `c0576bd`, or if those commits are missing, stop and tell me. Do not force-push.
 
 `feature/session-summary-v2` and `feature/rate-limiting-v2` are already contained in `dev`. Do not merge them again. Do not recreate them. Do not redo PR 2-25, PR 2-26, or the production deploy.
 
@@ -24,7 +24,7 @@ Copy everything below the line.
 
 I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
 
-Confirm local `dev` matches `origin/dev` and `origin/main`, and that `git log --oneline` contains the commit `chore: v2 phase 1 production deploy — AI intelligence layer live`, plus `dc0a074`, `c954c31`, and `9a71fcb`. If a branch is behind, diverged, or those commits are missing, stop and tell me. Do not force-push.
+Confirm local `dev` matches `origin/dev`, and that `origin/main` contains `c0576bd` (`chore: v2 phase 1 production deploy — AI intelligence layer live`). `git log --oneline` should also contain `dc0a074`, `c954c31`, and `9a71fcb`. `dev` and `main` are not the same hash, because `main` has a merge commit. If `dev` is behind or diverged, if `main` does not contain `c0576bd`, or if those commits are missing, stop and tell me. Do not force-push.
 
 This is Sprint 4. Do PR 2-28 only. After 2-28, stop and wait.
 
