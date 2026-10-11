@@ -11,18 +11,27 @@
 //   curl -X POST http://localhost:3000/api/chat \
 //     -H "Authorization: Bearer TOKEN" \
 //     -H "Content-Type: application/json" \
-//     -d '{"message":"What is 2 + 2?","characterId":"blip","subject":"math","messages":[]}'
+//     -d '{"message":"What is 2 + 2?","characterId":"blip","subject":"math","grade":"2","messages":[]}'
 
 import { type NextRequest } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { verifyAuthToken, adminDb } from '@/lib/firebase/admin';
+import { getLearningPath } from '@/lib/firebase/learningPath';
 import { getAnthropicClient } from '@/lib/claude/client';
 import { buildSystemPrompt } from '@/lib/claude/buildSystemPrompt';
+import { getDifficultyHint } from '@/lib/claude/adaptDifficulty';
+import { isGradeBand, type GradeBand } from '@/constants/gradeBands';
 import { embedText } from '@/lib/gemini/embed';
 import { queryByEmbedding } from '@/lib/firebase/vectorSearch';
 import { detectsProblemRequest, generateMathProblem } from '@/lib/mcp/mathProblem';
 import { chatRatelimit } from '@/lib/upstash/ratelimit';
-import type { ChatRequest, Message } from '@/types';
+import {
+  MASTERED_SCORE,
+  type ChatRequest,
+  type LearningPath,
+  type LearningPathContext,
+  type Message,
+} from '@/types';
 
 /** Maps our internal MessageRole to the role format Claude expects. */
 function toClaudeRole(role: Message['role']): 'user' | 'assistant' {
@@ -75,7 +84,31 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { message, sessionId, characterId, subject, messages } = body;
+  const { message, sessionId, characterId, subject, messages, grade, currentTopic } = body;
+
+  // Grade from this session. Missing means Kindergarten so older clients still work.
+  let gradeBand: GradeBand = 'K';
+  if (grade !== undefined) {
+    if (!isGradeBand(grade)) {
+      return Response.json(
+        { success: false, error: 'Optional field grade must be "K", "1", "2", or "3".' },
+        { status: 400 },
+      );
+    }
+    gradeBand = grade;
+  }
+
+  // Topic from this session. When the child sends one, the teacher stays on it.
+  let requestedTopic: string | undefined;
+  if (currentTopic !== undefined) {
+    if (typeof currentTopic !== 'string' || currentTopic.trim().length === 0) {
+      return Response.json(
+        { success: false, error: 'Optional field currentTopic must be a non-empty string.' },
+        { status: 400 },
+      );
+    }
+    requestedTopic = currentTopic.trim();
+  }
 
   if (
     typeof message !== 'string' ||
@@ -96,7 +129,7 @@ export async function POST(request: NextRequest) {
 
   // ── 4. MCP routing — detect problem requests before falling through to RAG ──
   // When the child asks for a practice problem, generate one via the MCP tool.
-  // If MCP succeeds, skip RAG and inject the problem as Layer 5 instead.
+  // If MCP succeeds, skip RAG and inject the problem as Layer 7 instead.
   // If MCP fails, fall through to RAG as normal.
   let ragContext: string | undefined;
   let mcpContext: string | undefined;
@@ -129,10 +162,21 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // Learning path is optional — a missing or failed read must not block chat.
+  // The session's topic, when the client sends one, overrides the stored current topic.
+  const learningPathContext = await loadLearningPathContext(parentUID, subject, requestedTopic);
+
   // ── 5b. Build the composable system prompt ───────────────────────────────
   let systemPrompt: string;
   try {
-    systemPrompt = buildSystemPrompt({ characterId, subject, ragContext, mcpContext });
+    systemPrompt = buildSystemPrompt({
+      characterId,
+      subject,
+      gradeBand,
+      learningPathContext,
+      ragContext,
+      mcpContext,
+    });
   } catch (err) {
     return Response.json({ success: false, error: (err as Error).message }, { status: 400 });
   }
@@ -209,4 +253,64 @@ export async function POST(request: NextRequest) {
       Connection: 'keep-alive',
     },
   });
+}
+
+/**
+ * Loads the parent's learning path for this subject and maps it for the Teacher prompt.
+ * requestedTopic is the topic this session started on. It wins over a newer path topic
+ * so a mid-session approval does not change the lesson already in progress.
+ * If the path cannot be read, a sent topic still keeps the teacher on that lesson.
+ */
+async function loadLearningPathContext(
+  parentUID: string,
+  subject: ChatRequest['subject'],
+  requestedTopic: string | undefined,
+): Promise<LearningPathContext | undefined> {
+  try {
+    const path = await getLearningPath(parentUID, subject);
+    if (path === null) {
+      return topicOnlyContext(requestedTopic);
+    }
+
+    return toLearningPathContext(path, requestedTopic);
+  } catch {
+    return topicOnlyContext(requestedTopic);
+  }
+}
+
+/**
+ * Prompt slice when we know the session topic but have no mastery history.
+ */
+function topicOnlyContext(requestedTopic: string | undefined): LearningPathContext | undefined {
+  if (requestedTopic === undefined) {
+    return undefined;
+  }
+
+  return {
+    currentTopic: requestedTopic,
+    masteredTopics: [],
+    difficultyHint: 'normal',
+  };
+}
+
+/**
+ * Builds the prompt slice from a stored learning path.
+ * Difficulty comes from the last two scores on the topic this session is teaching.
+ */
+function toLearningPathContext(
+  path: LearningPath,
+  requestedTopic: string | undefined,
+): LearningPathContext {
+  const currentTopic = requestedTopic ?? path.currentTopic;
+  const masteredFromHistory = path.masteryHistory
+    .filter((entry) => entry.mastered || entry.score >= MASTERED_SCORE)
+    .map((entry) => entry.topic);
+
+  const masteredTopics = [...new Set([...path.topicsCompleted, ...masteredFromHistory])];
+
+  return {
+    currentTopic,
+    masteredTopics,
+    difficultyHint: getDifficultyHint(path.masteryHistory, currentTopic),
+  };
 }

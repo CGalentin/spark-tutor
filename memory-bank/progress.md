@@ -1,9 +1,100 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Week 4 of 4 — ✅ COMPLETE (15/15 PRs done) | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next session is PR 2-28 (README and CLAUDE.md), only when the user asks.**
 
-## Week-by-Week Summary
+## v2 Sprint 1 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-01 | Grade Band Constants | `feature/grade-band-constants` | ✅ Done |
+| 2-02 | Update System Prompt Composer | `feature/grade-band-prompt-layer` | ✅ Done |
+| 2-03 | Topic Curriculum Map | `feature/topic-curriculum-map` | ✅ Done |
+| 2-04 | Learning Path Firestore Types | `feature/learning-path-types` | ✅ Done |
+| 2-05 | Learning Path Firestore Helpers | `feature/learning-path-firestore` | ✅ Done |
+| 2-06 | Session Start Reads Learning Path | `feature/session-reads-learning-path` | ✅ Done |
+| 2-07 | Sprint 1 Integration Test | `dev` | ✅ Done |
+
+## v2 Sprint 2 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-08 | Gemini Flash Client | `feature/gemini-flash-client` | ✅ Done (merged to local `dev`) |
+| 2-09 | Evaluator System Prompt | `feature/evaluator-prompt` | ✅ Done (merged to local `dev`) |
+| 2-10 | Topic Boundary Detection | `feature/topic-boundary-detection` | ✅ Done (merged to local `dev`) |
+| 2-11 | Evaluator API Route | `feature/evaluator-api` | ✅ Done (merged to local `dev`) |
+| 2-12 | Wire Evaluator Into Chat Flow | `feature/evaluator-in-chat` | ✅ Done (merged to local `dev`) |
+| 2-13 | Next Topic Suggester | `feature/next-topic-suggester` | ✅ Done (merged to local `dev`) |
+## v2 Sprint 3 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-15 | Learning Path Injects Into Teacher Prompt | `feature/learning-path-prompt-injection` | ✅ Done (merged to local `dev`, pushed) |
+| 2-16 | Parent Topic Approval API | `feature/parent-topic-approval` | ✅ Done (merged to local `dev`) |
+| 2-17 | Difficulty Adaptation | `feature/difficulty-adaptation` | ✅ Done (merged to local `dev`) |
+| 2-18 | Session Start Full Learning Path Integration | `feature/session-full-integration` | ✅ Done (merged to local `dev`) |
+| 2-19 | Sprint 3 Integration Test | `dev` | ✅ Done (pushed to `origin/dev`) |
+
+## v2 Sprint 4 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 2-20 | Mastery Indicator Component | `feature/mastery-indicator` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
+| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
+| 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
+| 2-26 | Final v2 End-to-End Test | `dev` | ✅ On `main`. Shapes card left in place |
+| 2-27 | v2 Production Deploy | `main` | ✅ Live at https://spark-tutor-app.vercel.app |
+
+---
+
+## v2 Sprint 1 — What Works / What's Left
+
+**Works now**
+- Grade-band configs + prompt strings (K–3)
+- Chat API accepts optional `grade` and injects Layer 4 (defaults to K)
+- Topic curriculum map (`getTopics`)
+- LearningPath / TopicMastery / EvaluationResult TypeScript types
+- Learning path Admin helpers + client `subscribeToLearningPath`
+- Session start reads or creates a learning path and returns `currentTopic`, `currentGrade`, `suggestedNextTopic`, plus a `learningPath` summary
+- Chat page stores topic + grade in `useSessionStore` and sends both on every `/api/chat` request
+- Sprint 1 live check: session start returns Counting to 10 / K; Firestore `learningPath/math` created; K vs grade 2 Claude language differs
+- Gemini Flash `evaluateMastery` returns typed JSON
+- Evaluator prompt builder with mastery rubric (71–89 close, 90–100 mastered) and curriculum next-topic hint
+- Unreadable evaluator JSON falls back to score 0 / not mastered
+- Topic boundary detector (`detectTopicBoundary`) + `topicMessageCount` in the session store
+- `POST /api/evaluate` scores a topic, saves `evaluations[]` + mastery history
+- Chat fires evaluate at topic boundaries (fire-and-forget; child UI unchanged)
+- Next-topic suggester uses TOPIC_MAP + mastery history; rolls to the next grade when the current grade is done
+- Sprint 2 live check: 6 Math messages on Counting to 10 → evaluate after message 6 → session `evaluations[]` + learningPath masteryHistory; score 65 / not mastered so no next-topic suggestion; chat completed before evaluate started
+- Teacher prompt Layer 5 injects current topic + mastered topics; Claude stays on that topic
+- Difficulty follows the last two scores on the current topic: both under 50 → easier, both over 85 → harder, otherwise normal
+- Parent can approve a next topic (`POST /api/learning-path/approve`) or clear the suggestion (`POST /api/learning-path/reject`). No dashboard button yet (PR 2-22)
+
+- Session start teaches `currentTopic` while a suggestion is waiting, saves topic/grade/difficulty on the session doc, and returns a learning-path summary
+
+- Sprint 3 live check: Counting to 10 scored 100 and suggested Counting to 20; approve switched the path; a new session taught Counting to 20; two scores under 50 produced a fingers-and-one-hand reply
+- `MasteryIndicator` draws a parent-facing score ring from `topic` and `score` props
+- The parent dashboard shows `LiveSessionPanel` above session history. It follows the newest session with no end time and passes the latest evaluation score into the ring
+- A topic suggestion card sits above the live session for math and for reading. It appears only while a next topic is waiting for the parent. Approve and reject go through the existing API routes
+- Below session history, a learning-path timeline groups Math and Reading. The current topic shows its latest score as In progress. More than five scores fold behind "Show full history"
+- A finished session card shows the latest mastery score from that session's `evaluations`. No evaluation stays a plain "No mastery score yet" line. The summary prompt is given those same scores, and the saved JSON keys are unchanged
+- `/api/evaluate` is limited to 60 per parent per hour, and approve and reject are limited to 20. Chat stays 30 and summary stays 10. A missing token is 401 and does not count. Redis errors fail open
+- PR 2-26 live check: six Kindergarten Math messages on Counting to 20 scored 92 and suggested Shapes. The live ring, the session card, and the timeline all showed that score. The suggestion card is still waiting. Approve and reject were not clicked
+
+**Not built yet (Sprint 4)**
+- Parent decision on the waiting Shapes suggestion. Do not click it unless asked
+- README and CLAUDE.md update (PR 2-28)
+
+**Live in production**
+- v2 phase 1 at https://spark-tutor-app.vercel.app: grade bands, evaluator, learning path, live mastery ring, suggestion card, session summaries with scores
+- RAG corpus is still the K-1 chunk set
+
+---
+
+## v1 Week-by-Week Summary
 | Week | Theme | Status |
 |---|---|---|
 | Week 1 | Foundation & Chat UI | ✅ Complete |

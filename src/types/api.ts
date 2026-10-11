@@ -1,7 +1,9 @@
 // Types for API routes — request/response shapes and the shared ApiResult wrapper.
 // Every API route handler and service function should use ApiResult<T> as its return type.
 
+import type { GradeBand } from '@/constants/gradeBands';
 import type { Message, Subject } from './session';
+import type { DifficultyHint, EvaluationResult } from './learningPath';
 
 /** Standard API response wrapper used by all /app/api routes.
  *  Discriminated union makes it easy to check success before accessing data. */
@@ -14,6 +16,10 @@ export interface ChatRequest {
   sessionId: string;
   characterId: string;
   subject: Subject;
+  /** Tutoring grade band for this session. Optional — the chat route defaults to 'K' if omitted. */
+  grade?: GradeBand;
+  /** Topic this session is teaching. When set, the teacher stays on this topic. */
+  currentTopic?: string;
   /** Full conversation history so Claude has context. */
   messages: Message[];
 }
@@ -50,10 +56,32 @@ export interface SessionStartRequest {
   subject: Subject;
 }
 
+/**
+ * Snapshot of the learning path at session start.
+ * The child teaches from currentTopic. suggestedNextTopic stays a proposal until the parent approves.
+ */
+export interface LearningPathSummary {
+  subject: Subject;
+  currentTopic: string;
+  currentGrade: GradeBand;
+  suggestedNextTopic: string | null;
+  parentApproved: boolean;
+  difficultyHint: DifficultyHint;
+  topicsCompleted: string[];
+}
+
 /** Successful response from POST /api/session/start. */
 export interface SessionStartResponse {
   /** The Firestore document ID of the newly created session. */
   sessionId: string;
+  /** Topic the child should work on this session (from their learning path). */
+  currentTopic: string;
+  /** Tutoring grade band for this session (K–3, not RAG chunk metadata). */
+  currentGrade: GradeBand;
+  /** AI-suggested next topic, if the evaluator has proposed one. Null until then. */
+  suggestedNextTopic: string | null;
+  /** Full snapshot used to start this session. */
+  learningPath: LearningPathSummary;
 }
 
 /** Request body sent to POST /api/session/end. */
@@ -107,4 +135,47 @@ export interface SummaryResponse {
   topicsCovered: string[];
   areasForPractice: string[];
   encouragementNote: string;
+}
+
+/** Request body sent to POST /api/evaluate. Parent-only — never shown in child chat. */
+export interface EvaluateRequest {
+  sessionId: string;
+  /** Conversation block for this topic (child + mascot messages). */
+  messages: Message[];
+  /** Topic being scored (from the learning path). */
+  topic: string;
+  /** Tutoring grade band (K–3 from @/constants — not RAG chunk grades). */
+  grade: GradeBand;
+  subject: Subject;
+}
+
+/** Successful response from POST /api/evaluate. */
+export interface EvaluateResponse {
+  evaluated: true;
+  result: EvaluationResult;
+}
+
+/** Request body sent to POST /api/learning-path/approve. Parent dashboard only. */
+export interface ApproveTopicRequest {
+  subject: Subject;
+  /** Topic the parent is moving the child onto. */
+  approvedTopic: string;
+}
+
+/** Successful response from POST /api/learning-path/approve. */
+export interface ApproveTopicResponse {
+  approved: true;
+  /** The topic that is now current on the learning path. */
+  newTopic: string;
+}
+
+/** Request body sent to POST /api/learning-path/reject. Parent dashboard only. */
+export interface RejectTopicRequest {
+  /** Subject whose suggestion the parent is declining. */
+  subject: Subject;
+}
+
+/** Successful response from POST /api/learning-path/reject. */
+export interface RejectTopicResponse {
+  rejected: true;
 }

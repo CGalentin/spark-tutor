@@ -17,10 +17,27 @@ export type {
   MathProblemResponse,
   SessionStartRequest,
   SessionStartResponse,
+  LearningPathSummary,
   SessionEndRequest,
   SessionEndResponse,
   SummaryRequest,
   SummaryResponse,
+  EvaluateRequest,
+  EvaluateResponse,
+  ApproveTopicRequest,
+  ApproveTopicResponse,
+  RejectTopicRequest,
+  RejectTopicResponse,
 } from './api';
 
 export type { CurriculumChunk, RankedChunk, GradeBand } from './rag';
+
+export { MASTERED_SCORE } from './learningPath';
+export type {
+  TopicMastery,
+  LearningPath,
+  EvaluationResult,
+  EvaluationConfidence,
+  DifficultyHint,
+  LearningPathContext,
+} from './learningPath';

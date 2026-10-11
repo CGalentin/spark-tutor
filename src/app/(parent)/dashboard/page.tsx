@@ -1,4 +1,4 @@
-// Parent dashboard — shows session history and agentic summaries.
+// Parent dashboard — topic suggestion, live session, session history, then learning path.
 // Auth protection is handled by the parent layout.
 // Uses onSnapshot via useSessionHistory so the summary appears as soon as Claude generates it.
 
@@ -7,7 +7,10 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useSessionHistory } from '@/hooks/useSessionHistory';
 import { DashboardHeader } from '@/components/parent/DashboardHeader';
+import { LearningPathHistory } from '@/components/parent/LearningPathHistory';
+import { LiveSessionPanel } from '@/components/parent/LiveSessionPanel';
 import { SessionSummaryCard } from '@/components/parent/SessionSummaryCard';
+import { TopicSuggestionCard } from '@/components/parent/TopicSuggestionCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 /** Parent dashboard — live session history with agentic AI summaries. */
@@ -19,6 +22,13 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-6">
       {/* Welcome banner with start-session CTA */}
       <DashboardHeader parentEmail={parentEmail} />
+
+      {/* Approve or keep the current topic before the live session card */}
+      <TopicSuggestionCard subject="math" sessions={sessions} sessionsLoading={isLoading} />
+      <TopicSuggestionCard subject="reading" sessions={sessions} sessionsLoading={isLoading} />
+
+      {/* Open session and live mastery ring */}
+      <LiveSessionPanel />
 
       {/* Session history */}
       <Card>
@@ -51,6 +61,9 @@ export default function DashboardPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mastered topics and the topic still in progress */}
+      <LearningPathHistory />
     </div>
   );
 }

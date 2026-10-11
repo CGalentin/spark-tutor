@@ -41,3 +41,42 @@ export const summaryRatelimit: Ratelimit | null = redis
       prefix: 'rl:summary',
     })
   : null;
+
+/**
+ * 60 requests per user per sliding hour window.
+ * Applied to /api/evaluate — one call per topic block, so it fires more often than chat.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const evaluateRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(60, '1 h'),
+      prefix: 'rl:evaluate',
+    })
+  : null;
+
+/**
+ * 20 requests per user per sliding hour window.
+ * Applied to /api/learning-path/approve — parent confirms the next topic.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const approveRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(20, '1 h'),
+      prefix: 'rl:approve',
+    })
+  : null;
+
+/**
+ * 20 requests per user per sliding hour window.
+ * Applied to /api/learning-path/reject — parent clears a topic suggestion.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const rejectRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(20, '1 h'),
+      prefix: 'rl:reject',
+    })
+  : null;

@@ -13,7 +13,61 @@ import {
   type Unsubscribe,
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Session } from '@/types';
+import { isGradeBand } from '@/constants/gradeBands';
+import type { DifficultyHint, EvaluationResult, LearningPath, Session, Subject } from '@/types';
+
+/** Reads evaluator scores saved on a session. Skips any entry that is not a real score. */
+function readEvaluations(value: unknown): EvaluationResult[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const evaluations: EvaluationResult[] = [];
+
+  for (const entry of value) {
+    if (typeof entry !== 'object' || entry === null) {
+      continue;
+    }
+
+    const record = entry as Record<string, unknown>;
+    const topic = record['topic'];
+    const score = record['score'];
+
+    if (typeof topic !== 'string' || topic.length === 0) {
+      continue;
+    }
+
+    if (typeof score !== 'number' || !Number.isFinite(score)) {
+      continue;
+    }
+
+    const confidence = record['confidence'];
+    const safeConfidence =
+      confidence === 'low' || confidence === 'medium' || confidence === 'high' ? confidence : 'low';
+
+    const suggestedNext = record['suggestedNext'];
+
+    evaluations.push({
+      topic,
+      score,
+      mastered: record['mastered'] === true,
+      confidence: safeConfidence,
+      suggestedNext: typeof suggestedNext === 'string' ? suggestedNext : null,
+      reasoning: typeof record['reasoning'] === 'string' ? record['reasoning'] : '',
+    });
+  }
+
+  return evaluations;
+}
+
+/** Keeps only a real difficulty hint. Older sessions omit the field. */
+function readDifficultyHint(value: unknown): DifficultyHint | undefined {
+  if (value === 'easier' || value === 'normal' || value === 'harder') {
+    return value;
+  }
+
+  return undefined;
+}
 
 /** Fetches a single session document for a given parent and session ID. */
 export async function getSession(
@@ -76,6 +130,10 @@ export function subscribeToSessions(
           endedAt: (data['endedAt'] as { toDate: () => Date } | undefined)?.toDate(),
           messageCount: (data['messageCount'] as number | undefined) ?? 0,
           starsEarned: (data['starsEarned'] as number | undefined) ?? 0,
+          currentTopic: typeof data['currentTopic'] === 'string' ? data['currentTopic'] : undefined,
+          currentGrade: isGradeBand(data['currentGrade']) ? data['currentGrade'] : undefined,
+          difficultyHint: readDifficultyHint(data['difficultyHint']),
+          evaluations: readEvaluations(data['evaluations']),
           summary: data['summary']
             ? {
                 topicsCovered: (data['summary']['topicsCovered'] as string[]) ?? [],
@@ -91,6 +149,33 @@ export function subscribeToSessions(
       });
 
       onData(sessions);
+    },
+    (error) => onError(error),
+  );
+}
+
+/**
+ * Subscribes to one subject's learning path for the parent dashboard.
+ * Uses the client SDK (onSnapshot) so the UI updates when the evaluator writes a new score.
+ * Returns the unsubscribe function — call it in useEffect cleanup.
+ */
+export function subscribeToLearningPath(
+  parentUID: string,
+  subject: Subject,
+  onData: (path: LearningPath | null) => void,
+  onError: (error: Error) => void,
+): Unsubscribe {
+  const pathRef = doc(db, 'users', parentUID, 'learningPath', subject);
+
+  return onSnapshot(
+    pathRef,
+    (snap) => {
+      if (!snap.exists()) {
+        onData(null);
+        return;
+      }
+
+      onData(snap.data() as LearningPath);
     },
     (error) => onError(error),
   );

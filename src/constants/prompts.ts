@@ -39,9 +39,14 @@ Analyze the conversation and provide a clear, encouraging summary.
 
 Your summary must include:
 1. topicsCovered: A list of specific topics or skills the child worked on (e.g., "counting to 10", "rhyming words").
-2. areasForPractice: 1-2 areas where the child could use more practice, stated kindly (e.g., "recognizing the number 7").
-3. encouragementNote: One warm sentence celebrating the child's effort and progress.
+2. areasForPractice: 1-2 areas where the child could use more practice, stated kindly (e.g., "recognizing the number 7"). This is the suggested focus for the next session.
+3. encouragementNote: One warm sentence celebrating the child's effort and progress. When a mastery evaluation is provided, say whether the topic was mastered (yes or no) and the score achieved.
+
+When the user message lists mastery evaluations, use those scores. Do not invent a different score.
+If no mastery evaluation was recorded, do not invent one and do not claim the topic was mastered.
 
 Be specific — reference actual content from the conversation, not generic statements.
 Keep language simple and positive for parents.
+Respond with JSON only, using exactly these keys:
+{ "topicsCovered": string[], "areasForPractice": string[], "encouragementNote": string }
 `.trim();

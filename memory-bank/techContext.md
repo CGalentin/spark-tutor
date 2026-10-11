@@ -81,46 +81,65 @@ UPSTASH_REDIS_REST_TOKEN            ✅ filled (Vercel: Production + Preview; lo
 src/lib/firebase/config.ts        ← Firebase singleton init, exports auth + db
 src/lib/firebase/admin.ts         ← Firebase Admin SDK init; exports adminAuth, adminDb, verifyAuthToken()
 src/lib/firebase/auth.ts          ← signIn, signUp, signOut, onAuthChange
-src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessions() (onSnapshot)
+src/lib/firebase/firestore.ts     ← getSession, getSessions, subscribeToSessions(), subscribeToLearningPath() (client SDK)
+src/lib/firebase/learningPath.ts  ← get/create/update/saveMastery (Admin SDK — API routes only)
 src/lib/firebase/vectorSearch.ts  ← saveChunk(), chunkExists(), queryByEmbedding(), countChunks()
 
-# Gemini (embedding only)
-src/lib/gemini/client.ts          ← GoogleGenerativeAI singleton
+# Gemini (embeddings + Flash evaluator)
+src/lib/gemini/client.ts          ← getGeminiClient() embeddings SDK; getGeminiFlashClient() Flash model singleton
 src/lib/gemini/embed.ts           ← embedText(text) → number[] (3072 dims)
+src/lib/gemini/buildEvaluatorPrompt.ts ← evaluator rubric + curriculum next-topic + JSON-only contract
+src/lib/gemini/evaluate.ts        ← evaluateMastery(messages, topic, grade) → EvaluationResult (parent-only; parse fallback)
+src/lib/gemini/suggestNextTopic.ts ← suggestNextTopic(subject, grade, completedTopics, masteryHistory) → next topic string
 
 # Claude
 src/lib/claude/client.ts          ← Anthropic SDK singleton
-src/lib/claude/buildSystemPrompt.ts ← 4-layer system prompt composer (child chat)
-src/lib/claude/buildSummaryPrompt.ts ← formats session transcript for agentic summary
+src/lib/claude/adaptDifficulty.ts   ← getDifficultyHint() from the last two scores on the current topic
+src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child chat; Layer 5 = learning path + difficulty line)
+src/lib/claude/buildSummaryPrompt.ts ← transcript plus session evaluations for the parent summary
 
 # API Routes
-src/app/api/chat/route.ts              ← SSE streaming chat; MCP routing before RAG; increments messageCount
+src/app/api/chat/route.ts              ← SSE streaming chat; uses request grade + currentTopic in the prompt; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
-src/app/api/session/start/route.ts     ← creates Firestore session doc, returns sessionId
+src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
+src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
+src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
+src/app/api/session/start/route.ts     ← reads or creates learning path first; teaches currentTopic while a suggestion waits; saves topic, grade, difficultyHint on the session; returns sessionId + learningPath summary
 src/app/api/session/star/route.ts      ← increments starsEarned in Firestore
 src/app/api/session/end/route.ts       ← writes endedAt; fire-and-forgets /api/summary
-src/app/api/summary/route.ts           ← sends transcript to Claude; saves summary.* to session doc
+src/app/api/summary/route.ts           ← sends transcript and session evaluations to Claude; saves summary.* to session doc
 
 # Types
 src/types/index.ts                ← central re-export for all shared types
 src/types/session.ts              ← Subject, Message, Session, SessionSummary
-src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand
-src/types/api.ts                  ← ApiResult<T>, ChatRequest, SessionStartRequest/Response,
-                                     SessionEndRequest/Response, SummaryRequest/Response, etc.
+src/types/rag.ts                  ← CurriculumChunk, RankedChunk, GradeBand ('K'|'1'|'K-1' — RAG chunk metadata)
+src/types/learningPath.ts         ← TopicMastery, LearningPath, EvaluationResult, LearningPathContext, MASTERED_SCORE (90)
+src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade), SessionStartRequest/Response
+                                     (session start returns currentTopic, currentGrade, suggestedNextTopic),
+                                     SessionEndRequest/Response, SummaryRequest/Response,
+                                     EvaluateRequest/EvaluateResponse,
+                                     ApproveTopicRequest/ApproveTopicResponse,
+                                     RejectTopicRequest/RejectTopicResponse
 
 # Constants + State
+src/constants/index.ts            ← barrel: grade bands, prompts, topic map
 src/constants/characters.ts       ← all 6 Spark Squad character configs
 src/constants/prompts.ts          ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
-src/constants/subjects.ts         ← Subject, GradeBand, MAX_SESSION_STARS
+src/constants/gradeBands.ts       ← tutoring GradeBand 'K'|'1'|'2'|'3' + GRADE_BAND_CONFIGS
+src/constants/gradeBandPrompts.ts ← GRADE_BAND_PROMPT strings (Layer 4)
+src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading K–3; science placeholder)
+src/constants/subjects.ts         ← SUBJECTS, MAX_SESSION_STARS (legacy GRADE_BANDS still K|1 for RAG-era constants)
 src/store/useChildStore.ts        ← character selection state
-src/store/useSessionStore.ts      ← active session state (sessionId, subject, stars, messageCount)
+src/store/useSessionStore.ts      ← active session state (sessionId, subject, currentTopic, currentGrade, stars, messageCount, topicMessageCount)
 src/store/useAuthStore.ts         ← auth state mirror (parentUID, isAuthenticated)
 
 # Hooks
 src/hooks/useAuth.ts              ← reads from useAuthStore
 src/hooks/useStars.ts             ← awardStar() — updates store + syncs to Firestore
 src/hooks/useSessionHistory.ts    ← onSnapshot subscription to parent's session list
+src/hooks/useLiveSession.ts       ← newest session with no endedAt, plus the latest evaluation score
+src/hooks/useLearningPath.ts      ← one subject's learning path, plus approve and reject API calls
 
 # Child UI components
 src/components/child/StarBurst.tsx               ← CSS keyframe pop animation overlay
@@ -133,10 +152,18 @@ src/components/ui/                               ← Shadcn components (do not e
 
 # MCP
 src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
+src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; chat calls this after each mascot reply)
 
 # Parent UI components
 src/components/parent/DashboardHeader.tsx  ← welcome message + Start Session CTA
-src/components/parent/SessionSummaryCard.tsx ← Shadcn Card; date, subject, stars, topics, encouragement
+src/components/parent/SessionSummaryCard.tsx ← date, subject, stars, mastery badge, topics, encouragement
+src/components/parent/MasteryIndicator.tsx ← SVG mastery ring; props `topic` + `score`; no Firestore
+src/components/parent/LiveSessionPanel.tsx ← open-session card; mounts the ring above session history
+src/components/parent/TopicSuggestionCard.tsx ← approve or keep the current topic; above the live session
+src/components/parent/LearningPathHistory.tsx ← timeline card below session history
+src/components/parent/LearningPathSubjectSection.tsx ← Math or Reading scores, newest five visible
+src/components/parent/LearningPathScoreList.tsx ← one score row: topic, grade, band, date
+src/components/ui/collapsible.tsx ← Shadcn collapsible (Base UI). Do not hand-edit
 
 # Scripts (ts-node, not bundled)
 tsconfig.scripts.json             ← CommonJS tsconfig for ts-node scripts
@@ -144,6 +171,7 @@ scripts/rag/chunkDocument.ts      ← PDF → overlapping text chunks
 scripts/rag/ingestDocuments.ts    ← full ingestion pipeline (chunk → embed → Firestore)
 scripts/rag/testEmbed.ts          ← smoke test for Gemini embedding
 scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8/10)
+scripts/gemini/testEvaluate.ts    ← smoke test for evaluateMastery (Gemini Flash JSON)
 ```
 
 ## Claude API Settings
@@ -151,14 +179,25 @@ scripts/rag/testRetrieval.ts      ← RAG quality test (10 questions, pass ≥ 8
 - Child chat: `max_tokens: 300`, `temperature: 0.7`
 - Session summary: `max_tokens: 600`
 - Always stream responses for child chat via SSE
-- System prompt = BASE_TUTOR_RULES + CHARACTER_VOICE + SUBJECT_CONTEXT + RAG_CONTEXT (4 layers; Layer 4 optional)
+- System prompt layers (see systemPatterns.md):
+    1. BASE_TUTOR_RULES
+    2. CHARACTER_VOICE
+    3. SUBJECT_CONTEXT
+    4. GRADE_BAND (GRADE_BAND_PROMPT; defaults to K if request omits `grade`)
+    5. LEARNING_PATH (optional; current topic + mastered topics + easier/normal/harder from recent scores)
+    6. RAG_CONTEXT (optional)
+    7. MCP_CONTEXT (optional)
+- ChatRequest.grade is optional `'K'|'1'|'2'|'3'`. The chat page sends the session's currentGrade and currentTopic on every request. Omitted grade still defaults to K
 - `[STAR EARNED]` in Claude response = award a star to the child
 
 ## Gemini API Settings
-- Model: `gemini-embedding-001` — current stable embedding model as of Jun 2026
-- Output: 3072-dimension vectors (NOTE: `text-embedding-004` is retired — do not use)
-- Used only for: embedding curriculum chunks at ingestion time, and embedding child queries at chat time
-- Never generates user-facing text
+- Embedding model: `gemini-embedding-001` — 3072-dimension vectors (`text-embedding-004` is retired)
+- Flash model: `gemini-3.5-flash` — mastery evaluator (`gemini-2.0-flash` shut down 1 Jun 2026)
+- Embeddings used for: curriculum ingestion + child-query retrieval
+- Flash used for: `evaluateMastery` JSON scores (parent dashboard only — never child-facing)
+- Evaluator prompt: `buildEvaluatorPrompt({ topic, grade, messages })` with MASTERED_SCORE rubric
+- Parse failure: fallback EvaluationResult (score 0, mastered false, confidence low)
+- Never send Flash reasoning to the child chat UI
 
 ## Component Rules
 - Child UI: custom components ONLY — NO Shadcn. Min 18px text, 48px touch targets, rounded-3xl, bright colors
