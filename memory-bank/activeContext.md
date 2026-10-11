@@ -1,13 +1,13 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-26 is on `origin/dev` (10 Oct 2026). It is not merged to `main`, and production was not deployed. A Math session saved mastery score 92 and suggested Shapes. The user said to leave that card. Do not click it unless asked. Do not deploy unless the user explicitly says to deploy.**
+**PR 2-27 is on `main` and live (10 Oct 2026).** https://spark-tutor-app.vercel.app is the v2 parent dashboard and child chat. The Math suggestion card still says Shapes. Do not click it unless asked. Next session is PR 2-28 only. Do not start it unless asked.
 
-Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+Do not force-push.
 
-v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `origin/dev`. Do not force-push. Do not merge to `main`. Do not `vercel --prod` unless asked.
+v2 Sprint 3 Agentic Learning Path: PRs 2-01 through 2-19 are on `main`.
 
-v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
+v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https://spark-tutor-app.vercel.app.
 
 ---
 
@@ -219,10 +219,19 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
   - `npx tsc --noEmit` and `npm run build` passed. Pushed to `origin/dev` on 10 Oct 2026. Not merged to `main`
   - The user said to leave the Shapes card. Do not click either button unless asked
 
+- [x] PR 2-27 · v2 Production Deploy (`main`)
+  - No new environment variable names. Vercel Production already had the 13 names the app reads, including the two Upstash names. `.env.local` was not edited
+  - `npm run build` exited 0. `vercel --prod` aliased https://spark-tutor-app.vercel.app
+  - Live check was a short visit, not another 6-message chat. The dashboard showed the Shapes card and the older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages
+  - Child check: Blip, named Buddy, Math. Session start 200 stayed on Counting to 20, grade K, suggestion Shapes. The input "Say something..." was on screen. No chat message was sent. End returned 200 and "Great job today!" showed
+  - Approve was not clicked. Reject was not clicked. The Sep 26 Blip session was not ended. Older unended sessions were not closed
+  - Math path was unchanged after the visit: Counting to 20, suggestion Shapes, parentApproved false, topicsCompleted only Counting to 10, history 100 then 40 then 30 then 92
+  - Merged `dev` into `main` and pushed `main`. Not a force-push
+
 ## Up Next
-- Next session is PR 2-27, the production deploy, and only when the user explicitly says to deploy. Then stop. Do not start PR 2-28 in that same step unless asked.
+- Next session is PR 2-28, the README and CLAUDE.md update. Do not start it unless the user asks.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not deploy again unless asked.
 
 ---
 
@@ -309,7 +318,7 @@ v1 MVP (Weeks 1–4) is complete and live at https://spark-tutor-app.vercel.app.
 ---
 
 ## Active Branch
-`dev` — local `dev` matches `origin/dev` after the 10 Oct 2026 push. `main` is still the v1 production branch. Do not force-push. Do not merge to `main` unless the user explicitly says to deploy.
+`dev` and `main` both include the 10 Oct 2026 production deploy. `main` is the live branch. Do not force-push. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

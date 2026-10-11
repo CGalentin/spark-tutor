@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 through 2-26 are on `origin/dev`. They are not merged to `main`. The Shapes suggestion card stays until the user asks to press it. Next session is the production deploy, only when the user says to deploy. | Live: https://spark-tutor-app.vercel.app**
+**Sprint 4. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next session is PR 2-28 (README and CLAUDE.md), only when the user asks.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -45,7 +45,8 @@
 | 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
 | 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
-| 2-26 | Final v2 End-to-End Test | `dev` | ✅ Pushed to `origin/dev`. Shapes card left in place. Not on `main` |
+| 2-26 | Final v2 End-to-End Test | `dev` | ✅ On `main`. Shapes card left in place |
+| 2-27 | v2 Production Deploy | `main` | ✅ Live at https://spark-tutor-app.vercel.app |
 
 ---
 
@@ -85,11 +86,11 @@
 
 **Not built yet (Sprint 4)**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Production deploy (PR 2-27), only when the user explicitly says to deploy
 - README and CLAUDE.md update (PR 2-28)
 
-**Still v1 in production**
-- Child UI, RAG corpus (K-1 chunks), parent dashboard session list
+**Live in production**
+- v2 phase 1 at https://spark-tutor-app.vercel.app: grade bands, evaluator, learning path, live mastery ring, suggestion card, session summaries with scores
+- RAG corpus is still the K-1 chunk set
 
 ---
 

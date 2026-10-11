@@ -28,7 +28,7 @@
 - [x] Sprint 1 — Foundation (Grade Bands + Data Model)
 - [x] Sprint 2 — Evaluator Agent (Gemini Flash)
 - [x] Sprint 3 — Agentic Learning Path
-- [ ] Sprint 4 — Parent Dashboard Updates
+- [ ] Sprint 4 — Parent Dashboard Updates (PR 2-28 still open)
 
 ---
 
@@ -557,12 +557,14 @@
 ### PR 2-27 · v2 Production Deploy
 **Branch:** `main`
 
-- [ ] Add any new environment variables to Vercel project settings
-- [ ] `npm run build` — zero errors ✅
-- [ ] `vercel --prod`
-- [ ] Smoke test live URL — full child + parent flow
-- [ ] Merge `dev` → `main`
-- [ ] Commit: `chore: v2 phase 1 production deploy — AI intelligence layer live`
+- [x] Add any new environment variables to Vercel project settings
+- [x] `npm run build` — zero errors ✅
+- [x] `vercel --prod`
+- [x] Smoke test live URL — full child + parent flow
+- [x] Merge `dev` → `main`
+- [x] Commit: `chore: v2 phase 1 production deploy — AI intelligence layer live`
+
+> **Note:** No new environment variable names. Production already had the same names the app reads, including `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. `.env.local` was not edited. `npm run build` exited 0. `vercel --prod` published https://spark-tutor-app.vercel.app. The live check was a short visit, not another 6-message chat. The dashboard showed the Shapes card and the older open lesson: Counting to 20, Kindergarten, 0 stars, 4 messages. Child flow: Blip, named Buddy, Math. Session start 200 stayed on Counting to 20, grade K, suggestion Shapes. No chat message was sent. End returned 200 and "Great job today!" showed. Approve was not clicked. Reject was not clicked. The Sep 26 Blip session was not ended. The math path was not changed.
 
 ---
 
@@ -595,7 +597,7 @@
 - [x] All new endpoints rate limited
 - [x] Zero TypeScript errors
 - [ ] Zero ESLint warnings
-- [ ] Live on Vercel with zero build errors
+- [x] Live on Vercel with zero build errors
 - [ ] README updated with v2 architecture
 
 ---
