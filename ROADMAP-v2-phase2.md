@@ -154,17 +154,19 @@
 ### PR 3-05 · Character Select Screen With 8 Cards
 **Branch:** `feature/character-select-8-cards`
 
-- [ ] Verify new characters appear on the character select screen
+- [x] Verify new characters appear on the character select screen
   (if grid is driven by the characters array, no code change needed)
-- [ ] If grid is hardcoded: update `CharacterGrid.tsx` to include new characters
-- [ ] Decide on grid layout for 8 cards — options:
+- [x] If grid is hardcoded: update `CharacterGrid.tsx` to include new characters
+- [x] Decide on grid layout for 8 cards — options:
   - 2×4 (two columns, four rows) — safest on 375px
   - 4×2 (four columns, two rows) — fits more on screen but cards shrink
   - Recommend: 2×4, same column count as original 2×3
-- [ ] Verify grid fits cleanly at 375px with no horizontal scroll
-- [ ] Hover animation: slight scale up (same as existing cards)
-- [ ] Selected state: ring highlight + avatar celebrate bounce (same as existing)
-- [ ] Commit: `feat(child-ui): update character select grid to 8 cards`
+- [x] Verify grid fits cleanly at 375px with no horizontal scroll
+- [x] Hover animation: slight scale up (same as existing cards)
+- [x] Selected state: ring highlight + avatar celebrate bounce (same as existing)
+- [x] No feature commit. The grid was already driven by the character list
+
+> **Note (24 Oct 2026):** `CharacterGrid` already uses `grid-cols-2` and maps `CHARACTERS`. Eight cards make four rows. No layout file changed. Signed in, saw the Shapes card, clicked only "Start a Session", and did not tap "Let's Go!". At 375px the page did not scroll sideways. Bram and Stella showed their SVGs. Hover on Finn set `scale` to 1.05. Bram's selected card had the white ring, grew slightly, and the cub bounced. The Math path was unchanged. The phone-size chat animation box in PR 3-04 stays open.
 
 ---
 
@@ -704,7 +706,7 @@
 - [ ] 2 new characters with full constants including `elevenlabsVoiceId`
 - [ ] SVG avatar for each — recognizable at 48px and 96px
 - [ ] All 3 animations: idle, thinking, celebrate
-- [ ] Character select grid works on 375px with 8 cards
+- [x] Character select grid works on 375px with 8 cards
 - [ ] New character voice prompts match personality in actual chat
 
 ### Sprint 2 — MCP Tools

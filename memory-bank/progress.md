@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 PR 3-04 is recorded locally. Bram and Stella use the shared avatar animations. No new CSS. The phone-size animation watch is still open. Nothing new is pushed or deployed. Next code work is PR 3-05, the 8-card select screen.**
+**Phase 2 PR 3-05 is recorded locally. The select screen already shows eight cards in two columns. No grid code changed. The phone-size chat animation watch is still open. Nothing new is pushed or deployed. Next work is PR 3-06, the Sprint 1 test. Do not deploy unless asked.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -57,6 +57,7 @@
 | 3-02 | SVG Avatar — Bram | `feature/avatar-boyish-new` | ✅ Commit `84b81b1` |
 | 3-03 | SVG Avatar — Stella | `feature/avatar-girlish-new` | ✅ Commit `63800fa` |
 | 3-04 | Shared animations | `feature/new-character-animations` | ✅ No new CSS. Phone-size watch still open |
+| 3-05 | Character select screen with 8 cards | `feature/character-select-8-cards` | ✅ Already 2×4. No grid code change |
 
 ---
 
@@ -93,11 +94,12 @@
 - A finished session card shows the latest mastery score from that session's `evaluations`. No evaluation stays a plain "No mastery score yet" line. The summary prompt is given those same scores, and the saved JSON keys are unchanged
 - `/api/evaluate` is limited to 60 per parent per hour, and approve and reject are limited to 20. Chat stays 30 and summary stays 10. A missing token is 401 and does not count. Redis errors fail open
 - PR 2-26 live check: six Kindergarten Math messages on Counting to 20 scored 92 and suggested Shapes. The live ring, the session card, and the timeline all showed that score. The suggestion card is still waiting. Approve and reject were not clicked
+- The character select screen lists all eight Spark Squad characters in two columns. Bram and Stella use their SVG drawings. A 375px-wide screen does not scroll sideways
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Phase 2 PR 3-05: eight character cards in the existing two-column grid. Check that 375px does not scroll sideways
 - Watch Bram or Stella idle, think, and celebrate on a phone-sized screen. That PR 3-04 box is still open
+- Phase 2 PR 3-06: Sprint 1 test on local `dev`. Do not deploy unless asked
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

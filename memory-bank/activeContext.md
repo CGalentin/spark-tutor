@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 PR 3-04 is recorded (24 Oct 2026).** Bram and Stella use the shared idle, thinking, and celebrate classes. No new CSS was added. The phone-size animation has not been watched. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-05, the 8-card select screen. That is not v1 Week 3.
+**Phase 2 PR 3-05 is recorded (24 Oct 2026).** The select screen already maps every character into two columns, so eight cards are a 2×4 grid. No grid code changed. Bram and Stella show their drawings. The phone-size chat animation has still not been watched. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-06, the Sprint 1 test. Do not deploy unless asked. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -257,8 +257,16 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Both new SVGs take `animationClass`. Chat already drives thinking and celebrate
   - The 375px animation watch is still open
 
+- [x] PR 3-05 · Character select screen with 8 cards (`feature/character-select-8-cards`)
+  - `CharacterGrid` already maps `CHARACTERS` with `grid-cols-2`. Eight cards are four rows. `CharacterGrid.tsx` was not edited
+  - Signed in, saw the Shapes card, and clicked only "Start a Session". Did not tap "Let's Go!"
+  - At 375px: eight cards, no sideways scroll. Bram and Stella were SVGs, not the emoji fallback
+  - Hover on Finn set `scale` to 1.05. The page still did not scroll sideways
+  - Bram selected: white ring, slightly larger card, and the cub's celebrate bounce
+  - No feature commit. The Math path was not changed
+
 ## Up Next
-- Next code work is Phase 2 PR 3-05: the select screen already maps every character into two columns, so eight cards should already be a 2×4 grid. Confirm it fits at 375px before changing layout. Do not confuse this with v1 Week 3.
+- Next work is Phase 2 PR 3-06, the Sprint 1 test, on local `dev`. Do not deploy and do not merge to `main` unless asked. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -347,7 +355,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` includes the PR 3-04 note after `feature/new-character-animations` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
+Local `dev` includes the PR 3-05 note after `feature/character-select-8-cards` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
