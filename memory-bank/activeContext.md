@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 quiz answer check is on local dev (24 Oct 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-09, the spelling practice route. That is not v1 Week 3.
+**Phase 2 spelling practice is on local dev (24 Oct 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-10, wiring the quiz and spelling tools into chat. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -290,8 +290,19 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - No token returned 401. An expired note returned 404. The correct choice number stayed off the reply
   - The Math path was not changed. The 26 Sep Blip session is still open. Commit `1a0b3d7`
 
+- [x] PR 3-09 · Spelling Practice MCP Route (`feature/mcp-spelling`)
+  - `POST /api/mcp/spelling` checks the parent, then 30 lists per hour (`rl:spelling`), then the body
+  - `count` must be 3, 4, or 5. Claude writes that many words. The browser gets clues, letter counts, and hints
+  - The spellings stay in `quiz_sessions/{sessionId}/activeSpelling/current`, with `parentUID` and `expiresAt` (2 hours)
+  - A clue or hint that contains the spelling is thrown away and not saved
+  - `POST /api/mcp/spelling/verify` checks the parent, then 60 checks per hour (`rl:spelling-verify`), then the body
+  - A right try returns praise. A wrong try returns a hint. The reply never includes the spelling
+  - The note stays so a wrong try can be tried again. It does not change the reading-quiz note
+  - No token and a broken body returned 401 on both routes. One grade K list of 3 words returned 200
+  - The Math path was not changed. No session was ended. Commit `c10a43c`
+
 ## Up Next
-- Next work is Phase 2 PR 3-09, the spelling practice route, on `feature/mcp-spelling` from local `dev`. The spelled words stay on the server. Do not confuse this with v1 Week 3.
+- Next work is Phase 2 PR 3-10, wiring the reading quiz and spelling tools into chat, on `feature/mcp-reading-chat-trigger` from local `dev`. The child should not see raw JSON. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -380,7 +391,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` has the reading quiz route and the answer check. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
+Local `dev` has the reading quiz, the answer check, and the spelling routes. `origin/dev` is still `d4d332c`. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -411,6 +422,7 @@ Local `dev` has the reading quiz route and the answer check. `origin/main` is `0
 - The name question still says "What will you name your" plus the character emoji. Leave it until a later small change
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
 - Reading quiz choice numbers live at `quiz_sessions/{sessionId}/activeQuiz/current`. The browser cannot read that collection. The note has `answers`, `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`. The note is deleted after all 3 questions are gotten right
+- Spelling words live at `quiz_sessions/{sessionId}/activeSpelling/current`. The note has `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces it. The check route does not delete it. The spelling is never in the reply
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type

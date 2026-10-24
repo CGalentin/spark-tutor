@@ -245,7 +245,7 @@
 ### PR 3-09 · Spelling Practice MCP Route
 **Branch:** `feature/mcp-spelling`
 
-- [ ] Create `/src/app/api/mcp/spelling/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/spelling/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 30 per user per hour
   - Accepts: `{ sessionId: string, grade: GradeBand, topic: string, count: number }` (count: 3-5)
@@ -254,14 +254,16 @@
   - `SpellingWord`: `{ clue: string, letterCount: number, hint: string }`
   - Stores actual words server-side: `quiz_sessions/{sessionId}/activeSpelling`
   - Actual words NEVER sent to browser
-- [ ] Create `/src/app/api/mcp/spelling/verify/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/spelling/verify/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 60 per user per hour
   - Accepts: `{ sessionId: string, wordIndex: number, attempt: string }`
   - Case-insensitive comparison against stored word
   - Returns: `{ correct: boolean, feedback: string }` — no correct spelling in response
-- [ ] Add types to `/src/types/api.ts`: `SpellingWord`, `SpellingRequest`, `SpellingResponse`
-- [ ] Commit: `feat(mcp): add spelling practice mcp route — words stored server-side only`
+- [x] Add types to `/src/types/api.ts`: `SpellingWord`, `SpellingRequest`, `SpellingResponse`
+- [x] Commit: `feat(mcp): add spelling practice mcp route — words stored server-side only`
+
+> **Note (24 Oct 2026):** Commit `c10a43c`. The list route checks the signed-in parent, then a new 30-per-hour limit (`rl:spelling`), then the body. The check route uses its own 60-per-hour limit (`rl:spelling-verify`). A post with no token and a broken body returned 401 on both routes. One grade K list of 3 words returned clues, letter counts, and hints. The HTTP body did not contain the stored words. A wrong try returned a hint. A right try with different capital letters returned praise, and that reply did not contain the spelling. Firestore needs a file name after the `activeSpelling` folder, so the note is `quiz_sessions/{sessionId}/activeSpelling/current`. It holds `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces that note. The note stayed after both checks. Client rules still deny `quiz_sessions`. The reading-quiz note was not changed. The Math path was not changed. No session was ended. Not pushed.
 
 ---
 

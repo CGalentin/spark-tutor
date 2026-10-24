@@ -104,6 +104,8 @@ src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/mcp/reading-quiz/route.ts  ← MCP tool: passage + 3 questions; choice numbers saved server-side only
 src/app/api/mcp/reading-quiz/verify/route.ts ← checks one choice; praise or hint; never returns the choice number
+src/app/api/mcp/spelling/route.ts      ← MCP tool: clues, letter counts, and hints; spellings saved server-side only
+src/app/api/mcp/spelling/verify/route.ts ← checks one attempt; praise or hint; never returns the spelling
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
 src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
 src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
@@ -124,7 +126,9 @@ src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade)
                                      ApproveTopicRequest/ApproveTopicResponse,
                                      RejectTopicRequest/RejectTopicResponse,
                                      QuizQuestion, ReadingQuizRequest, ReadingQuizResponse,
-                                     ReadingQuizVerifyRequest, ReadingQuizVerifyResponse
+                                     ReadingQuizVerifyRequest, ReadingQuizVerifyResponse,
+                                     SpellingWord, SpellingRequest, SpellingResponse,
+                                     SpellingVerifyRequest, SpellingVerifyResponse
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map
