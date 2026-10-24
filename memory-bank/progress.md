@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 PR 3-01 is committed locally as `a7cc3e3` (Bram the bear cub and Stella the starfish). It is not pushed and not deployed. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next code work is PR 3-02, Bram's SVG avatar. That is not v1 Week 3 PR 3-01.**
+**Phase 2 PR 3-02 is committed locally as `84b81b1` (Bram's SVG avatar). It is not pushed and not deployed. Stella still has no drawing. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next code work is PR 3-03, Stella's SVG avatar.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -53,7 +53,8 @@
 
 | PR | Title | Branch | Status |
 |---|---|---|---|
-| 3-01 | Design the Two New Characters | `feature/new-characters-design` | ✅ Commit `a7cc3e3`. Bram and Stella. No SVG yet |
+| 3-01 | Design the Two New Characters | `feature/new-characters-design` | ✅ Commit `a7cc3e3`. Bram and Stella |
+| 3-02 | SVG Avatar — Bram | `feature/avatar-boyish-new` | ✅ Commit `84b81b1`. Stella still emoji |
 
 ---
 
@@ -93,7 +94,7 @@
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Phase 2 PR 3-02 and 3-03: SVG avatars for Bram and Stella. Until then the select screen shows emoji and chat shows ✨
+- Phase 2 PR 3-03: SVG avatar for Stella. Her select card still shows ⭐ and chat shows ✨
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

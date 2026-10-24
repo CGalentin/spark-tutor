@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 PR 3-01 is committed (24 Oct 2026).** Bram the bear cub and Stella the starfish are in `src/constants/characters.ts` on `feature/new-characters-design` as `a7cc3e3`. They have no SVG yet. https://spark-tutor-app.vercel.app is still the live v2 app and does not include them until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-02, the bear cub drawing. That is not v1 Week 3.
+**Phase 2 PR 3-02 is committed (24 Oct 2026).** Bram's SVG is `BramAvatar.tsx` in commit `84b81b1`. Stella still has no drawing. https://spark-tutor-app.vercel.app does not include either character until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-03, Stella's SVG. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -242,8 +242,13 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - `npx tsc --noEmit` exited 0. Commit `a7cc3e3`
   - Select cards fall back to the emoji. Chat `AnimatedAvatar` falls back to ✨. Do not draw the SVGs in this PR
 
+- [x] PR 3-02 · SVG Avatar — Bram (`feature/avatar-boyish-new`)
+  - `src/components/child/avatars/BramAvatar.tsx` — round ears, snout, belly, paws. `viewBox="0 0 120 120"` to match the other six
+  - `bram` is in `getAvatarComponent`. Commit `84b81b1`
+  - Headless Edge showed the cub at 48px and 96px on an amber card. The signed-in app was not clicked
+
 ## Up Next
-- Next code work is Phase 2 PR 3-02: the SVG avatar for Bram, on branch `feature/avatar-boyish-new`. Do not confuse this with v1 Week 3.
+- Next code work is Phase 2 PR 3-03: the SVG avatar for Stella, on branch `feature/avatar-girlish-new`. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -332,7 +337,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` includes the character commit `a7cc3e3` after `feature/new-characters-design` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
+Local `dev` includes Bram's avatar after `feature/avatar-boyish-new` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

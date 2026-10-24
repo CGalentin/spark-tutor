@@ -106,16 +106,18 @@
 ### PR 3-02 · SVG Avatar — Boyish Character
 **Branch:** `feature/avatar-boyish-new`
 
-- [ ] Create `/src/components/child/avatars/[CharacterName]Avatar.tsx`
-- [ ] SVG guidelines — match the existing six avatars exactly:
+- [x] Create `/src/components/child/avatars/[CharacterName]Avatar.tsx`
+- [x] SVG guidelines — match the existing six avatars exactly:
   - Simple geometric shapes only — no complex paths or clipPaths
   - `viewBox="0 0 150 150"`
   - Use character's `primaryColor` and `accentColor` from constants
   - Must be recognizable at 48px (character select) AND 96px (chat view)
-- [ ] Export from `/src/components/child/avatars/index.ts`
-- [ ] Add to the avatar map used by `getAvatarComponent(id)`
-- [ ] Verify avatar renders correctly in browser at both sizes
-- [ ] Commit: `feat(child-ui): add svg avatar for [character name]`
+- [x] Export from `/src/components/child/avatars/index.ts`
+- [x] Add to the avatar map used by `getAvatarComponent(id)`
+- [x] Verify avatar renders correctly in browser at both sizes
+- [x] Commit: `feat(child-ui): add svg avatar for [character name]`
+
+> **Note (24 Oct 2026):** Bram only. File is `BramAvatar.tsx`. Commit `84b81b1`. `viewBox` is `0 0 120 120`, the same as the other six avatars. The roadmap's 150 would have made him a different scale. Fur is amber-600 `#D97706`, muzzle amber-200 `#FDE68A`, features amber-800 `#92400E`, so he stays visible on the amber-500 card. A headless Edge screenshot showed him at 48px and 96px. The signed-in select screen was not clicked. Stella still has no SVG.
 
 ---
 

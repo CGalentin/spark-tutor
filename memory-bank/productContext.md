@@ -29,7 +29,7 @@ Children pick one character and give it a custom name. The character's personali
 | Bram | Bear cub | Curious and sturdy, explores one small step at a time |
 | Stella | Starfish | Cheerful and bright, turns practice into a gentle ocean game |
 
-Bram and Stella do not have SVG avatars yet. The select screen shows their emoji. Chat shows ✨ until those drawings exist.
+Bram has an SVG avatar. Stella does not yet. Her select card shows ⭐, and chat shows ✨ until her drawing exists.
 
 ## How a Session Works
 1. Parent logs in and opens the app on a tablet/device
