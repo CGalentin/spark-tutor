@@ -36,7 +36,7 @@ export default function CharacterSelectPage() {
         Choose a Spark Squad buddy to learn with.
       </p>
 
-      {/* Character grid — 2 columns, all 6 characters */}
+      {/* Character grid — 2 columns, every Spark Squad character */}
       <CharacterGrid
         characters={CHARACTERS}
         selectedId={selectedCharacterId}

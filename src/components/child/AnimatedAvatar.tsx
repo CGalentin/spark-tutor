@@ -11,7 +11,7 @@ import { getAvatarComponent } from './avatars';
 export type AvatarAnimationState = 'idle' | 'thinking' | 'celebrating';
 
 interface AnimatedAvatarProps {
-  /** Character ID — must match one of the 6 Spark Squad IDs. */
+  /** Character ID — must match a Spark Squad id in CHARACTERS. */
   characterId: string;
   /** Drives which animation plays. Defaults to 'idle'. */
   animationState?: AvatarAnimationState;

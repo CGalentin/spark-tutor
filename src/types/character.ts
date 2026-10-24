@@ -9,8 +9,8 @@ export interface CharacterConfig {
   /** Default display name before the child renames it. */
   name: string;
   /** The animal/robot/fantasy type — used for selecting the SVG avatar. */
-  type: 'robot' | 'fox' | 'dragon' | 'bunny' | 'fairy' | 'owl';
-  /** Emoji placeholder used until SVG avatars are built in PR 4-03. */
+  type: 'robot' | 'fox' | 'dragon' | 'bunny' | 'fairy' | 'owl' | 'bear' | 'starfish';
+  /** Emoji placeholder used until an SVG avatar exists for this character. */
   emoji: string;
   /** Tailwind class names for theming the character's card and chat UI. */
   colors: {
@@ -19,6 +19,8 @@ export interface CharacterConfig {
   };
   /** The personality paragraph injected as Layer 2 of the Claude system prompt. */
   voicePrompt: string;
+  /** ElevenLabs voice id. Empty until the voice sprint fills it in. */
+  elevenlabsVoiceId: string;
 }
 
 /** The subset of a character's data needed to build the Claude system prompt. */
