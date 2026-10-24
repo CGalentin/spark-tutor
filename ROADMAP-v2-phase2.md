@@ -124,12 +124,14 @@
 ### PR 3-03 · SVG Avatar — Girlish Character
 **Branch:** `feature/avatar-girlish-new`
 
-- [ ] Create `/src/components/child/avatars/[CharacterName]Avatar.tsx`
-- [ ] Follow same SVG guidelines as PR 3-02
-- [ ] Export from `/src/components/child/avatars/index.ts`
-- [ ] Add to the avatar map
-- [ ] Verify renders at both sizes
-- [ ] Commit: `feat(child-ui): add svg avatar for [character name]`
+- [x] Create `/src/components/child/avatars/[CharacterName]Avatar.tsx`
+- [x] Follow same SVG guidelines as PR 3-02
+- [x] Export from `/src/components/child/avatars/index.ts`
+- [x] Add to the avatar map
+- [x] Verify renders at both sizes
+- [x] Commit: `feat(child-ui): add svg avatar for [character name]`
+
+> **Note (24 Oct 2026):** Stella only. File is `StellaAvatar.tsx`. Commit `63800fa`. Five longer arms, rose-700 `#BE123C` on the rose-400 card, face rose-100 `#FFE4E6`. `viewBox` is `0 0 120 120`. A headless Edge screenshot showed her at 48px and 96px. The signed-in select screen was not clicked.
 
 ---
 
