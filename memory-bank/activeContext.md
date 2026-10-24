@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 sprint test is recorded (24 Oct 2026), and the deploy is not done.** Bram and Stella taught short Counting to 20 visits. Idle float and thinking tilt were watched at phone size. The chat celebrate bounce was not watched, because no star was awarded. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Do not deploy or merge to `main` unless asked. Do not push until the code overview is approved. That is not v1 Week 3.
+**Phase 2 character decisions are recorded (24 Oct 2026).** Stella's voice prompt stays. Do not run six messages just to earn a star. The name question still uses the emoji. The chat celebrate bounce is still open. The Math suggestion card still says Shapes. Do not click it unless asked. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -388,6 +388,9 @@ Local `dev` includes the sprint-test note. It is ahead of `origin/dev` (`54c23f0
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
 - Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
+- Stella's voice prompt stays. "keep floating along" was enough. Do not rewrite it so every reply uses a catchphrase
+- Do not run six child messages to force a star. Chat celebrate stays open until a shorter visit earns one, or until asked
+- The name question still says "What will you name your" plus the character emoji. Leave it until a later small change
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch

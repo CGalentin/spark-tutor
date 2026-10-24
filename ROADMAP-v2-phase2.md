@@ -185,7 +185,9 @@
 - [ ] Merge `dev` → `main`
 - [ ] Commit: `chore: sprint 1 complete — two new spark squad characters live`
 
-> **Note (24 Oct 2026):** Bram was named Cub and Stella was named Tide. Each Math visit stayed on Counting to 20, grade K, suggestion Shapes, difficulty normal. Two messages each, then All Done. No mastery check ran. Bram said "Good tracking, cub!" Stella said "keep floating along." At 375px with CPU slowed to 4x, both floated while waiting and tilted while replying. Neither earned a star, so the chat bounce was not seen. `npx tsc --noEmit` and `npm run build` exited 0. Deploy and the merge to `main` are still waiting for an explicit yes. The Math path was unchanged.
+> **Note (24 Oct 2026):** Bram was named Cub and Stella was named Tide. Each Math visit stayed on Counting to 20, grade K, suggestion Shapes, difficulty normal. Two messages each, then All Done. No mastery check ran. Bram said "Good tracking, cub!" Stella said "keep floating along." At 375px with CPU slowed to 4x, both floated while waiting and tilted while replying. Neither earned a star, so the chat bounce was not seen. `npx tsc --noEmit` and `npm run build` exited 0. The Math path was unchanged.
+>
+> **Decisions kept on purpose:** Stella's voice prompt stays. Do not force a catchphrase into every reply. Do not run six messages just to earn a star. The name question still uses the emoji ("What will you name your 🐻?"). Leave that sentence for a later small change.
 
 ---
 

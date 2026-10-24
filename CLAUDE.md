@@ -39,3 +39,8 @@ Live Math path for the test parent. Leave it as it is.
   - Counting to 20, score 92, at `2026-10-10T23:03:46.508Z`
 - The last two scores are 30 and 92, so the next Math chat uses the normal hint.
 - Do not click "Yes, start this next" or "Keep practicing current topic".
+
+## Phase 2 character decisions — keep these
+- Stella's voice prompt stays as written. The sample phrases are examples. A reply that says "keep floating along" is enough. Do not rewrite the prompt so every reply must use a catchphrase.
+- Do not run a six-message lesson to force a star. The chat celebrate check stays open until a star happens in a visit with fewer than six child messages, or until asked.
+- The name question still uses the character emoji, as in "What will you name your 🐻?". Leave that sentence. A later small change can use the character's name. Do not change it during the reading-quiz work.

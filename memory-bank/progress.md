@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 sprint test is recorded locally. Bram and Stella can teach a short Math visit. Idle and thinking were watched at phone size. Chat celebrate, the deploy, and the push are still open.**
+**Phase 2 character decisions are recorded.** Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open until a star happens without a six-message lesson.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -100,7 +100,8 @@
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open
+- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
+- The name question still uses the character emoji. Leave it
 - Deploy the new characters, and merge `dev` into `main`, only when asked. Do not push until the code overview is approved
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
