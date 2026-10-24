@@ -103,6 +103,7 @@ src/app/api/chat/route.ts              ← SSE streaming chat; uses request grad
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/mcp/reading-quiz/route.ts  ← MCP tool: passage + 3 questions; choice numbers saved server-side only
+src/app/api/mcp/reading-quiz/verify/route.ts ← checks one choice; praise or hint; never returns the choice number
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
 src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
 src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
@@ -122,7 +123,8 @@ src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade)
                                      EvaluateRequest/EvaluateResponse,
                                      ApproveTopicRequest/ApproveTopicResponse,
                                      RejectTopicRequest/RejectTopicResponse,
-                                     QuizQuestion, ReadingQuizRequest, ReadingQuizResponse
+                                     QuizQuestion, ReadingQuizRequest, ReadingQuizResponse,
+                                     ReadingQuizVerifyRequest, ReadingQuizVerifyResponse
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map

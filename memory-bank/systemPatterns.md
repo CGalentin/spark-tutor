@@ -91,7 +91,11 @@ The reading quiz generator is a separate route, `POST /api/mcp/reading-quiz`:
 - Output to the browser: `{ passage, questions }` where each question is `{ question, options, hint }`
 - Correct choice numbers are saved at `quiz_sessions/{sessionId}/activeQuiz/current`
 - That path needs the file name `current` because Firestore alternates folder, file, folder, file
-- The note holds `answers` (0, 1, or 2), `expiresAt` (2 hours), and `parentUID`. Hint text is not stored
+- The note holds `answers` (0, 1, or 2), `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`
+- `POST /api/mcp/reading-quiz/verify` checks one choice. Right returns praise. Wrong returns the stored hint
+- The correct choice number is never in that reply. A wrong choice can be tried again
+- The note is deleted after questions 0, 1, and 2 have all been gotten right
+- Verify is limited to 60 per hour (`rl:reading-quiz-verify`), separate from quiz creation
 - Client security rules deny all reads and writes on `quiz_sessions`
 
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:
@@ -128,6 +132,8 @@ users/{parentUID}/
 
 quiz_sessions/{sessionId}/activeQuiz/current   ← Admin SDK only; client rules deny this tree
   answers: number[]            ← 0, 1, or 2 for each of the 3 questions
+  hints: string[]              ← one hint per question, returned only on a wrong check
+  solvedQuestionIndexes: number[]  ← questions already gotten right
   expiresAt: Timestamp         ← 2 hours after the quiz was created
   parentUID: string            ← signed-in parent who requested the quiz
 ```

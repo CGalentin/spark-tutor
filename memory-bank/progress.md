@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**The reading quiz route is on local dev.** https://spark-tutor-app.vercel.app still shows eight drawings. The quiz route is not deployed. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-08, the quiz answer check.
+**The quiz answer check is on local dev.** https://spark-tutor-app.vercel.app still shows eight drawings. The quiz routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-09, the spelling practice route.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -65,7 +65,8 @@
 | PR | Title | Branch | Status |
 |---|---|---|---|
 | 3-07 | Reading Quiz MCP Route | `feature/mcp-reading-quiz` | ✅ Commit `0c2980c`. Choice numbers stay on the server |
-| 3-08 | Quiz Answer Verification | `feature/mcp-quiz-verify` | Up next |
+| 3-08 | Quiz Answer Verification | `feature/mcp-quiz-verify` | ✅ Commit `1a0b3d7`. Correct choice stays on the server |
+| 3-09 | Spelling Practice MCP Route | `feature/mcp-spelling` | Up next |
 
 ---
 
@@ -105,12 +106,13 @@
 - The character select screen lists all eight Spark Squad characters in two columns. Bram and Stella use their SVG drawings. A 375px-wide screen does not scroll sideways
 - Bram and Stella can start a Kindergarten Math visit on Counting to 20. Bram says "Good tracking, cub!" Stella can say "keep floating along." Their drawings float while waiting and tilt while a reply is on the way
 - `POST /api/mcp/reading-quiz` returns a short passage and 3 questions. Each question has 3 choices and a hint. The correct choice numbers are saved at `quiz_sessions/{sessionId}/activeQuiz/current` and are not in the reply
+- `POST /api/mcp/reading-quiz/verify` returns praise for a right choice and the stored hint for a wrong choice. The note is deleted after all 3 questions are gotten right
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-08: quiz answer check. Read `quiz_sessions/{sessionId}/activeQuiz/current`. Do not send the correct choice. The hint text is not stored on that note
+- Phase 2 PR 3-09: spelling practice route. The spelled words stay on the server
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 reading quiz route is on local dev (24 Oct 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz route is not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-08, the quiz answer check. That is not v1 Week 3.
+**Phase 2 quiz answer check is on local dev (24 Oct 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-09, the spelling practice route. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -282,8 +282,16 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - One grade K quiz on Story comprehension returned 200. The reply had no `correctIndex`. The note has 3 choice numbers
   - The Math path was not changed. The 26 Sep Blip session is still open. Commit `0c2980c`
 
+- [x] PR 3-08 · Quiz Answer Verification (`feature/mcp-quiz-verify`)
+  - `POST /api/mcp/reading-quiz/verify` checks the parent, then 60 checks per hour (`rl:reading-quiz-verify`), then the body
+  - A wrong choice returns the stored hint and leaves the question unsolved
+  - A right choice returns "Yes! That matches the story." The note is deleted only after all 3 are right
+  - The quiz route now also saves `hints` and `solvedQuestionIndexes` on the same note
+  - No token returned 401. An expired note returned 404. The correct choice number stayed off the reply
+  - The Math path was not changed. The 26 Sep Blip session is still open. Commit `1a0b3d7`
+
 ## Up Next
-- Next work is Phase 2 PR 3-08, the quiz answer check, on `feature/mcp-quiz-verify` from local `dev`. Read the note at `quiz_sessions/{sessionId}/activeQuiz/current`. Never send the correct choice back. The hint text is not on that note. Do not confuse this with v1 Week 3.
+- Next work is Phase 2 PR 3-09, the spelling practice route, on `feature/mcp-spelling` from local `dev`. The spelled words stay on the server. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -372,7 +380,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` has the reading quiz route and is ahead of `origin/dev` (`5706dfc`). `origin/main` is `0f3a375`. Do not force-push. Do not push unless asked. Do not start a six-message lesson to force a star.
+Local `dev` has the reading quiz route and the answer check. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -402,7 +410,7 @@ Local `dev` has the reading quiz route and is ahead of `origin/dev` (`5706dfc`).
 - Do not run six child messages to force a star. Chat celebrate stays open until a shorter visit earns one, or until asked
 - The name question still says "What will you name your" plus the character emoji. Leave it until a later small change
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
-- Reading quiz choice numbers live at `quiz_sessions/{sessionId}/activeQuiz/current`. The browser cannot read that collection. The note has `answers`, `expiresAt` (2 hours), and `parentUID`. The hint text is not stored there
+- Reading quiz choice numbers live at `quiz_sessions/{sessionId}/activeQuiz/current`. The browser cannot read that collection. The note has `answers`, `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`. The note is deleted after all 3 questions are gotten right
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type

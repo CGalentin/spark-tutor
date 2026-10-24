@@ -226,7 +226,7 @@
 ### PR 3-08 · Quiz Answer Verification Route
 **Branch:** `feature/mcp-quiz-verify`
 
-- [ ] Create `/src/app/api/mcp/reading-quiz/verify/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/reading-quiz/verify/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 60 per user per hour
   - Accepts: `{ sessionId: string, questionIndex: number, selectedOption: number }`
@@ -235,8 +235,10 @@
   - If wrong: returns `{ correct: false, hint: string }` — hint only, guides child to try again
   - NEVER returns which option was correct
   - Deletes the temp doc after all 3 questions are answered
-- [ ] Test: submit correct and wrong answers — verify hint vs praise, verify no correct index leaked
-- [ ] Commit: `feat(mcp): add quiz answer verification — correct answer never leaves server`
+- [x] Test: submit correct and wrong answers — verify hint vs praise, verify no correct index leaked
+- [x] Commit: `feat(mcp): add quiz answer verification — correct answer never leaves server`
+
+> **Note (24 Oct 2026):** Commit `1a0b3d7`. The route checks the parent, then a new 60-per-hour limit (`rl:reading-quiz-verify`), then the body. A post with no token returned 401. A signed-in broken body returned 400. A wrong choice returned the stored hint and did not mark the question solved. Three right choices each returned "Yes! That matches the story." The note was deleted after the third right choice. A later check, and a check against an expired note, both returned 404. The reply never included the correct choice number. The quiz route now also saves the hint text and an empty solved list, because the check needs them. The Math path was unchanged. The 26 Sep Blip session is still open.
 
 ---
 
