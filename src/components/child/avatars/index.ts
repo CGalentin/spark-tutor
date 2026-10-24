@@ -9,6 +9,7 @@ import { LunaAvatar } from './LunaAvatar';
 import { PipAvatar } from './PipAvatar';
 import { NovaAvatar } from './NovaAvatar';
 import { BramAvatar } from './BramAvatar';
+import { StellaAvatar } from './StellaAvatar';
 
 export { BlipAvatar } from './BlipAvatar';
 export { FinnAvatar } from './FinnAvatar';
@@ -17,6 +18,7 @@ export { LunaAvatar } from './LunaAvatar';
 export { PipAvatar } from './PipAvatar';
 export { NovaAvatar } from './NovaAvatar';
 export { BramAvatar } from './BramAvatar';
+export { StellaAvatar } from './StellaAvatar';
 
 /** Props shared by all avatar components. */
 export interface AvatarProps {
@@ -33,6 +35,7 @@ const AVATAR_MAP: Record<string, ComponentType<AvatarProps>> = {
   pip: PipAvatar,
   nova: NovaAvatar,
   bram: BramAvatar,
+  stella: StellaAvatar,
 };
 
 /** Returns the SVG avatar component for a given character ID, or null if not found. */
