@@ -28,7 +28,7 @@
 - [x] Sprint 1 — Foundation (Grade Bands + Data Model)
 - [x] Sprint 2 — Evaluator Agent (Gemini Flash)
 - [x] Sprint 3 — Agentic Learning Path
-- [ ] Sprint 4 — Parent Dashboard Updates (PR 2-28 still open)
+- [x] Sprint 4 — Parent Dashboard Updates (PR 2-28 docs committed on `docs/v2-readme-update`; not merged to `main`)
 
 ---
 
@@ -571,16 +571,16 @@
 ### PR 2-28 · Update README and Portfolio Docs
 **Branch:** `feature/readme-v2`
 
-- [ ] Update `README.md`:
-  - [ ] Add v2 architecture section (multi-agent diagram)
-  - [ ] Add new portfolio talking points:
+- [x] Update `README.md`:
+  - [x] Add v2 architecture section (multi-agent diagram)
+  - [x] Add new portfolio talking points:
     - Multi-agent orchestration (Teacher + Evaluator separation of concerns)
     - Human-in-the-loop agentic design (parent confirms AI suggestions)
     - Difficulty adaptation via mastery history
-  - [ ] Update tech stack (add Gemini Flash for Evaluator)
-  - [ ] Update live URL if changed
-- [ ] Update `CLAUDE.md` with v2 architecture notes
-- [ ] Commit: `docs: update readme and claude.md for v2 phase 1 architecture`
+  - [x] Update tech stack (add Gemini Flash for Evaluator)
+  - [x] Update live URL if changed
+- [x] Update `CLAUDE.md` with v2 architecture notes
+- [x] Commit: `docs: update readme and claude.md for v2 phase 1 architecture`
 
 ---
 
@@ -598,7 +598,7 @@
 - [x] Zero TypeScript errors
 - [ ] Zero ESLint warnings
 - [x] Live on Vercel with zero build errors
-- [ ] README updated with v2 architecture
+- [x] README updated with v2 architecture
 
 ---
 

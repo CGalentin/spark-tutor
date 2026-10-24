@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-27 is on `main` and live (10 Oct 2026).** https://spark-tutor-app.vercel.app is the v2 parent dashboard and child chat. The Math suggestion card still says Shapes. Do not click it unless asked. Next session is PR 2-28 only. Do not start it unless asked.
+**Phase 2 character decisions are recorded (24 Oct 2026).** Stella's voice prompt stays. Do not run six messages just to earn a star. The name question still uses the emoji. The chat celebrate bounce is still open. The Math suggestion card still says Shapes. Do not click it unless asked. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -228,10 +228,54 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Math path was unchanged after the visit: Counting to 20, suggestion Shapes, parentApproved false, topicsCompleted only Counting to 10, history 100 then 40 then 30 then 92
   - Merged `dev` into `main` and pushed `main`. Not a force-push
 
+- [x] PR 2-28 · Update README and CLAUDE.md (`docs/v2-readme-update`)
+  - `README.md` now describes the live K–3 app: Claude Haiku as the Teacher, Gemini Flash (`gemini-3.5-flash`) as the silent Evaluator, seven prompt layers, the Firestore learning path, and the parent approval path. The live URL is still https://spark-tutor-app.vercel.app. The stored RAG chunks are still the K–1 set of 536
+  - `CLAUDE.md` keeps the earlier "Key Files to Read" lines and adds the Evaluator, `MASTERED_SCORE` of 90, the two `GradeBand` types, the model name `gemini-3.5-flash`, and the current Math path
+  - `npx tsc --noEmit` exited 0
+  - Commit `6df4460` includes only `README.md` and `CLAUDE.md`. `AGENTS.md` and `spark_tutor_build_bible_2.docx` stayed uncommitted
+  - `dev` was not merged into `main`. No production deploy
+
+- [x] PR 3-01 · Design the Two New Characters (`feature/new-characters-design`)
+  - Bram (`bram`): bear cub, amber `bg-amber-500` / `text-amber-800`, emoji 🐻, sturdy explorer voice
+  - Stella (`stella`): starfish, rose `bg-rose-400` / `text-rose-600`, emoji ⭐, bright tide-pool voice
+  - `elevenlabsVoiceId` is `''` on all 8 characters. The type union now includes `'bear'` and `'starfish'`
+  - `npx tsc --noEmit` exited 0. Commit `a7cc3e3`
+  - Select cards fall back to the emoji. Chat `AnimatedAvatar` falls back to ✨. Do not draw the SVGs in this PR
+
+- [x] PR 3-02 · SVG Avatar — Bram (`feature/avatar-boyish-new`)
+  - `src/components/child/avatars/BramAvatar.tsx` — round ears, snout, belly, paws. `viewBox="0 0 120 120"` to match the other six
+  - `bram` is in `getAvatarComponent`. Commit `84b81b1`
+  - Headless Edge showed the cub at 48px and 96px on an amber card. The signed-in app was not clicked
+
+- [x] PR 3-03 · SVG Avatar — Stella (`feature/avatar-girlish-new`)
+  - `src/components/child/avatars/StellaAvatar.tsx` — five arms and a face. `viewBox="0 0 120 120"`
+  - `stella` is in `getAvatarComponent`. Commit `63800fa`
+  - Headless Edge showed the starfish at 48px and 96px on a rose card. The signed-in app was not clicked
+
+- [x] PR 3-04 · Shared animations (`feature/new-character-animations`)
+  - No new keyframes. `globals.css` already has idle, thinking, and celebrate
+  - Both new SVGs take `animationClass`. Chat already drives thinking and celebrate
+  - Idle float and thinking tilt were watched at 375px during the sprint test. Chat celebrate was not, so that box stays open
+
+- [x] PR 3-05 · Character select screen with 8 cards (`feature/character-select-8-cards`)
+  - `CharacterGrid` already maps `CHARACTERS` with `grid-cols-2`. Eight cards are four rows. `CharacterGrid.tsx` was not edited
+  - Signed in, saw the Shapes card, and clicked only "Start a Session". Did not tap "Let's Go!"
+  - At 375px: eight cards, no sideways scroll. Bram and Stella were SVGs, not the emoji fallback
+  - Hover on Finn set `scale` to 1.05. The page still did not scroll sideways
+  - Bram selected: white ring, slightly larger card, and the cub's celebrate bounce
+  - No feature commit. The Math path was not changed
+
+- [x] PR 3-06 · Sprint 1 test, deploy still open (`dev`)
+  - Bram named Cub, Stella named Tide. Each Math visit: Counting to 20, grade K, suggestion Shapes, difficulty normal
+  - Two chats each. Bram said "Good tracking, cub!" Stella said "keep floating along."
+  - At 375px with CPU slowed to 4x, both floated while idle and tilted while thinking. No star, so no chat bounce
+  - Sessions were ended. No evaluator call. The Math path was not changed
+  - `npx tsc --noEmit` and `npm run build` exited 0. No deploy. No merge to `main`
+
 ## Up Next
-- Next session is PR 2-28, the README and CLAUDE.md update. Do not start it unless the user asks.
+- Push is waiting for approval of the unpushed Bram and Stella code. Deploy and the merge to `main` wait for an explicit yes. Do not start Sprint 2. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not deploy again unless asked.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
 ---
 
@@ -318,7 +362,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-`dev` and `main` both include the 10 Oct 2026 production deploy. `main` is the live branch. Do not force-push. Do not deploy again unless the user asks.
+Local `dev` includes the sprint-test note. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks. Do not push until the user approves the code overview.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -344,6 +388,9 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 - `suggestedNextTopic` is returned from session start but not stored in Zustand yet (Sprint 3/4)
 - MCP uses grade `'K'` and difficulty `'easy'` as defaults from chat router — could be made dynamic in a future iteration
 - Avatar SVG fallback: if `getAvatarComponent(id)` returns null, `AnimatedAvatar` shows ✨ emoji
+- Stella's voice prompt stays. "keep floating along" was enough. Do not rewrite it so every reply uses a catchphrase
+- Do not run six child messages to force a star. Chat celebrate stays open until a shorter visit earns one, or until asked
+- The name question still says "What will you name your" plus the character emoji. Leave it until a later small change
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch

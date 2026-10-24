@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next session is PR 2-28 (README and CLAUDE.md), only when the user asks.**
+**Phase 2 character decisions are recorded.** Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open until a star happens without a six-message lesson.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -43,10 +43,22 @@
 | 2-21 | Live Session Panel | `feature/live-session-panel` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-22 | Topic Suggestion Card | `feature/topic-suggestion-card` | ✅ Done (merged and pushed to `origin/dev`) |
 | 2-23 | Learning Path History | `feature/learning-path-history` | ✅ Done (merged and pushed to `origin/dev`) |
-| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
-| 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ Merged and pushed to `origin/dev`. Not on `main` |
+| 2-24 | Session Summary v2 | `feature/session-summary-v2` | ✅ On `main` |
+| 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ On `main`. Live 429 box stays open |
 | 2-26 | Final v2 End-to-End Test | `dev` | ✅ On `main`. Shapes card left in place |
 | 2-27 | v2 Production Deploy | `main` | ✅ Live at https://spark-tutor-app.vercel.app |
+| 2-28 | Update README and CLAUDE.md | `docs/v2-readme-update` | ✅ Commit `6df4460`. On local `dev`. Not pushed |
+
+## Phase 2 Sprint 1 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-01 | Design the Two New Characters | `feature/new-characters-design` | ✅ Commit `a7cc3e3`. Bram and Stella |
+| 3-02 | SVG Avatar — Bram | `feature/avatar-boyish-new` | ✅ Commit `84b81b1` |
+| 3-03 | SVG Avatar — Stella | `feature/avatar-girlish-new` | ✅ Commit `63800fa` |
+| 3-04 | Shared animations | `feature/new-character-animations` | ✅ No new CSS. Phone-size watch still open |
+| 3-05 | Character select screen with 8 cards | `feature/character-select-8-cards` | ✅ Already 2×4. No grid code change |
+| 3-06 | Sprint 1 test + deploy | `dev` | ✅ Test and build passed. Deploy and chat star bounce still open |
 
 ---
 
@@ -83,10 +95,15 @@
 - A finished session card shows the latest mastery score from that session's `evaluations`. No evaluation stays a plain "No mastery score yet" line. The summary prompt is given those same scores, and the saved JSON keys are unchanged
 - `/api/evaluate` is limited to 60 per parent per hour, and approve and reject are limited to 20. Chat stays 30 and summary stays 10. A missing token is 401 and does not count. Redis errors fail open
 - PR 2-26 live check: six Kindergarten Math messages on Counting to 20 scored 92 and suggested Shapes. The live ring, the session card, and the timeline all showed that score. The suggestion card is still waiting. Approve and reject were not clicked
+- The character select screen lists all eight Spark Squad characters in two columns. Bram and Stella use their SVG drawings. A 375px-wide screen does not scroll sideways
+- Bram and Stella can start a Kindergarten Math visit on Counting to 20. Bram says "Good tracking, cub!" Stella can say "keep floating along." Their drawings float while waiting and tilt while a reply is on the way
 
-**Not built yet (Sprint 4)**
+**Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- README and CLAUDE.md update (PR 2-28)
+- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
+- The name question still uses the character emoji. Leave it
+- Deploy the new characters, and merge `dev` into `main`, only when asked. Do not push until the code overview is approved
+- Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**
 - v2 phase 1 at https://spark-tutor-app.vercel.app: grade bands, evaluator, learning path, live mastery ring, suggestion card, session summaries with scores

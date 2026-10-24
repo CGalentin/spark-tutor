@@ -1,4 +1,4 @@
-// Single Spark Squad character card — displayed in the 2x3 selection grid.
+// Single Spark Squad character card — displayed in the 2-column selection grid.
 // K-1 design: SVG avatar, big tap target (120px min), bright character color,
 // visible selection ring, hover scale animation.
 
