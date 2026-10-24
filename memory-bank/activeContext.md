@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 character decisions are recorded (24 Oct 2026).** Stella's voice prompt stays. Do not run six messages just to earn a star. The name question still uses the emoji. The chat celebrate bounce is still open. The Math suggestion card still says Shapes. Do not click it unless asked. That is not v1 Week 3.
+**Phase 2 characters are live (24 Oct 2026).** https://spark-tutor-app.vercel.app shows eight select cards, including Bram and Stella. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-07, the reading quiz route. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -265,15 +265,15 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Bram selected: white ring, slightly larger card, and the cub's celebrate bounce
   - No feature commit. The Math path was not changed
 
-- [x] PR 3-06 · Sprint 1 test, deploy still open (`dev`)
+- [x] PR 3-06 · Sprint 1 test and deploy (`dev` merged to `main`)
   - Bram named Cub, Stella named Tide. Each Math visit: Counting to 20, grade K, suggestion Shapes, difficulty normal
   - Two chats each. Bram said "Good tracking, cub!" Stella said "keep floating along."
   - At 375px with CPU slowed to 4x, both floated while idle and tilted while thinking. No star, so no chat bounce
   - Sessions were ended. No evaluator call. The Math path was not changed
-  - `npx tsc --noEmit` and `npm run build` exited 0. No deploy. No merge to `main`
+  - Production https://spark-tutor-app.vercel.app shows eight cards. Merge on `main` is `0b3db03`
 
 ## Up Next
-- Push is waiting for approval of the unpushed Bram and Stella code. Deploy and the merge to `main` wait for an explicit yes. Do not start Sprint 2. Do not confuse this with v1 Week 3.
+- Next work is Phase 2 PR 3-07, the reading quiz route, on `feature/mcp-reading-quiz` from local `dev`. The correct answer indexes stay on the server. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -362,7 +362,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` includes the sprint-test note. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks. Do not push until the user approves the code overview.
+Local `dev` is pushed. `origin/main` has merge `0b3db03` for the Bram and Stella deploy. Do not force-push. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

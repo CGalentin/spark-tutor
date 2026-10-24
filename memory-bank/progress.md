@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 character decisions are recorded.** Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open until a star happens without a six-message lesson.
+**Bram and Stella are live at https://spark-tutor-app.vercel.app.** The select screen shows eight drawings. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-07, the reading quiz route.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -58,7 +58,7 @@
 | 3-03 | SVG Avatar — Stella | `feature/avatar-girlish-new` | ✅ Commit `63800fa` |
 | 3-04 | Shared animations | `feature/new-character-animations` | ✅ No new CSS. Phone-size watch still open |
 | 3-05 | Character select screen with 8 cards | `feature/character-select-8-cards` | ✅ Already 2×4. No grid code change |
-| 3-06 | Sprint 1 test + deploy | `dev` | ✅ Test and build passed. Deploy and chat star bounce still open |
+| 3-06 | Sprint 1 test + deploy | `dev` | ✅ Live. Chat star bounce still open |
 
 ---
 
@@ -102,7 +102,7 @@
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
 - The name question still uses the character emoji. Leave it
-- Deploy the new characters, and merge `dev` into `main`, only when asked. Do not push until the code overview is approved
+- Phase 2 PR 3-07: reading quiz route. Correct answer indexes stay on the server
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

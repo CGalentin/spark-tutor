@@ -4,9 +4,11 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 24 Oct 2026. The Sprint 1 character test is recorded on local `dev`. The notes commit message is `docs: record the sprint 1 character test and leave the deploy unstarted`. It sits on top of `87f36d5`. Local `dev` is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `origin/main` should contain `c0576bd`. `dev` and `main` are not the same hash, because `main` has merge commits.
+Date: 24 Oct 2026. Bram and Stella are live at https://spark-tutor-app.vercel.app. The live select screen shows eight cards at 375px, with their drawings, and no sideways scroll. No lesson was started on the live site.
 
-Nothing was deployed. The chat celebrate bounce was not seen, because neither new character earned a star. Idle float and thinking tilt were watched at 375px with the CPU slowed to 4x.
+`origin/dev` contains `8e2732e` (`docs: record the kept character decisions before deploy`). `origin/main` contains merge `0b3db03` (`Merge dev into main: Bram and Stella are live`). A later notes commit, `docs: check off the character deploy and point the next session at the reading quiz`, is the one that records this prompt. After that commit is pushed, both `origin/dev` and `origin/main` should contain it. `dev` and `main` are not the same hash, because `main` has merge commits.
+
+The chat celebrate bounce was not seen. Idle float and thinking tilt were watched at 375px with the CPU slowed to 4x.
 
 `AGENTS.md` and `spark_tutor_build_bible_2.docx` are still dirty on purpose. Leave them uncommitted unless I say so in that chat.
 
@@ -20,27 +22,29 @@ I'm building Spark Tutor v2 Phase 2. Read these files before you touch anything.
 - `.cursorrules` in the parent `TutorApp` folder (`C:\Users\GauntletAI\Desktop\GauntletAI\TutorApp\.cursorrules`)
 - `CLAUDE.md`
 - `ROADMAP-v2_1.md` (Phase 1; already shipped)
-- `ROADMAP-v2-phase2.md` (this is the plan). Read the Pre-Work notes and Sprint 1, especially what is still open on PRs 3-04 and 3-06
+- `ROADMAP-v2-phase2.md` (this is the plan). Read the Pre-Work notes, the Sprint 1 decisions, and PR 3-07
 
 If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-Local `dev` should be one commit ahead of `87f36d5`. That commit message is `docs: record the sprint 1 character test and leave the deploy unstarted`. `git log --oneline` should also contain `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `c0576bd`, `dc0a074`, `c954c31`, and `9a71fcb`. `origin/dev` should still be `54c23f0`. `origin/main` should contain `c0576bd`. `dev` and `main` are not the same hash. If `dev` is behind, diverged, or those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`git log --oneline` should contain `0b3db03`, `8e2732e`, `7d3cc98`, `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `c0576bd`, `dc0a074`, `c954c31`, and `9a71fcb`. `origin/main` should contain `0b3db03` and `c0576bd`. `dev` and `main` are not the same hash. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
-Do not start Sprint 2. Do not start PR 3-07. The open work is only what I ask for in that message:
+This session is PR 3-07 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/mcp-reading-quiz`. Create that branch from local `dev`. Do not start PR 3-08. Do not deploy.
 
-- If I approve the code overview, push local `dev`. The code changes since `54c23f0` are the README and CLAUDE.md update, Bram and Stella in the character list, and their two SVG files. The select grid did not need a code change.
-- If I say deploy, that is the rest of PR 3-06: `vercel --prod`, then merge `dev` into `main`. Not a force-push.
-- If I ask to watch the star bounce, start one short Math visit, stay under six child messages so the evaluator does not add a score, and stop when a star is earned or when I say stop.
+v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. Do not redo PRs 2-28 or 3-01 through 3-06.
 
-Commit after the work I asked for. Show me the changes and any suggestions before you push.
+PR 3-07 · Reading quiz MCP route
 
-v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. Do not redo PRs 2-28, 3-01, 3-02, 3-03, 3-04, or 3-05.
+Build `POST /api/mcp/reading-quiz`. Check the signed-in parent before reading the body. Add a rate limit of 30 per parent per hour. The route accepts a session id, a grade, and a topic. Claude writes a short passage and 3 questions. Each question has 3 options and a hint. The reply to the browser is the passage and the questions. The correct option numbers stay in a server-only Firestore note and must not be in the response. Add the types in `src/types/api.ts`. I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why. After the edits, list each file, what changed, and why.
 
-One PR 3-04 box is still open on purpose: "Test animations on mobile (375px, DevTools throttled CPU)." Idle and thinking were watched. Close it only if you actually see celebrate on Bram or Stella at phone size in chat. The classes already exist in `src/app/globals.css`. Do not copy those keyframes into the avatar files.
+Commit only the files for this PR. Then update `memory-bank/activeContext.md`, `memory-bank/progress.md`, check off PR 3-07 in `ROADMAP-v2-phase2.md`, and refresh `memory-bank/next-session-prompt.md` so the next session starts at PR 3-08. Commit those notes separately. Merge the feature branch into local `dev`. Do not push. Do not merge to `main`.
 
-I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why. After the edits, list each file, what changed, and why.
+Decisions already made. Do not undo them:
+
+- Stella's voice prompt stays. Sample phrases are examples. "keep floating along" was enough.
+- Do not run a six-message lesson to force a star. The chat celebrate check stays open.
+- The name question still uses the character emoji, as in "What will you name your 🐻?". Leave that sentence.
 
 Character facts already in the code:
 
@@ -53,6 +57,6 @@ Leave the Shapes suggestion in place. Math stays on Counting to 20. `suggestedNe
 
 One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." Do not redo 2-25 to close that box. Do not lower a cap. Do not fill a rate-limit bucket. Do not print the Redis URL or token.
 
-Three PR 2-26 boxes stay open on purpose. The Phase 1 "Zero ESLint warnings" box stays open. Do not merge `dev` into `main` unless I explicitly say to deploy in that same message.
+Three PR 2-26 boxes stay open on purpose. The Phase 1 "Zero ESLint warnings" box stays open. The PR 3-04 phone celebrate box stays open.
 
-Live site, unchanged until I say deploy: https://spark-tutor-app.vercel.app
+Live site: https://spark-tutor-app.vercel.app
