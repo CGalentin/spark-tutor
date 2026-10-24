@@ -152,6 +152,33 @@ export interface ReadingQuizResponse {
   questions: QuizQuestion[];
 }
 
+/** Request body sent to POST /api/mcp/reading-quiz/verify. */
+export interface ReadingQuizVerifyRequest {
+  /** Session whose server-only quiz note should be checked. */
+  sessionId: string;
+  /** Which question the child is answering. 0, 1, or 2. */
+  questionIndex: number;
+  /** Which choice the child picked. 0, 1, or 2. */
+  selectedOption: number;
+}
+
+/** Right answer. Praise only — the correct choice number is not included. */
+export interface ReadingQuizCorrectResponse {
+  correct: true;
+  /** Warm praise a mascot can say. It does not name the choice number. */
+  feedback: string;
+}
+
+/** Wrong answer. A hint only — the correct choice number is not included. */
+export interface ReadingQuizWrongResponse {
+  correct: false;
+  /** Nudge toward another try. It does not say which choice is right. */
+  hint: string;
+}
+
+/** Successful response from POST /api/mcp/reading-quiz/verify. */
+export type ReadingQuizVerifyResponse = ReadingQuizCorrectResponse | ReadingQuizWrongResponse;
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;

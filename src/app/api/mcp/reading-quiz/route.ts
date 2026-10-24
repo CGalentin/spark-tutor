@@ -5,6 +5,7 @@
 //   quiz_sessions/{sessionId}/activeQuiz/current
 // Firestore paths alternate folder, file, folder, file. The plan's path ends on
 // the activeQuiz folder, so the note itself is the file named "current".
+// The note also keeps each hint and which questions are already solved.
 // That note is never copied into the JSON sent back to the browser.
 
 import { type NextRequest } from 'next/server';
@@ -344,6 +345,8 @@ export async function POST(request: NextRequest): Promise<Response> {
   try {
     await quizNoteRef.set({
       answers,
+      hints: generated.questions.map((item) => item.hint),
+      solvedQuestionIndexes: [],
       expiresAt: Timestamp.fromMillis(Date.now() + QUIZ_NOTE_TTL_MS),
       parentUID,
     });
