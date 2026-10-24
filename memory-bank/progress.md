@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 PR 3-05 is recorded locally. The select screen already shows eight cards in two columns. No grid code changed. The phone-size chat animation watch is still open. Nothing new is pushed or deployed. Next work is PR 3-06, the Sprint 1 test. Do not deploy unless asked.**
+**Phase 2 sprint test is recorded locally. Bram and Stella can teach a short Math visit. Idle and thinking were watched at phone size. Chat celebrate, the deploy, and the push are still open.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -58,6 +58,7 @@
 | 3-03 | SVG Avatar — Stella | `feature/avatar-girlish-new` | ✅ Commit `63800fa` |
 | 3-04 | Shared animations | `feature/new-character-animations` | ✅ No new CSS. Phone-size watch still open |
 | 3-05 | Character select screen with 8 cards | `feature/character-select-8-cards` | ✅ Already 2×4. No grid code change |
+| 3-06 | Sprint 1 test + deploy | `dev` | ✅ Test and build passed. Deploy and chat star bounce still open |
 
 ---
 
@@ -95,11 +96,12 @@
 - `/api/evaluate` is limited to 60 per parent per hour, and approve and reject are limited to 20. Chat stays 30 and summary stays 10. A missing token is 401 and does not count. Redis errors fail open
 - PR 2-26 live check: six Kindergarten Math messages on Counting to 20 scored 92 and suggested Shapes. The live ring, the session card, and the timeline all showed that score. The suggestion card is still waiting. Approve and reject were not clicked
 - The character select screen lists all eight Spark Squad characters in two columns. Bram and Stella use their SVG drawings. A 375px-wide screen does not scroll sideways
+- Bram and Stella can start a Kindergarten Math visit on Counting to 20. Bram says "Good tracking, cub!" Stella can say "keep floating along." Their drawings float while waiting and tilt while a reply is on the way
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Watch Bram or Stella idle, think, and celebrate on a phone-sized screen. That PR 3-04 box is still open
-- Phase 2 PR 3-06: Sprint 1 test on local `dev`. Do not deploy unless asked
+- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open
+- Deploy the new characters, and merge `dev` into `main`, only when asked. Do not push until the code overview is approved
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

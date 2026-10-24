@@ -147,7 +147,7 @@
 - [ ] Test animations on mobile (375px, DevTools throttled CPU)
 - [x] Commit: `feat(child-ui): add idle, thinking, and celebrate animations to new avatars`
 
-> **Note (24 Oct 2026):** No new CSS. `globals.css` already defines the three classes. Bram and Stella pass `animationClass` through, and chat already switches thinking and celebrate for whichever character is selected. The phone-size animation look has not been watched yet, so that box stays open.
+> **Note (24 Oct 2026):** No new CSS. `globals.css` already defines the three classes. Bram and Stella pass `animationClass` through, and chat already switches thinking and celebrate for whichever character is selected. During the sprint test, idle float and thinking tilt were watched at 375px with CPU slowed to 4x. Celebrate in chat was not watched, because no star was awarded. That box stays open.
 
 ---
 
@@ -173,17 +173,19 @@
 ### PR 3-06 · Sprint 1 Test + Deploy
 **Branch:** `dev`
 
-- [ ] Select each new character, name it, start a Math session
-- [ ] Verify mascot voice and catchphrases match each character's personality
-- [ ] Verify idle animation plays in chat view
-- [ ] Verify thinking animation plays while mascot is responding
+- [x] Select each new character, name it, start a Math session
+- [x] Verify mascot voice and catchphrases match each character's personality
+- [x] Verify idle animation plays in chat view
+- [x] Verify thinking animation plays while mascot is responding
 - [ ] Verify celebrate animation plays when star is earned
-- [ ] Verify character select grid looks clean on 375px with 8 cards
-- [ ] Run: `npx tsc --noEmit` — zero errors
-- [ ] Run: `npm run build` — zero errors
+- [x] Verify character select grid looks clean on 375px with 8 cards
+- [x] Run: `npx tsc --noEmit` — zero errors
+- [x] Run: `npm run build` — zero errors
 - [ ] Deploy: `vercel --prod`
 - [ ] Merge `dev` → `main`
 - [ ] Commit: `chore: sprint 1 complete — two new spark squad characters live`
+
+> **Note (24 Oct 2026):** Bram was named Cub and Stella was named Tide. Each Math visit stayed on Counting to 20, grade K, suggestion Shapes, difficulty normal. Two messages each, then All Done. No mastery check ran. Bram said "Good tracking, cub!" Stella said "keep floating along." At 375px with CPU slowed to 4x, both floated while waiting and tilted while replying. Neither earned a star, so the chat bounce was not seen. `npx tsc --noEmit` and `npm run build` exited 0. Deploy and the merge to `main` are still waiting for an explicit yes. The Math path was unchanged.
 
 ---
 

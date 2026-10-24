@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 PR 3-05 is recorded (24 Oct 2026).** The select screen already maps every character into two columns, so eight cards are a 2×4 grid. No grid code changed. Bram and Stella show their drawings. The phone-size chat animation has still not been watched. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-06, the Sprint 1 test. Do not deploy unless asked. That is not v1 Week 3.
+**Phase 2 sprint test is recorded (24 Oct 2026), and the deploy is not done.** Bram and Stella taught short Counting to 20 visits. Idle float and thinking tilt were watched at phone size. The chat celebrate bounce was not watched, because no star was awarded. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Do not deploy or merge to `main` unless asked. Do not push until the code overview is approved. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -255,7 +255,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 - [x] PR 3-04 · Shared animations (`feature/new-character-animations`)
   - No new keyframes. `globals.css` already has idle, thinking, and celebrate
   - Both new SVGs take `animationClass`. Chat already drives thinking and celebrate
-  - The 375px animation watch is still open
+  - Idle float and thinking tilt were watched at 375px during the sprint test. Chat celebrate was not, so that box stays open
 
 - [x] PR 3-05 · Character select screen with 8 cards (`feature/character-select-8-cards`)
   - `CharacterGrid` already maps `CHARACTERS` with `grid-cols-2`. Eight cards are four rows. `CharacterGrid.tsx` was not edited
@@ -265,8 +265,15 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Bram selected: white ring, slightly larger card, and the cub's celebrate bounce
   - No feature commit. The Math path was not changed
 
+- [x] PR 3-06 · Sprint 1 test, deploy still open (`dev`)
+  - Bram named Cub, Stella named Tide. Each Math visit: Counting to 20, grade K, suggestion Shapes, difficulty normal
+  - Two chats each. Bram said "Good tracking, cub!" Stella said "keep floating along."
+  - At 375px with CPU slowed to 4x, both floated while idle and tilted while thinking. No star, so no chat bounce
+  - Sessions were ended. No evaluator call. The Math path was not changed
+  - `npx tsc --noEmit` and `npm run build` exited 0. No deploy. No merge to `main`
+
 ## Up Next
-- Next work is Phase 2 PR 3-06, the Sprint 1 test, on local `dev`. Do not deploy and do not merge to `main` unless asked. Do not confuse this with v1 Week 3.
+- Push is waiting for approval of the unpushed Bram and Stella code. Deploy and the merge to `main` wait for an explicit yes. Do not start Sprint 2. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -355,7 +362,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` includes the PR 3-05 note after `feature/character-select-8-cards` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
+Local `dev` includes the sprint-test note. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks. Do not push until the user approves the code overview.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
