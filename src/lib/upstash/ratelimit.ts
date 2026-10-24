@@ -80,3 +80,17 @@ export const rejectRatelimit: Ratelimit | null = redis
       prefix: 'rl:reject',
     })
   : null;
+
+/**
+ * 30 requests per parent per sliding hour window.
+ * Applied to /api/mcp/reading-quiz — one new quiz, not the later answer checks.
+ * Own prefix so this counter does not share the chat bucket.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const readingQuizRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(30, '1 h'),
+      prefix: 'rl:reading-quiz',
+    })
+  : null;

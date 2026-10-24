@@ -123,6 +123,35 @@ export interface MathProblemResponse {
   hint: string;
 }
 
+/** One reading-quiz question sent to the browser. The correct choice is not included. */
+export interface QuizQuestion {
+  /** The comprehension question, in words a child can read with help. */
+  question: string;
+  /** Exactly three answer choices. Order matches the stored correct index. */
+  options: string[];
+  /** A nudge that does not say which choice is correct. */
+  hint: string;
+}
+
+/** Request body sent to POST /api/mcp/reading-quiz. */
+export interface ReadingQuizRequest {
+  /** Session this quiz belongs to. The route checks it is owned by the signed-in parent. */
+  sessionId: string;
+  /** Tutoring grade (K–3 from @/constants). Not the RAG chunk grade. */
+  grade: GradeBand;
+  /** Reading topic the passage should be about. */
+  topic: string;
+}
+
+/** Successful response from POST /api/mcp/reading-quiz.
+ *  Correct option numbers stay in Firestore and are not part of this type. */
+export interface ReadingQuizResponse {
+  /** Short age-appropriate passage the questions are about. */
+  passage: string;
+  /** Three comprehension questions. Each has three choices and a hint. */
+  questions: QuizQuestion[];
+}
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;
