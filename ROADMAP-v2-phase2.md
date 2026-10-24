@@ -82,10 +82,10 @@
 ### PR 3-01 · Design the Two New Characters
 **Branch:** `feature/new-characters-design`
 
-- [ ] Decide on the two new characters (suggestions below — pick what excites you):
+- [x] Decide on the two new characters (suggestions below — pick what excites you):
   - **Boyish options:** a curious raccoon, a friendly bear cub, a bouncy kangaroo
   - **Girlish options:** a glowing jellyfish, a cheerful hedgehog, a starfish
-- [ ] For each character, define before writing any code:
+- [x] For each character, define before writing any code:
   - `id` — kebab-case, e.g. `raccoon`
   - `defaultName` — e.g. "Remy"
   - `type` — animal / fantasy / robot
@@ -94,10 +94,12 @@
   - `emoji` — temporary placeholder until SVG is done
   - `voicePrompt` — one paragraph: personality, catchphrases, teaching style
   - `elevenlabsVoiceId` — leave as `''` for now, filled in Sprint 4
-- [ ] Add both characters to `/src/constants/characters.ts`
-- [ ] Export updated character list from `/src/constants/index.ts`
-- [ ] Verify TypeScript compiles: `npx tsc --noEmit`
-- [ ] Commit: `feat(constants): add two new spark squad character definitions`
+- [x] Add both characters to `/src/constants/characters.ts`
+- [x] Export updated character list from `/src/constants/index.ts`
+- [x] Verify TypeScript compiles: `npx tsc --noEmit`
+- [x] Commit: `feat(constants): add two new spark squad character definitions`
+
+> **Note (24 Oct 2026):** Bram the bear cub (`bram`, amber) and Stella the starfish (`stella`, rose). Commit `a7cc3e3` on `feature/new-characters-design`. No SVG yet. The select card shows the emoji. Chat falls back to ✨ until PRs 3-02 and 3-03.
 
 ---
 

@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 4 docs are committed. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. PR 2-28 (`6df4460`, README and CLAUDE.md) is on local branch `docs/v2-readme-update` only. It is not merged and not pushed. The Shapes suggestion card stays until the user asks to press it. Next code work is Phase 2 PR 3-01 (two new characters) in `ROADMAP-v2-phase2.md`. That is not v1 Week 3 PR 3-01.**
+**Phase 2 PR 3-01 is committed locally as `a7cc3e3` (Bram the bear cub and Stella the starfish). It is not pushed and not deployed. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next code work is PR 3-02, Bram's SVG avatar. That is not v1 Week 3 PR 3-01.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -47,7 +47,13 @@
 | 2-25 | Rate Limiting Update | `feature/rate-limiting-v2` | ✅ On `main`. Live 429 box stays open |
 | 2-26 | Final v2 End-to-End Test | `dev` | ✅ On `main`. Shapes card left in place |
 | 2-27 | v2 Production Deploy | `main` | ✅ Live at https://spark-tutor-app.vercel.app |
-| 2-28 | Update README and CLAUDE.md | `docs/v2-readme-update` | ✅ Commit `6df4460`. Not merged. Not pushed |
+| 2-28 | Update README and CLAUDE.md | `docs/v2-readme-update` | ✅ Commit `6df4460`. On local `dev`. Not pushed |
+
+## Phase 2 Sprint 1 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-01 | Design the Two New Characters | `feature/new-characters-design` | ✅ Commit `a7cc3e3`. Bram and Stella. No SVG yet |
 
 ---
 
@@ -87,7 +93,7 @@
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Phase 2 PR 3-01: two new Spark Squad characters (constants, then avatars in later PRs)
+- Phase 2 PR 3-02 and 3-03: SVG avatars for Bram and Stella. Until then the select screen shows emoji and chat shows ✨
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

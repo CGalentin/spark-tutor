@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-28 docs are committed on `docs/v2-readme-update` (24 Oct 2026).** Commit `6df4460` is `docs: update readme and claude.md for v2 phase 1 architecture`. That branch is not merged into `dev` or `main`, and it is not pushed. https://spark-tutor-app.vercel.app is still the live v2 parent dashboard and child chat. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-01 in `ROADMAP-v2-phase2.md` (two new Spark Squad characters). That is not the already-finished v1 Week 3 PR 3-01.
+**Phase 2 PR 3-01 is committed (24 Oct 2026).** Bram the bear cub and Stella the starfish are in `src/constants/characters.ts` on `feature/new-characters-design` as `a7cc3e3`. They have no SVG yet. https://spark-tutor-app.vercel.app is still the live v2 app and does not include them until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-02, the bear cub drawing. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -235,9 +235,15 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Commit `6df4460` includes only `README.md` and `CLAUDE.md`. `AGENTS.md` and `spark_tutor_build_bible_2.docx` stayed uncommitted
   - `dev` was not merged into `main`. No production deploy
 
+- [x] PR 3-01 · Design the Two New Characters (`feature/new-characters-design`)
+  - Bram (`bram`): bear cub, amber `bg-amber-500` / `text-amber-800`, emoji 🐻, sturdy explorer voice
+  - Stella (`stella`): starfish, rose `bg-rose-400` / `text-rose-600`, emoji ⭐, bright tide-pool voice
+  - `elevenlabsVoiceId` is `''` on all 8 characters. The type union now includes `'bear'` and `'starfish'`
+  - `npx tsc --noEmit` exited 0. Commit `a7cc3e3`
+  - Select cards fall back to the emoji. Chat `AnimatedAvatar` falls back to ✨. Do not draw the SVGs in this PR
+
 ## Up Next
-- The memory-bank refresh and the roadmap checkboxes for PR 2-28 are written and not committed yet.
-- Next code work is Phase 2 PR 3-01 on branch `feature/new-characters-design`: two new Spark Squad characters in `src/constants/characters.ts`. Do not confuse this with v1 Week 3 PR 3-01, which is already done.
+- Next code work is Phase 2 PR 3-02: the SVG avatar for Bram, on branch `feature/avatar-boyish-new`. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -326,7 +332,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-`docs/v2-readme-update` holds commit `6df4460` (README and CLAUDE.md). Local `dev` still matches `origin/dev` at `54c23f0`. `main` is the live branch and is a different hash because it has merge commits. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
+Local `dev` includes the character commit `a7cc3e3` after `feature/new-characters-design` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

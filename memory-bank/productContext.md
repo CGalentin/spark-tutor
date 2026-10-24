@@ -15,7 +15,7 @@ v1 shipped for K-1. v2 extends the same product to Grades 2–3 with grade-tuned
 | AI answers aren't grounded in real curriculum | RAG layer retrieves OER curriculum chunks before every Claude response (current corpus is still K-1) |
 | Child jumps topics with no memory | v2 learning path stores current topic, mastery scores, and a parent-approved next step |
 
-## The Spark Squad (6 Mascot Characters)
+## The Spark Squad (8 Mascot Characters)
 Children pick one character and give it a custom name. The character's personality shapes how Claude responds.
 
 | Character | Type | Personality |
@@ -26,6 +26,10 @@ Children pick one character and give it a custom name. The character's personali
 | Luna | Bunny | Gentle, nurturing, encouraging and patient |
 | Pip | Fairy | Whimsical, imaginative, uses storytelling |
 | Nova | Owl | Wise, calm, asks lots of thoughtful questions |
+| Bram | Bear cub | Curious and sturdy, explores one small step at a time |
+| Stella | Starfish | Cheerful and bright, turns practice into a gentle ocean game |
+
+Bram and Stella do not have SVG avatars yet. The select screen shows their emoji. Chat shows ✨ until those drawings exist.
 
 ## How a Session Works
 1. Parent logs in and opens the app on a tablet/device
