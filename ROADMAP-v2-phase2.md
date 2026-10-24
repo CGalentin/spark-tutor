@@ -270,7 +270,7 @@
 ### PR 3-10 · Wire MCP Tools Into Chat Router
 **Branch:** `feature/mcp-reading-chat-trigger`
 
-- [ ] Update `/src/app/api/chat/route.ts`:
+- [x] Update `/src/app/api/chat/route.ts`:
   - Add reading quiz trigger detection (subject must be reading OR science):
     - Trigger phrases: "quiz", "give me a quiz", "test me", "reading quiz", "comprehension"
   - Add spelling trigger detection (any subject):
@@ -278,8 +278,10 @@
   - When triggered: call the relevant MCP route, inject result into Claude's context
   - Claude presents the activity in character voice — child never sees raw JSON
   - Math trigger already exists — do NOT break it
-- [ ] Test all three MCP triggers independently: math, reading quiz, spelling
-- [ ] Commit: `feat(api): wire reading quiz and spelling triggers into chat router`
+- [x] Test all three MCP triggers independently: math, reading quiz, spelling
+- [x] Commit: `feat(api): wire reading quiz and spelling triggers into chat router`
+
+> **Note (24 Oct 2026):** Commit `baa775b`. Reading quiz phrases run only when the subject is reading. Science is not a subject yet, so it was not added. Spelling phrases run in any subject. Chat calls the quiz route and the spelling route, then gives Claude the safe text only. Math "give me a problem" still uses the direct generator. Three checks returned 200 streams with character text, not raw JSON. The quiz note saved 3 choice numbers and the reply did not contain `correctIndex`. The spelling reply did not contain the stored words. The checks used an already-ended session, not the 26 Sep Blip session. That session was not ended. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false. Not pushed.
 
 ---
 

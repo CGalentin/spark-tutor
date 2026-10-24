@@ -99,7 +99,7 @@ src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child ch
 src/lib/claude/buildSummaryPrompt.ts ← transcript plus session evaluations for the parent summary
 
 # API Routes
-src/app/api/chat/route.ts              ← SSE streaming chat; uses request grade + currentTopic in the prompt; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
+src/app/api/chat/route.ts              ← SSE streaming chat; grade + currentTopic in the prompt; learning path; difficultyHint; math, reading-quiz, and spelling triggers before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
 src/app/api/mcp/reading-quiz/route.ts  ← MCP tool: passage + 3 questions; choice numbers saved server-side only
@@ -160,6 +160,7 @@ src/components/ui/                               ← Shadcn components (do not e
 
 # MCP
 src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
+src/lib/mcp/detectReadingTools.ts   ← detectsReadingQuizRequest() + detectsSpellingRequest() (phrase checks only)
 src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; chat calls this after each mascot reply)
 
 # Parent UI components

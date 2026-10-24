@@ -109,6 +109,12 @@ The reading quiz generator is a separate route, `POST /api/mcp/reading-quiz`:
   - Right returns praise. Wrong returns a hint. The spelling is never in that reply
   - The note stays so a wrong try can be tried again. It does not change the reading-quiz note
   - Verify is limited to 60 per hour (`rl:spelling-verify`), separate from list creation and from the quiz buckets
+- Chat calls those routes when the child's message asks for one:
+  - Reading quiz only when the subject is reading. Phrases include quiz, test me, and comprehension
+  - Spelling in any subject. Phrases include spell and spelling
+  - Math "give me a problem" still uses the direct generator, not an HTTP route
+  - Science is not a subject yet, so chat does not look for it
+  - The prompt gets the passage and choices, or the clues and letter counts. The reply is character voice, not raw JSON
 - Client security rules deny all reads and writes on `quiz_sessions`
 
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:

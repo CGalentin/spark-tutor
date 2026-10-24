@@ -4,25 +4,22 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 24 Oct 2026. PR 3-09 is done. Nothing was deployed. Nothing was pushed.
+Date: 24 Oct 2026. PR 3-10 is done. Nothing was deployed. Nothing was pushed.
 
 - `origin/dev` is still `d4d332c`
 - `origin/main` is still `0f3a375`
 - `dev` and `main` are not the same hash, because `main` has merge commits
-- Local `dev` contains `c10a43c` (`feat(mcp): add spelling practice mcp route — words stored server-side only`)
-- The notes commit on top of `c10a43c` checks off PR 3-09 and points this prompt at PR 3-10. That commit is local only
-- `POST /api/mcp/spelling` and `POST /api/mcp/spelling/verify` are `c10a43c`
+- Local `dev` contains `baa775b` (`feat(api): wire reading quiz and spelling triggers into chat router`)
+- The notes commit on top of `baa775b` checks off PR 3-10 and points this prompt at PR 3-11. That commit is local only
 - Live site https://spark-tutor-app.vercel.app still shows the eight character cards. The quiz and spelling routes are not on production.
 
-The spelling note is `quiz_sessions/{sessionId}/activeSpelling/current`. It holds `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces that note. A wrong try returns a hint and can be tried again. The note is not deleted. The spelling is never in the reply. Do not redo that.
+Chat starts a reading quiz when the subject is reading and the message says quiz, test me, or comprehension. It starts spelling when the message says spell or spelling, in any subject. Math "give me a problem" still uses the direct generator. Science is not a subject yet. The child sees character voice, not raw JSON. The spelling and the correct choice stay on the server. Do not redo that.
 
-The reading-quiz note is still `quiz_sessions/{sessionId}/activeQuiz/current`. Do not redo PR 3-07 or PR 3-08.
-
-The Math path was unchanged. No session was ended. The 26 Sep Blip session is still open.
+The trigger check used an already-ended session, not the 26 Sep Blip session. It did not end that session. Chat still increments `messageCount` when a session id is sent. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false.
 
 `AGENTS.md` and `spark_tutor_build_bible_2.docx` are still dirty on purpose. Leave them uncommitted unless I say so in that chat.
 
-If local `dev` is ahead of `origin/dev` by the spelling commit and the notes commit, that is expected. Do not stop. Do not push unless I ask in that chat.
+If local `dev` is ahead of `origin/dev`, that is expected. Do not stop. Do not push unless I ask in that chat.
 
 Copy everything below the line.
 
@@ -34,44 +31,43 @@ I'm building Spark Tutor v2 Phase 2. Read these files before you touch anything.
 - `.cursorrules` in the parent `TutorApp` folder (`C:\Users\GauntletAI\Desktop\GauntletAI\TutorApp\.cursorrules`)
 - `CLAUDE.md`
 - `ROADMAP-v2_1.md` (Phase 1; already shipped)
-- `ROADMAP-v2-phase2.md`. Read the Sprint 1 decisions, the PR 3-07 note, the PR 3-08 note, the PR 3-09 note, and PR 3-10
+- `ROADMAP-v2-phase2.md`. Read the Sprint 1 decisions, the PR 3-09 note, the PR 3-10 note, and PR 3-11
 
 If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-`origin/dev` should still be `d4d332c`. `origin/main` should still be `0f3a375` and should contain `0b3db03` and `c0576bd`. `git log --oneline` should contain `c10a43c`, `d4d332c`, `1a0b3d7`, `f2663ca`, `0c2980c`, `5706dfc`, `8e2732e`, `7d3cc98`, `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should contain `c10a43c`. `dev` and `main` are not the same hash. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`origin/dev` should still be `d4d332c`. `origin/main` should still be `0f3a375` and should contain `0b3db03` and `c0576bd`. `git log --oneline` should contain `baa775b`, `c10a43c`, `d4d332c`, `1a0b3d7`, `f2663ca`, `0c2980c`, `5706dfc`, `8e2732e`, `7d3cc98`, `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should contain `baa775b`. `dev` and `main` are not the same hash. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
-This session is PR 3-10 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/mcp-reading-chat-trigger`. Create that branch from local `dev`. Do not start PR 3-11. Do not deploy.
+This session is PR 3-11 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/mcp-activity-buttons`. Create that branch from local `dev`. Do not start PR 3-12. Do not deploy.
 
-v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. v1 Week 3 also has a PR 3-09, and that one is already done. Do not redo it. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-09.
+v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. v1 Week 3 also has a PR 3-09, and that one is already done. Do not redo it. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-10.
 
-PR 3-10 · Wire MCP tools into the chat router
+PR 3-11 · Activity buttons in the child UI
 
 I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why. After the edits, list each file, what changed, and why.
 
-Update `src/app/api/chat/route.ts`:
+Create `src/components/child/ActivityButtons.tsx`. Show it above the chat input on `src/app/(child)/chat/page.tsx`.
 
-- The math practice trigger already exists. Do not break it.
-- Add a reading-quiz trigger only when the subject is reading. Science is not a subject yet. Do not add it in this PR.
-- Reading-quiz phrases: "quiz", "give me a quiz", "test me", "reading quiz", "comprehension"
-- Add a spelling trigger for any subject.
-- Spelling phrases: "spelling", "spell", "practice spelling", "spelling words", "spell a word"
-- When a phrase matches, call that MCP route and put the result into Claude's context.
-- Claude presents the activity in the character's voice. The child never sees raw JSON.
-- The spelled word and the correct quiz choice stay on the server.
+Three buttons:
 
-Copy the shape of the existing math trigger. Do not invent a second style.
+- "Practice Problem 🔢" only when the subject is math. Clicking it sends `practice problem`.
+- "Reading Quiz 📖" only when the subject is reading. Science is not a subject yet. Do not add it. Clicking it sends `give me a quiz`.
+- "Spelling Practice ✏️" for math and for reading. Clicking it sends `practice spelling`.
 
-Before writing the route, read the Next.js route handler doc in `node_modules/next/dist/docs/`. This app is Next.js 16.
+Those phrases are ones the chat route already understands. Do not add a second submit path. The button should put the phrase into the chat and send it the same way a typed message is sent.
 
-Test math, reading quiz, and spelling separately. Do not print stored words, correct choice numbers, the Redis URL, or the Redis token. Do not fill a rate-limit bucket. Do not lower a cap. Do not end any session. The dev server on port 3000 may already be running. If a route returns an HTML 404, restart `npm run dev` and try again. Do not leave a `console.log` in the route.
+Each button is at least 48px tall, rounded-2xl, and bright. Hide all three while the mascot is responding.
+
+This PR changes the child screen. Verify it in the browser. Check math and reading. At 375px, the buttons, the input, and the send button fit without overlap. Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end any session.
+
+Before writing a component, read the Next.js docs in `node_modules/next/dist/docs/` only if you are unsure about a file convention. This app is Next.js 16.
 
 Commit only the files for this PR. The commit message is:
 
-`feat(api): wire reading quiz and spelling triggers into chat router`
+`feat(child-ui): add activity buttons for quiz and spelling above chat input`
 
-Then update `memory-bank/activeContext.md`, `memory-bank/progress.md`, `memory-bank/systemPatterns.md`, and `memory-bank/techContext.md`. Check off PR 3-10 in `ROADMAP-v2-phase2.md`. Refresh `memory-bank/next-session-prompt.md` so the next session starts at PR 3-11. Commit those notes separately. Merge the feature branch into local `dev`. Do not push. Do not merge to `main`.
+Then update `memory-bank/activeContext.md`, `memory-bank/progress.md`, `memory-bank/systemPatterns.md`, and `memory-bank/techContext.md`. Check off PR 3-11 in `ROADMAP-v2-phase2.md`. Refresh `memory-bank/next-session-prompt.md` so the next session starts at PR 3-12. Commit those notes separately. Merge the feature branch into local `dev`. Do not push. Do not merge to `main`.
 
 The pre-commit hook runs `tsc`, Prettier, and ESLint. Let it run. If it fails, fix the problem and make a new commit. Do not amend.
 
