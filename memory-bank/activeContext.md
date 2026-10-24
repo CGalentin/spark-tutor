@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**PR 2-27 is on `main` and live (10 Oct 2026).** https://spark-tutor-app.vercel.app is the v2 parent dashboard and child chat. The Math suggestion card still says Shapes. Do not click it unless asked. Next session is PR 2-28 only. Do not start it unless asked.
+**PR 2-28 docs are committed on `docs/v2-readme-update` (24 Oct 2026).** Commit `6df4460` is `docs: update readme and claude.md for v2 phase 1 architecture`. That branch is not merged into `dev` or `main`, and it is not pushed. https://spark-tutor-app.vercel.app is still the live v2 parent dashboard and child chat. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-01 in `ROADMAP-v2-phase2.md` (two new Spark Squad characters). That is not the already-finished v1 Week 3 PR 3-01.
 
 Do not force-push.
 
@@ -228,10 +228,18 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Math path was unchanged after the visit: Counting to 20, suggestion Shapes, parentApproved false, topicsCompleted only Counting to 10, history 100 then 40 then 30 then 92
   - Merged `dev` into `main` and pushed `main`. Not a force-push
 
+- [x] PR 2-28 · Update README and CLAUDE.md (`docs/v2-readme-update`)
+  - `README.md` now describes the live K–3 app: Claude Haiku as the Teacher, Gemini Flash (`gemini-3.5-flash`) as the silent Evaluator, seven prompt layers, the Firestore learning path, and the parent approval path. The live URL is still https://spark-tutor-app.vercel.app. The stored RAG chunks are still the K–1 set of 536
+  - `CLAUDE.md` keeps the earlier "Key Files to Read" lines and adds the Evaluator, `MASTERED_SCORE` of 90, the two `GradeBand` types, the model name `gemini-3.5-flash`, and the current Math path
+  - `npx tsc --noEmit` exited 0
+  - Commit `6df4460` includes only `README.md` and `CLAUDE.md`. `AGENTS.md` and `spark_tutor_build_bible_2.docx` stayed uncommitted
+  - `dev` was not merged into `main`. No production deploy
+
 ## Up Next
-- Next session is PR 2-28, the README and CLAUDE.md update. Do not start it unless the user asks.
+- The memory-bank refresh and the roadmap checkboxes for PR 2-28 are written and not committed yet.
+- Next code work is Phase 2 PR 3-01 on branch `feature/new-characters-design`: two new Spark Squad characters in `src/constants/characters.ts`. Do not confuse this with v1 Week 3 PR 3-01, which is already done.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not deploy again unless asked.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
 ---
 
@@ -318,7 +326,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-`dev` and `main` both include the 10 Oct 2026 production deploy. `main` is the live branch. Do not force-push. Do not deploy again unless the user asks.
+`docs/v2-readme-update` holds commit `6df4460` (README and CLAUDE.md). Local `dev` still matches `origin/dev` at `54c23f0`. `main` is the live branch and is a different hash because it has merge commits. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

@@ -4,66 +4,43 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 10 Oct 2026. Sprint 4, PR 2-27 is done. v2 is live at https://spark-tutor-app.vercel.app. `dev` was merged into `main` and `main` was pushed. It was not a force-push.
+Date: 24 Oct 2026. PR 2-28 docs are committed on branch `docs/v2-readme-update` as `6df4460` (`docs: update readme and claude.md for v2 phase 1 architecture`). That commit contains only `README.md` and `CLAUDE.md`. It is not merged into `dev` or `main`. It is not pushed.
 
-`git log --oneline` should contain `c0576bd` (`chore: v2 phase 1 production deploy — AI intelligence layer live`), plus `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should match `origin/dev`. `origin/main` should contain `c0576bd`. `dev` and `main` are not the same hash, because `main` has a merge commit. If `dev` is behind or diverged, if `main` does not contain `c0576bd`, or if those commits are missing, stop and tell me. Do not force-push.
+Local `dev` should still match `origin/dev` at `54c23f0`. `git log --oneline` on `dev` should contain `c0576bd` (`chore: v2 phase 1 production deploy — AI intelligence layer live`), plus `dc0a074`, `c954c31`, and `9a71fcb`. `origin/main` should contain `c0576bd`. `dev` and `main` are not the same hash, because `main` has merge commits. If `dev` is behind or diverged, if `main` does not contain `c0576bd`, or if those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
-`feature/session-summary-v2` and `feature/rate-limiting-v2` are already contained in `dev`. Do not merge them again. Do not recreate them. Do not redo PR 2-25, PR 2-26, or the production deploy.
+`AGENTS.md` and `spark_tutor_build_bible_2.docx` are still dirty on purpose. Leave them uncommitted unless I say so in that chat. `CLAUDE.md` is already committed. Do not throw it away.
 
-These files are dirty on purpose and must stay uncommitted: `AGENTS.md`, `CLAUDE.md`, `spark_tutor_build_bible_2.docx`.
+The memory-bank refresh and the PR 2-28 checkboxes may still be uncommitted. If they are, show me that diff and wait. Do not start PR 3-01 on top of an uncommitted memory-bank update.
 
 ## Where this session begins
 
-PR 2-28 only. Do not deploy again unless I ask in that same message.
+Phase 2 PR 3-01 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/new-characters-design`.
 
-Leave the Shapes card alone. On 10 Oct 2026 I said to leave it. Do not click **Yes, start this next** or **Keep practicing current topic**. Do not ask again.
+This is not v1 Week 3 PR 3-01. v1 Week 2 PRs 2-01 through 2-10 and v1 Week 3 PR 3-01 are already done. Do not mix them up. Do not redo PRs 2-01 through 2-28. Do not redo the 6-message Math chat.
 
 Copy everything below the line.
 
 ---
 
-I'm building Spark Tutor v2. Read the memory bank first: all files in memory-bank/ (including next-session-prompt.md), plus .cursorrules (in the parent TutorApp folder), CLAUDE.md, and ROADMAP-v2_1.md. Do not touch any code until those are read.
+I'm building Spark Tutor v2 Phase 2. Read the memory bank first: every file in memory-bank/ (including next-session-prompt.md), plus .cursorrules in the parent TutorApp folder, CLAUDE.md, ROADMAP-v2_1.md, and ROADMAP-v2-phase2.md. Do not touch any file until those are read.
 
-Confirm local `dev` matches `origin/dev`, and that `origin/main` contains `c0576bd` (`chore: v2 phase 1 production deploy — AI intelligence layer live`). `git log --oneline` should also contain `dc0a074`, `c954c31`, and `9a71fcb`. `dev` and `main` are not the same hash, because `main` has a merge commit. If `dev` is behind or diverged, if `main` does not contain `c0576bd`, or if those commits are missing, stop and tell me. Do not force-push.
+Confirm git before editing. Local `dev` should match `origin/dev`. The PR 2-28 docs commit `6df4460` is on `docs/v2-readme-update`, not necessarily on `dev`. `origin/main` should contain `c0576bd`. If `dev` is behind, diverged, or `c0576bd`, `dc0a074`, `c954c31`, and `9a71fcb` are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not deploy unless I explicitly say to deploy in that same message.
 
-This is Sprint 4. Do PR 2-28 only. After 2-28, stop and wait.
+This session is PR 3-01 only. After it is committed and the memory bank is updated, stop and wait. Do not start PR 3-02.
 
-Sprint 4 map
+PR 3-01 · Design the Two New Characters
 
-- 2-20 through 2-23 are done and are on `main`
-- 2-24 session summary with mastery is on `main`
-- 2-25 rate limits are on `main`. Do not redo them
-- 2-26 final end-to-end test is on `main`. Do not redo the 6-message chat
-- 2-27 production deploy is done. Live URL: https://spark-tutor-app.vercel.app. Do not deploy again
-- 2-28 README + CLAUDE.md — start here
+Branch: `feature/new-characters-design`.
 
-PR 2-28 · Update README and Portfolio Docs
+Work through the PR 3-01 checklist in `ROADMAP-v2-phase2.md`. Before writing code, decide the two characters with me. One boyish, one girlish. Suggestions in the roadmap: raccoon, bear cub, or kangaroo; jellyfish, hedgehog, or starfish. For each one, define `id`, `defaultName`, `type`, `vibe`, colors, emoji, `voicePrompt`, and leave `elevenlabsVoiceId` as `''`. Add them to `src/constants/characters.ts` and export from `src/constants/index.ts`. Run `npx tsc --noEmit`. Commit message when I approve it: `feat(constants): add two new spark squad character definitions`.
 
-Branch: `feature/readme-v2`.
+I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why.
 
-Work through the PR 2-28 checklist in `ROADMAP-v2_1.md`.
+Leave the Shapes suggestion in place. Math stays on Counting to 20. `suggestedNextTopic` is Shapes. `parentApproved` is false. `topicsCompleted` is still only Counting to 10. History in saved order: Counting to 10 score 100 at `2026-09-26T17:55:51.558Z`, Counting to 20 score 40 and score 30 both at `2026-09-26T17:56:08.773Z`, then Counting to 20 score 92 at `2026-10-10T23:03:46.508Z`. The last two scores are 30 and 92, so the next Math chat uses the normal hint. Do not reset the path. Do not click "Yes, start this next" or "Keep practicing current topic". Do not close older unended sessions. Do not end the 26 Sep 2026 Blip session. It has 7 messages, Counting to 10, score 100, suggested next Counting to 20, and it still says the summary is generating.
 
-1. Update `README.md` with a v2 architecture section, the portfolio talking points, Gemini Flash in the tech stack, and the live URL https://spark-tutor-app.vercel.app.
-2. Update `CLAUDE.md` with v2 architecture notes.
-3. `CLAUDE.md` already has uncommitted edits from before the deploy. Read that diff first. Do not throw those edits away. Do not commit `AGENTS.md` or `spark_tutor_build_bible_2.docx`.
-4. Commit: `docs: update readme and claude.md for v2 phase 1 architecture`.
-5. Update `activeContext.md`, `progress.md`, check off `ROADMAP-v2_1.md`, and refresh `next-session-prompt.md`. Then stop.
+One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." Do not redo 2-25 to close that box. Do not lower a cap. Do not fill a rate-limit bucket. Do not print the Redis URL or token.
 
-Leave the Shapes suggestion in place. Math stays on Counting to 20. `suggestedNextTopic` is Shapes. `parentApproved` is false. `topicsCompleted` is still only Counting to 10. History in saved order: Counting to 10 score 100 at `2026-09-26T17:55:51.558Z`, Counting to 20 score 40 and score 30 both at `2026-09-26T17:56:08.773Z`, then Counting to 20 score 92 at `2026-10-10T23:03:46.508Z`. The last two scores are 30 and 92, so the next Math chat uses the normal hint. Do not reset the path.
-
-Do not close older unended sessions. One of them is why the live card still shows an open lesson after a session ends: Counting to 20, Kindergarten, 0 stars, 4 messages, score 0. Do not end the 26 Sep 2026 Blip session. It has 7 messages, Counting to 10, score 100, suggested next Counting to 20, and it still says the summary is generating.
-
-One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." The 429 sentences are already in the routes. A live 429 could not be shown because Redis did not answer. Do not redo 2-25 to close that box. Do not lower a cap. Do not fill a rate-limit bucket. Do not print the Redis URL or token.
-
-Three PR 2-26 boxes stay open on purpose: the dashboard does have an older open session, approve was not clicked, and reject was not clicked.
-
-What production already proved
-
-The live site is https://spark-tutor-app.vercel.app. A short visit on 10 Oct 2026 picked Blip, named Buddy, tapped Math, got `POST /api/session/start` 200 on Counting to 20, saw the chat input, sent no chat message, got `POST /api/session/end` 200, and saw "Great job today!". The dashboard still showed the Shapes card and the older open lesson. The 26 Sep session was not ended.
-
-The earlier 2-26 test, already on `main`, proved the 6-message path: score 92, mastered, suggested next Shapes, live ring 92 / Mastered!, session card "92 · Mastered!", "Topic mastered", "Suggested next: Shapes", practice note "Learning about shapes".
-
-I am newer to coding. Explain what each docs change does in plain language before you edit it.
+Three PR 2-26 boxes stay open on purpose. The Phase 1 "Zero ESLint warnings" box stays open. The PR 2-28 boxes for committing `AGENTS.md` and `spark_tutor_build_bible_2.docx`, and for merging `dev` into `main`, stay open.
 
 Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
