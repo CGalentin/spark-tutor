@@ -179,6 +179,53 @@ export interface ReadingQuizWrongResponse {
 /** Successful response from POST /api/mcp/reading-quiz/verify. */
 export type ReadingQuizVerifyResponse = ReadingQuizCorrectResponse | ReadingQuizWrongResponse;
 
+/** One spelling word sent to the browser. The spelled word is not included. */
+export interface SpellingWord {
+  /** A description of the word that does not contain the spelling. */
+  clue: string;
+  /** How many letters are in the word. This number is not the spelling. */
+  letterCount: number;
+  /** A nudge that does not contain the spelling. */
+  hint: string;
+}
+
+/** Request body sent to POST /api/mcp/spelling. */
+export interface SpellingRequest {
+  /** Session this list belongs to. The route checks it is owned by the signed-in parent. */
+  sessionId: string;
+  /** Tutoring grade (K–3 from @/constants). Not the RAG chunk grade. */
+  grade: GradeBand;
+  /** Topic the words should be about. */
+  topic: string;
+  /** How many words to write. Must be 3, 4, or 5. */
+  count: number;
+}
+
+/** Successful response from POST /api/mcp/spelling.
+ *  The spelled words stay in Firestore and are not part of this type. */
+export interface SpellingResponse {
+  /** Clues, letter counts, and hints. The spellings themselves are omitted. */
+  words: SpellingWord[];
+}
+
+/** Request body sent to POST /api/mcp/spelling/verify. */
+export interface SpellingVerifyRequest {
+  /** Session whose server-only spelling note should be checked. */
+  sessionId: string;
+  /** Which word the child is trying. Starts at 0. */
+  wordIndex: number;
+  /** The child's spelling, before trim and capital-letter folding. */
+  attempt: string;
+}
+
+/** Successful response from POST /api/mcp/spelling/verify.
+ *  Praise or a hint only. The spelled word is not included. */
+export interface SpellingVerifyResponse {
+  correct: boolean;
+  /** Warm praise when right, or a hint when wrong. It does not contain the spelling. */
+  feedback: string;
+}
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;

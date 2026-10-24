@@ -108,3 +108,31 @@ export const readingQuizVerifyRatelimit: Ratelimit | null = redis
       prefix: 'rl:reading-quiz-verify',
     })
   : null;
+
+/**
+ * 30 requests per parent per sliding hour window.
+ * Applied to /api/mcp/spelling — one new word list, not the later spelling checks.
+ * Own prefix so this counter does not share the chat or reading-quiz buckets.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const spellingRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(30, '1 h'),
+      prefix: 'rl:spelling',
+    })
+  : null;
+
+/**
+ * 60 requests per parent per sliding hour window.
+ * Applied to /api/mcp/spelling/verify — one spelling check, not a new word list.
+ * Own prefix so this counter does not share the spelling-list bucket.
+ * Null when Upstash is not configured (fail-open for local dev).
+ */
+export const spellingVerifyRatelimit: Ratelimit | null = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(60, '1 h'),
+      prefix: 'rl:spelling-verify',
+    })
+  : null;
