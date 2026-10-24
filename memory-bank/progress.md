@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Phase 2 PR 3-03 is committed locally as `63800fa` (Stella's SVG avatar). It is not pushed and not deployed. PRs 2-20 through 2-27 are on `main` and live at https://spark-tutor-app.vercel.app. The Shapes suggestion card stays until the user asks to press it. Next code work is PR 3-04, the shared avatar animations.**
+**Phase 2 PR 3-04 is recorded locally. Bram and Stella use the shared avatar animations. No new CSS. The phone-size animation watch is still open. Nothing new is pushed or deployed. Next code work is PR 3-05, the 8-card select screen.**
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -56,6 +56,7 @@
 | 3-01 | Design the Two New Characters | `feature/new-characters-design` | ✅ Commit `a7cc3e3`. Bram and Stella |
 | 3-02 | SVG Avatar — Bram | `feature/avatar-boyish-new` | ✅ Commit `84b81b1` |
 | 3-03 | SVG Avatar — Stella | `feature/avatar-girlish-new` | ✅ Commit `63800fa` |
+| 3-04 | Shared animations | `feature/new-character-animations` | ✅ No new CSS. Phone-size watch still open |
 
 ---
 
@@ -95,7 +96,8 @@
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Phase 2 PR 3-04: confirm Bram and Stella use the shared idle, thinking, and celebrate animations. Do not copy those keyframes into the avatar files.
+- Phase 2 PR 3-05: eight character cards in the existing two-column grid. Check that 375px does not scroll sideways
+- Watch Bram or Stella idle, think, and celebrate on a phone-sized screen. That PR 3-04 box is still open
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

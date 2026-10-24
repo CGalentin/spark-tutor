@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 PR 3-03 is committed (24 Oct 2026).** Stella's SVG is `StellaAvatar.tsx` in commit `63800fa`. Bram and Stella both have drawings. https://spark-tutor-app.vercel.app does not include them until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-04, confirming the shared idle, thinking, and celebrate animations on both new avatars. That is not v1 Week 3.
+**Phase 2 PR 3-04 is recorded (24 Oct 2026).** Bram and Stella use the shared idle, thinking, and celebrate classes. No new CSS was added. The phone-size animation has not been watched. https://spark-tutor-app.vercel.app does not include the new characters until a later deploy. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is PR 3-05, the 8-card select screen. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -252,8 +252,13 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - `stella` is in `getAvatarComponent`. Commit `63800fa`
   - Headless Edge showed the starfish at 48px and 96px on a rose card. The signed-in app was not clicked
 
+- [x] PR 3-04 · Shared animations (`feature/new-character-animations`)
+  - No new keyframes. `globals.css` already has idle, thinking, and celebrate
+  - Both new SVGs take `animationClass`. Chat already drives thinking and celebrate
+  - The 375px animation watch is still open
+
 ## Up Next
-- Next code work is Phase 2 PR 3-04: the shared idle, thinking, and celebrate animations already apply to any avatar in the map, including Bram and Stella. Confirm that before adding new CSS. Do not confuse this with v1 Week 3.
+- Next code work is Phase 2 PR 3-05: the select screen already maps every character into two columns, so eight cards should already be a 2×4 grid. Confirm it fits at 375px before changing layout. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -342,7 +347,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` includes Stella's avatar after `feature/avatar-girlish-new` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
+Local `dev` includes the PR 3-04 note after `feature/new-character-animations` is merged in. It is ahead of `origin/dev` (`54c23f0`) and has not been pushed. `main` is the live branch. Do not force-push. Do not merge to `main`. Do not deploy again unless the user asks.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

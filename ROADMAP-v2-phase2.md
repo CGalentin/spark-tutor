@@ -138,14 +138,16 @@
 ### PR 3-04 · Animations for Both New Characters
 **Branch:** `feature/new-character-animations`
 
-- [ ] Add three CSS keyframe animations to each new avatar component:
+- [x] Add three CSS keyframe animations to each new avatar component:
   - `avatar-idle` — gentle float up/down `translateY(0 → -6px → 0)`, 2s loop
   - `avatar-thinking` — slow side-to-side tilt, 3s loop — plays while mascot is typing
   - `avatar-celebrate` — fast bounce + scale up, 0.8s — plays when child earns a star
-- [ ] Wire `thinking` to `isChatLoading` state via `AnimatedAvatar` (same as existing six)
-- [ ] Wire `celebrate` to star events in `useSessionStore` (same as existing six)
+- [x] Wire `thinking` to `isChatLoading` state via `AnimatedAvatar` (same as existing six)
+- [x] Wire `celebrate` to star events in `useSessionStore` (same as existing six)
 - [ ] Test animations on mobile (375px, DevTools throttled CPU)
-- [ ] Commit: `feat(child-ui): add idle, thinking, and celebrate animations to new avatars`
+- [x] Commit: `feat(child-ui): add idle, thinking, and celebrate animations to new avatars`
+
+> **Note (24 Oct 2026):** No new CSS. `globals.css` already defines the three classes. Bram and Stella pass `animationClass` through, and chat already switches thinking and celebrate for whichever character is selected. The phone-size animation look has not been watched yet, so that box stays open.
 
 ---
 
