@@ -102,6 +102,7 @@ src/lib/claude/buildSummaryPrompt.ts ← transcript plus session evaluations for
 src/app/api/chat/route.ts              ← SSE streaming chat; uses request grade + currentTopic in the prompt; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
+src/app/api/mcp/reading-quiz/route.ts  ← MCP tool: passage + 3 questions; choice numbers saved server-side only
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
 src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
 src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
@@ -120,7 +121,8 @@ src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade)
                                      SessionEndRequest/Response, SummaryRequest/Response,
                                      EvaluateRequest/EvaluateResponse,
                                      ApproveTopicRequest/ApproveTopicResponse,
-                                     RejectTopicRequest/RejectTopicResponse
+                                     RejectTopicRequest/RejectTopicResponse,
+                                     QuizQuestion, ReadingQuizRequest, ReadingQuizResponse
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map

@@ -19,6 +19,8 @@ Browser (Child or Parent)
    │  /api/summary   → Claude (agentic)         │
    │  /api/rag       → Gemini embed + Firebase  │
    │  /api/mcp/math-problem → Claude MCP tool   │
+   │  /api/mcp/reading-quiz → Claude quiz     │
+   │       answers stored in Firestore        │
    │  /api/session/start|end → Firestore        │
    │  /api/learning-path/approve|reject       │
    │       → parent confirms next topic       │
@@ -83,6 +85,15 @@ The math problem generator is a Next.js API route that Claude can "call" during 
 - Output to Claude: `{ problem, hint }` — the `answer` field is NEVER sent to client
 - Claude receives the problem and hint, then guides the child Socratically toward the answer
 
+The reading quiz generator is a separate route, `POST /api/mcp/reading-quiz`:
+- Input: `{ sessionId, grade, topic }` with tutoring grade `'K' | '1' | '2' | '3'`
+- The signed-in parent is checked first, then a limit of 30 per hour (`rl:reading-quiz`), then the body
+- Output to the browser: `{ passage, questions }` where each question is `{ question, options, hint }`
+- Correct choice numbers are saved at `quiz_sessions/{sessionId}/activeQuiz/current`
+- That path needs the file name `current` because Firestore alternates folder, file, folder, file
+- The note holds `answers` (0, 1, or 2), `expiresAt` (2 hours), and `parentUID`. Hint text is not stored
+- Client security rules deny all reads and writes on `quiz_sessions`
+
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:
 - `detectTopicBoundary(messageCount, messages)` is true every `TOPIC_BLOCK_SIZE` (6) child messages, or when the last child message includes "I'm done" / "next topic" / "something else"
 - Count `0` is not a boundary (even though 0 % 6 === 0)
@@ -114,8 +125,14 @@ users/{parentUID}/
     parentApproved: boolean
     parentApprovedAt: Timestamp | null
     lastEvaluatedAt: Timestamp | null
+
+quiz_sessions/{sessionId}/activeQuiz/current   ← Admin SDK only; client rules deny this tree
+  answers: number[]            ← 0, 1, or 2 for each of the 3 questions
+  expiresAt: Timestamp         ← 2 hours after the quiz was created
+  parentUID: string            ← signed-in parent who requested the quiz
 ```
 All child session and learning-path data lives under the parent UID — no child accounts exist.
+The quiz answer note is the exception: it is server-only, outside the parent folder, and the browser cannot read it.
 
 **Two different `GradeBand` types (do not mix them):**
 - Tutoring: `src/constants/gradeBands.ts` — `'K' | '1' | '2' | '3'`

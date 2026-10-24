@@ -203,7 +203,7 @@
 ### PR 3-07 · Reading Quiz MCP Route
 **Branch:** `feature/mcp-reading-quiz`
 
-- [ ] Create `/src/app/api/mcp/reading-quiz/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/reading-quiz/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 30 per user per hour (add to Upstash config alongside existing limits)
   - Accepts: `{ sessionId: string, grade: GradeBand, topic: string }`
@@ -214,10 +214,12 @@
   - Stores correct answer indexes server-side in Firestore temp doc:
     `quiz_sessions/{sessionId}/activeQuiz` → `{ answers: number[], expiresAt: Timestamp }`
   - Correct answer indexes are NEVER included in the client response
-- [ ] Add types to `/src/types/api.ts`:
+- [x] Add types to `/src/types/api.ts`:
   `QuizQuestion`, `ReadingQuizRequest`, `ReadingQuizResponse`
-- [ ] Test with curl: confirm passage + questions return, confirm no `correctIndex` in response
-- [ ] Commit: `feat(mcp): add reading quiz generator mcp route — answers server-side only`
+- [x] Test with curl: confirm passage + questions return, confirm no `correctIndex` in response
+- [x] Commit: `feat(mcp): add reading quiz generator mcp route — answers server-side only`
+
+> **Note (24 Oct 2026):** Commit `0c2980c`. The route checks the signed-in parent, then a new 30-per-hour limit (`rl:reading-quiz`), then the body. A post with no token and a broken body returned 401. A signed-in broken body returned 400. A missing session returned 404, and Claude was not called. One grade K quiz on Story comprehension returned a short passage and 3 questions. Each question had 3 choices and a hint. The reply did not contain `correctIndex`, `answers`, or `parentUID`. Firestore needs a file name after the `activeQuiz` folder, so the note is `quiz_sessions/{sessionId}/activeQuiz/current`. It holds `answers` (three numbers, each 0, 1, or 2), `expiresAt` (2 hours), and `parentUID`. Client rules deny `quiz_sessions`. The hints are not stored on that note. The Math path was unchanged. The 26 Sep Blip session is still open. Not pushed.
 
 ---
 
