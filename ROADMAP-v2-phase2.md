@@ -181,9 +181,11 @@
 - [x] Verify character select grid looks clean on 375px with 8 cards
 - [x] Run: `npx tsc --noEmit` — zero errors
 - [x] Run: `npm run build` — zero errors
-- [ ] Deploy: `vercel --prod`
-- [ ] Merge `dev` → `main`
-- [ ] Commit: `chore: sprint 1 complete — two new spark squad characters live`
+- [x] Deploy: `vercel --prod`
+- [x] Merge `dev` → `main`
+- [x] Notes commit records the deploy. The star bounce box stays open
+
+> **Note (24 Oct 2026, deploy):** Production alias https://spark-tutor-app.vercel.app shows all eight cards at 375px, including Bram and Stella's drawings. No sideways scroll. No lesson was started on the live site. `origin/dev` includes `8e2732e`. `origin/main` includes merge `0b3db03`. The three kept decisions are in `CLAUDE.md`.
 
 > **Note (24 Oct 2026):** Bram was named Cub and Stella was named Tide. Each Math visit stayed on Counting to 20, grade K, suggestion Shapes, difficulty normal. Two messages each, then All Done. No mastery check ran. Bram said "Good tracking, cub!" Stella said "keep floating along." At 375px with CPU slowed to 4x, both floated while waiting and tilted while replying. Neither earned a star, so the chat bounce was not seen. `npx tsc --noEmit` and `npm run build` exited 0. The Math path was unchanged.
 >
