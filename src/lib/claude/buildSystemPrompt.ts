@@ -7,7 +7,7 @@
 // Layer 4: GRADE_BAND           — how to talk for K / 1 / 2 / 3 (defaults to K)
 // Layer 5: LEARNING_PATH        — current topic, mastered topics, difficulty (optional until a path exists)
 // Layer 6: RAG_CONTEXT          — curriculum chunks (optional)
-// Layer 7: MCP_CONTEXT          — practice problem + hint (optional)
+// Layer 7: MCP_CONTEXT          — practice problem, reading quiz, or spelling list (optional)
 
 import { BASE_TUTOR_RULES } from '@/constants/prompts';
 import { getCharacterById } from '@/constants/characters';
@@ -25,7 +25,7 @@ interface BuildSystemPromptOptions {
   learningPathContext?: LearningPathContext;
   /** Curriculum chunks retrieved from Firebase Vector Search. */
   ragContext?: string;
-  /** MCP-generated math problem + hint — injected instead of RAG when present. */
+  /** MCP activity — problem, quiz, or spelling list. Injected instead of RAG when present. */
   mcpContext?: string;
 }
 
@@ -71,7 +71,7 @@ export function buildSystemPrompt({
     layers.push(`CURRICULUM CONTEXT (ground your responses in this material):\n${ragContext}`);
   }
 
-  // Layer 7 — MCP math problem (replaces RAG when child requests a practice problem)
+  // Layer 7 — MCP activity (replaces RAG when the child asks for one)
   if (mcpContext !== undefined && mcpContext.trim().length > 0) {
     layers.push(mcpContext);
   }
