@@ -345,7 +345,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Commit `411f213`. Science not ingested. Math path unchanged
 
 ## Up Next
-- Next work is Phase 2 PR 3-16, ingest Science chunks, on `feature/ingest-science` from local `dev` after this branch is merged. Do not add a Science subject button yet.
+- Next work is Phase 2 PR 3-16, ingest Science chunks, on `feature/ingest-science` from local `dev`. Do not add a Science subject button yet.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
@@ -434,7 +434,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Sprint 2 is on `main` at merge `cba97ab`. Feature branch `feature/ingest-grades-2-3` has PR 3-15 commit `411f213` (not yet merged to local `dev`). Do not force-push. Do not start a six-message lesson to force a star.
+Sprint 2 is on `main` at merge `cba97ab`. Local `dev` is at `5f510d7` and includes PR 3-15 (`411f213`). Not pushed. Next branch is `feature/ingest-science` from local `dev`. Do not force-push. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
