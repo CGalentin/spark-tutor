@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 Sprint 2 is live (11 Nov 2026).** https://spark-tutor-app.vercel.app has the reading quiz, spelling practice, chat triggers, and activity buttons. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-13, downloading Grades 2–3 + Science source docs. That is mostly manual.
+**Phase 2 Sprint 3 started (11 Nov 2026).** PR 3-13 is done: Grades 2–3 + Science source PDFs are organized locally (39 new files, gitignored). Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-14, replace science placeholder topics in `TOPIC_MAP`. Do not ingest yet. Do not add a Science subject button yet.
 
 Do not force-push.
 
@@ -322,8 +322,16 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - `npx tsc --noEmit` and `npm run build` exited 0. Math path unchanged. Test sessions ended; 26 Sep Blip left open
   - `vercel --prod` aliased https://spark-tutor-app.vercel.app. Merge on `main` is `cba97ab`
 
+- [x] PR 3-13 · Download + Organize New Source Documents (`feature/curriculum-sources-grades-2-3`)
+  - Local folders: `rag-sources/math/grade-2|grade-3`, `reading/grade-2|grade-3`, `science/k-1|grade-2|grade-3`
+  - CK-12 FlexBook PDFs need an account, so sources match K–1: EngageNY Math, CKLA Reading, CKSci Science
+  - 39 new PDFs (math 6+6, reading 5+7, science 6+5+4). All CC BY-NC-SA or public domain
+  - `.gitignore` uses `rag-sources/**/*.{pdf,zip,docx}` so nested folders stay local
+  - `rag-sources/README.md` lists each file with URL and license. Not ingested. `TOPIC_MAP` unchanged. No Science button
+  - Math path unchanged. Commit on the feature branch, then merged to local `dev`. Not pushed
+
 ## Up Next
-- Next work is Phase 2 PR 3-13, download + organize Grades 2–3 and Science source PDFs, on `feature/curriculum-sources-grades-2-3` from local `dev`. Mostly manual. Do not ingest yet.
+- Next work is Phase 2 PR 3-14, replace science placeholders in `TOPIC_MAP`, on `feature/science-topic-map` from local `dev`. Do not ingest yet. Do not add a Science subject button yet.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
@@ -412,7 +420,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Sprint 2 is on `main` at merge `cba97ab`. Local `dev` has the completion notes. Do not force-push. Do not start a six-message lesson to force a star.
+Sprint 2 is on `main` at merge `cba97ab`. Local `dev` has PR 3-13 (source docs README + gitignore). Do not force-push. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

@@ -341,7 +341,7 @@
 
 > Manual step outside Cursor. Set aside 30-45 minutes before writing code.
 
-- [ ] Create local folders (gitignored — not committed):
+- [x] Create local folders (gitignored — not committed):
   - `/rag-sources/math/grade-2/`
   - `/rag-sources/math/grade-3/`
   - `/rag-sources/reading/grade-2/`
@@ -349,17 +349,19 @@
   - `/rag-sources/science/k-1/`
   - `/rag-sources/science/grade-2/`
   - `/rag-sources/science/grade-3/`
-- [ ] Download from CK-12 (ck12.org → filter by grade and subject, free PDFs):
+- [x] Download from CK-12 (ck12.org → filter by grade and subject, free PDFs):
   - 5-8 Grade 2 Math: addition/subtraction to 100, place value, intro fractions
   - 5-8 Grade 3 Math: multiplication, division, fractions, area and perimeter
   - 5-8 Grade 2 Reading/ELA: comprehension, context clues, compare/contrast, nonfiction
   - 5-8 Grade 3 Reading/ELA: inference, text evidence, literary devices, summary
-- [ ] Download Science from CK-12 or Smithsonian Learning Lab (CC-licensed):
+- [x] Download Science from CK-12 or Smithsonian Learning Lab (CC-licensed):
   - K-1 Science: living things, weather, human body, animals, plants, earth and sky
   - Grade 2-3 Science: same topics at increasing depth
-- [ ] Confirm every file is CC-licensed or public domain before ingesting
-- [ ] Update `/rag-sources/README.md` — list each new source with URL and license
-- [ ] Commit: `docs(rag): add grade 2-3 and science source list with license confirmations`
+- [x] Confirm every file is CC-licensed or public domain before ingesting
+- [x] Update `/rag-sources/README.md` — list each new source with URL and license
+- [x] Commit: `docs(rag): add grade 2-3 and science source list with license confirmations`
+
+> **Note (11 Nov 2026):** Same choice as K–1 — CK-12 FlexBook PDFs need an account, so sources are EngageNY Math (CC BY-NC-SA 3.0), Core Knowledge CKLA Reading (CC BY-NC-SA 3.0), and Core Knowledge Science / CKSci (CC BY-NC-SA 4.0). Local counts: math G2 6, math G3 6, reading G2 5, reading G3 7, science K–1 6, science G2 5, science G3 4 (39 new PDFs). `.gitignore` now ignores `rag-sources/**/*.{pdf,zip,docx}` so nested grade folders stay local. Not ingested. `TOPIC_MAP` unchanged. No Science subject button. Math path untouched.
 
 ---
 

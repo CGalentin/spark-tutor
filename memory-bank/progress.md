@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 2 is live.** https://spark-tutor-app.vercel.app has the reading quiz, spelling, chat triggers, and activity buttons. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-13, downloading Grades 2–3 + Science source docs.
+**Sprint 3 started.** PR 3-13 source docs are local (39 new CC PDFs, not ingested). Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-14, real science topics in `TOPIC_MAP`.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -71,6 +71,14 @@
 | 3-11 | Activity Buttons in Child UI | `feature/mcp-activity-buttons` | ✅ Commit `8ec1c33`. Same send path as typed chat |
 | 3-12 | Sprint 2 Test + Deploy | `dev` | ✅ Live. Merge `cba97ab` on `main` |
 
+## Phase 2 Sprint 3 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-13 | Download + Organize New Source Documents | `feature/curriculum-sources-grades-2-3` | ✅ 39 local PDFs. README + gitignore on `dev`. Not ingested |
+| 3-14 | Update Science Topic Map | `feature/science-topic-map` | ⏳ Next |
+| 3-15 | Ingest Grades 2-3 Math + Reading Chunks | `feature/ingest-grades-2-3` | ⏳ Pending |
+
 ---
 
 ## v2 Sprint 1 — What Works / What's Left
@@ -115,13 +123,14 @@
 - Chat starts a reading quiz when the subject is reading and the child says quiz, test me, or comprehension. It starts spelling practice when the child says spell or spelling, in any subject. Math "give me a problem" still works. The reply is character voice, not raw JSON
 - Activity buttons above the chat input send those phrases the same way a typed message is sent. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. They hide while the mascot is responding
 - Sprint 2 local test: button + phrase triggers, wrong/right verify for quiz and spelling, no answer/spelling leaks, `tsc` and build clean
+- PR 3-13: local `rag-sources/` grade folders hold 39 new CC-licensed PDFs (EngageNY Math, CKLA Reading, CKSci Science). Listed in `rag-sources/README.md`. Not ingested
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force a star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-13: download + organize Grades 2–3 and Science PDFs (manual, gitignored folders)
-- Sprint 3 curriculum expansion continues after the sources are ready
+- Phase 2 PR 3-14: replace science placeholders in `TOPIC_MAP` with real K–3 topic names
+- Ingest Grades 2–3 + Science chunks; Science subject button; grade promotion — later Sprint 3 PRs
 - Merge leftover docs notes only when the user asks
 
 **Live in production**
