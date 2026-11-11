@@ -28,7 +28,7 @@
 
 - [ ] Pre-work — Close PR 2-28
 - [ ] Sprint 1 — New Spark Squad Characters
-- [ ] Sprint 2 — Reading Quiz + Spelling MCP Tools
+- [x] Sprint 2 — Reading Quiz + Spelling MCP Tools
 - [ ] Sprint 3 — Grades 2-3 + Science Curriculum
 - [ ] Sprint 4 — Voice Input + ElevenLabs TTS
 
@@ -318,11 +318,13 @@
 - [x] Check Upstash dashboard — verify new rate limit buckets exist
 - [x] Run: `npx tsc --noEmit` — zero errors
 - [x] Run: `npm run build` — zero errors
-- [ ] Deploy: `vercel --prod`
-- [ ] Merge `dev` → `main`
-- [ ] Commit: `chore: sprint 2 complete — reading quiz and spelling mcp tools live`
+- [x] Deploy: `vercel --prod`
+- [x] Merge `dev` → `main`
+- [x] Commit: `chore: sprint 2 complete — reading quiz and spelling mcp tools live`
 
-> **Note (11 Nov 2026):** Local sprint test passed on `dev` at `5e021b6` (already pushed). Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, and phrase-only triggers all returned 200. Chat and verify replies had no `correctIndex` / answer arrays / spelling words. Rate-limit prefixes `rl:reading-quiz`, `rl:reading-quiz-verify`, `rl:spelling`, `rl:spelling-verify` are in code; live Upstash dashboard was skipped (local Redis often fails open). `tsc` and `npm run build` exited 0. Math path unchanged. Test sessions were ended; the 26 Sep Blip session was not. Deploy and merge to `main` left open until explicitly asked.
+> **Note (11 Nov 2026):** Local sprint test passed on `dev` at `5e021b6` (already pushed). Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, and phrase-only triggers all returned 200. Chat and verify replies had no `correctIndex` / answer arrays / spelling words. Rate-limit prefixes `rl:reading-quiz`, `rl:reading-quiz-verify`, `rl:spelling`, `rl:spelling-verify` are in code; live Upstash dashboard was skipped (local Redis often fails open). `tsc` and `npm run build` exited 0. Math path unchanged. Test sessions were ended; the 26 Sep Blip session was not.
+
+> **Note (11 Nov 2026, deploy):** `vercel --prod` aliased https://spark-tutor-app.vercel.app. Live login and character-select returned 200. Merge to `main` is `cba97ab`. Math path was not changed. Shapes was not clicked. The 26 Sep Blip session was not ended.
 
 ---
 
@@ -728,11 +730,11 @@
 - [ ] New character voice prompts match personality in actual chat
 
 ### Sprint 2 — MCP Tools
-- [ ] Reading quiz: passage + questions generated, correct answer indexes server-side only
-- [ ] Spelling practice: clue + letter count only, actual word server-side only
-- [ ] Both trigger via chat phrase AND activity button
-- [ ] Math problem tool regression-free
-- [ ] All new routes: auth before body, rate limit, no answer in response
+- [x] Reading quiz: passage + questions generated, correct answer indexes server-side only
+- [x] Spelling practice: clue + letter count only, actual word server-side only
+- [x] Both trigger via chat phrase AND activity button
+- [x] Math problem tool regression-free
+- [x] All new routes: auth before body, rate limit, no answer in response
 
 ### Sprint 3 — Curriculum
 - [ ] Grades 2-3 Math + Reading chunks ingested (CK-12/EngageNY)

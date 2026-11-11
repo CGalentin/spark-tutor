@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 2 local test passed; deploy still open.** `origin/dev` has the quiz, spelling, triggers, and activity buttons. https://spark-tutor-app.vercel.app still shows eight drawings without those routes. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is finish PR 3-12 deploy when asked, then Sprint 3.
+**Sprint 2 is live.** https://spark-tutor-app.vercel.app has the reading quiz, spelling, chat triggers, and activity buttons. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-13, downloading Grades 2–3 + Science source docs.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -69,7 +69,7 @@
 | 3-09 | Spelling Practice MCP Route | `feature/mcp-spelling` | ✅ Commit `c10a43c`. Spellings stay on the server |
 | 3-10 | Wire MCP Tools Into Chat | `feature/mcp-reading-chat-trigger` | ✅ Commit `baa775b`. Child does not see raw JSON |
 | 3-11 | Activity Buttons in Child UI | `feature/mcp-activity-buttons` | ✅ Commit `8ec1c33`. Same send path as typed chat |
-| 3-12 | Sprint 2 Test + Deploy | `dev` | ⏳ Local test ✅. Deploy / merge to `main` still open |
+| 3-12 | Sprint 2 Test + Deploy | `dev` | ✅ Live. Merge `cba97ab` on `main` |
 
 ---
 
@@ -120,9 +120,9 @@
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force a star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-12 deploy: `vercel --prod`, merge `dev` → `main`, chore commit — only when asked
-- Sprint 3 curriculum expansion (PR 3-13+) after that deploy
-- Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
+- Phase 2 PR 3-13: download + organize Grades 2–3 and Science PDFs (manual, gitignored folders)
+- Sprint 3 curriculum expansion continues after the sources are ready
+- Merge leftover docs notes only when the user asks
 
 **Live in production**
 - v2 phase 1 at https://spark-tutor-app.vercel.app: grade bands, evaluator, learning path, live mastery ring, suggestion card, session summaries with scores
