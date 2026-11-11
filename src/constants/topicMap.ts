@@ -1,6 +1,5 @@
 // Curriculum topic lists by subject and grade.
 // Later PRs use this to pick the next lesson on a child's learning path.
-// Science is a Phase 2 placeholder — same starter topics for every grade.
 
 import type { GradeBand } from './gradeBands';
 
@@ -9,16 +8,6 @@ export type TopicSubject = 'math' | 'reading' | 'science';
 
 /** Nested lookup: subject → grade → list of topic names. */
 export type TopicMap = Record<TopicSubject, Record<GradeBand, string[]>>;
-
-/** Same science topics for K–3 until Phase 2 builds a real sequence. */
-const SCIENCE_PLACEHOLDER_TOPICS: string[] = [
-  'Living things',
-  'Weather',
-  'Human body',
-  'Animals',
-  'Plants',
-  'Earth and sky',
-];
 
 export const TOPIC_MAP: TopicMap = {
   math: {
@@ -52,10 +41,38 @@ export const TOPIC_MAP: TopicMap = {
     '3': ['Inferencing', 'Text evidence', 'Literary devices', 'Summary writing', 'Research skills'],
   },
   science: {
-    K: [...SCIENCE_PLACEHOLDER_TOPICS],
-    '1': [...SCIENCE_PLACEHOLDER_TOPICS],
-    '2': [...SCIENCE_PLACEHOLDER_TOPICS],
-    '3': [...SCIENCE_PLACEHOLDER_TOPICS],
+    K: [
+      'Living and non-living things',
+      'Types of weather',
+      'Parts of the body',
+      'Animal habitats',
+      'Plant parts',
+      'Sun moon and stars',
+    ],
+    '1': [
+      'Plant and animal needs',
+      'Seasonal changes',
+      'The five senses',
+      'Animal life cycles',
+      'How plants grow',
+      'Earth and space',
+    ],
+    '2': [
+      'Ecosystems',
+      'Weather patterns',
+      'Body systems',
+      'Adaptations',
+      'Photosynthesis',
+      'Landforms and water',
+    ],
+    '3': [
+      'Food chains',
+      'Climate vs weather',
+      'Human body systems',
+      'Animal behavior',
+      'Plant reproduction',
+      "Earth's resources",
+    ],
   },
 };
 
