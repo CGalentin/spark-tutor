@@ -13,5 +13,11 @@ service cloud.firestore {
     match /curriculum_chunks/{document=**} {
       allow read, write: if false;
     }
+
+    // Reading-quiz answer notes are written only by the Admin SDK in API routes.
+    // The browser must never read the correct option numbers.
+    match /quiz_sessions/{document=**} {
+      allow read, write: if false;
+    }
   }
 }

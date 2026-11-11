@@ -99,9 +99,13 @@ src/lib/claude/buildSystemPrompt.ts ← 7-layer system prompt composer (child ch
 src/lib/claude/buildSummaryPrompt.ts ← transcript plus session evaluations for the parent summary
 
 # API Routes
-src/app/api/chat/route.ts              ← SSE streaming chat; uses request grade + currentTopic in the prompt; fetches learning path; sets difficultyHint; MCP routing before RAG; increments messageCount
+src/app/api/chat/route.ts              ← SSE streaming chat; grade + currentTopic in the prompt; learning path; difficultyHint; math, reading-quiz, and spelling triggers before RAG; increments messageCount
 src/app/api/rag/route.ts               ← Gemini embed + cosine search; returns top-3 chunks
 src/app/api/mcp/math-problem/route.ts  ← MCP tool: Claude generates problem+hint; answer never returned
+src/app/api/mcp/reading-quiz/route.ts  ← MCP tool: passage + 3 questions; choice numbers saved server-side only
+src/app/api/mcp/reading-quiz/verify/route.ts ← checks one choice; praise or hint; never returns the choice number
+src/app/api/mcp/spelling/route.ts      ← MCP tool: clues, letter counts, and hints; spellings saved server-side only
+src/app/api/mcp/spelling/verify/route.ts ← checks one attempt; praise or hint; never returns the spelling
 src/app/api/evaluate/route.ts          ← Gemini Flash mastery score; saves evaluations[] + learning path; suggestNextTopic when mastered
 src/app/api/learning-path/approve/route.ts ← parent approves next topic; updates currentTopic, topicsCompleted, parentApproved
 src/app/api/learning-path/reject/route.ts  ← parent clears suggestedNextTopic; currentTopic unchanged
@@ -120,7 +124,11 @@ src/types/api.ts                  ← ApiResult<T>, ChatRequest (optional grade)
                                      SessionEndRequest/Response, SummaryRequest/Response,
                                      EvaluateRequest/EvaluateResponse,
                                      ApproveTopicRequest/ApproveTopicResponse,
-                                     RejectTopicRequest/RejectTopicResponse
+                                     RejectTopicRequest/RejectTopicResponse,
+                                     QuizQuestion, ReadingQuizRequest, ReadingQuizResponse,
+                                     ReadingQuizVerifyRequest, ReadingQuizVerifyResponse,
+                                     SpellingWord, SpellingRequest, SpellingResponse,
+                                     SpellingVerifyRequest, SpellingVerifyResponse
 
 # Constants + State
 src/constants/index.ts            ← barrel: grade bands, prompts, topic map
@@ -147,11 +155,13 @@ src/components/child/SessionProgressBar.tsx      ← gradient progress bar + sta
 src/components/child/EndSessionButton.tsx        ← "All Done!" CTA
 src/components/child/WellDoneScreen.tsx          ← post-session celebration screen
 src/components/child/AnimatedAvatar.tsx          ← SVG avatar wrapper with idle/thinking/celebrating states
-src/components/child/avatars/                    ← 6 SVG avatar components + index.ts with getAvatarComponent()
+src/components/child/ActivityButtons.tsx         ← math/reading/spelling shortcuts above ChatInput; same handleSend path
+src/components/child/avatars/                    ← 8 SVG avatar components + index.ts with getAvatarComponent()
 src/components/ui/                               ← Shadcn components (do not edit)
 
 # MCP
 src/lib/mcp/mathProblem.ts          ← generateMathProblem() + detectsProblemRequest() (server-side, no HTTP)
+src/lib/mcp/detectReadingTools.ts   ← detectsReadingQuizRequest() + detectsSpellingRequest() (phrase checks only)
 src/lib/mcp/topicBoundary.ts        ← detectTopicBoundary() + TOPIC_BLOCK_SIZE=6 (client-safe; chat calls this after each mascot reply)
 
 # Parent UI components

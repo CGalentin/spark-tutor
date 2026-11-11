@@ -123,6 +123,109 @@ export interface MathProblemResponse {
   hint: string;
 }
 
+/** One reading-quiz question sent to the browser. The correct choice is not included. */
+export interface QuizQuestion {
+  /** The comprehension question, in words a child can read with help. */
+  question: string;
+  /** Exactly three answer choices. Order matches the stored correct index. */
+  options: string[];
+  /** A nudge that does not say which choice is correct. */
+  hint: string;
+}
+
+/** Request body sent to POST /api/mcp/reading-quiz. */
+export interface ReadingQuizRequest {
+  /** Session this quiz belongs to. The route checks it is owned by the signed-in parent. */
+  sessionId: string;
+  /** Tutoring grade (K–3 from @/constants). Not the RAG chunk grade. */
+  grade: GradeBand;
+  /** Reading topic the passage should be about. */
+  topic: string;
+}
+
+/** Successful response from POST /api/mcp/reading-quiz.
+ *  Correct option numbers stay in Firestore and are not part of this type. */
+export interface ReadingQuizResponse {
+  /** Short age-appropriate passage the questions are about. */
+  passage: string;
+  /** Three comprehension questions. Each has three choices and a hint. */
+  questions: QuizQuestion[];
+}
+
+/** Request body sent to POST /api/mcp/reading-quiz/verify. */
+export interface ReadingQuizVerifyRequest {
+  /** Session whose server-only quiz note should be checked. */
+  sessionId: string;
+  /** Which question the child is answering. 0, 1, or 2. */
+  questionIndex: number;
+  /** Which choice the child picked. 0, 1, or 2. */
+  selectedOption: number;
+}
+
+/** Right answer. Praise only — the correct choice number is not included. */
+export interface ReadingQuizCorrectResponse {
+  correct: true;
+  /** Warm praise a mascot can say. It does not name the choice number. */
+  feedback: string;
+}
+
+/** Wrong answer. A hint only — the correct choice number is not included. */
+export interface ReadingQuizWrongResponse {
+  correct: false;
+  /** Nudge toward another try. It does not say which choice is right. */
+  hint: string;
+}
+
+/** Successful response from POST /api/mcp/reading-quiz/verify. */
+export type ReadingQuizVerifyResponse = ReadingQuizCorrectResponse | ReadingQuizWrongResponse;
+
+/** One spelling word sent to the browser. The spelled word is not included. */
+export interface SpellingWord {
+  /** A description of the word that does not contain the spelling. */
+  clue: string;
+  /** How many letters are in the word. This number is not the spelling. */
+  letterCount: number;
+  /** A nudge that does not contain the spelling. */
+  hint: string;
+}
+
+/** Request body sent to POST /api/mcp/spelling. */
+export interface SpellingRequest {
+  /** Session this list belongs to. The route checks it is owned by the signed-in parent. */
+  sessionId: string;
+  /** Tutoring grade (K–3 from @/constants). Not the RAG chunk grade. */
+  grade: GradeBand;
+  /** Topic the words should be about. */
+  topic: string;
+  /** How many words to write. Must be 3, 4, or 5. */
+  count: number;
+}
+
+/** Successful response from POST /api/mcp/spelling.
+ *  The spelled words stay in Firestore and are not part of this type. */
+export interface SpellingResponse {
+  /** Clues, letter counts, and hints. The spellings themselves are omitted. */
+  words: SpellingWord[];
+}
+
+/** Request body sent to POST /api/mcp/spelling/verify. */
+export interface SpellingVerifyRequest {
+  /** Session whose server-only spelling note should be checked. */
+  sessionId: string;
+  /** Which word the child is trying. Starts at 0. */
+  wordIndex: number;
+  /** The child's spelling, before trim and capital-letter folding. */
+  attempt: string;
+}
+
+/** Successful response from POST /api/mcp/spelling/verify.
+ *  Praise or a hint only. The spelled word is not included. */
+export interface SpellingVerifyResponse {
+  correct: boolean;
+  /** Warm praise when right, or a hint when wrong. It does not contain the spelling. */
+  feedback: string;
+}
+
 /** Request body sent to POST /api/summary. */
 export interface SummaryRequest {
   sessionId: string;

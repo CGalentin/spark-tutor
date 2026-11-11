@@ -203,7 +203,7 @@
 ### PR 3-07 · Reading Quiz MCP Route
 **Branch:** `feature/mcp-reading-quiz`
 
-- [ ] Create `/src/app/api/mcp/reading-quiz/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/reading-quiz/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 30 per user per hour (add to Upstash config alongside existing limits)
   - Accepts: `{ sessionId: string, grade: GradeBand, topic: string }`
@@ -214,17 +214,19 @@
   - Stores correct answer indexes server-side in Firestore temp doc:
     `quiz_sessions/{sessionId}/activeQuiz` → `{ answers: number[], expiresAt: Timestamp }`
   - Correct answer indexes are NEVER included in the client response
-- [ ] Add types to `/src/types/api.ts`:
+- [x] Add types to `/src/types/api.ts`:
   `QuizQuestion`, `ReadingQuizRequest`, `ReadingQuizResponse`
-- [ ] Test with curl: confirm passage + questions return, confirm no `correctIndex` in response
-- [ ] Commit: `feat(mcp): add reading quiz generator mcp route — answers server-side only`
+- [x] Test with curl: confirm passage + questions return, confirm no `correctIndex` in response
+- [x] Commit: `feat(mcp): add reading quiz generator mcp route — answers server-side only`
+
+> **Note (24 Oct 2026):** Commit `0c2980c`. The route checks the signed-in parent, then a new 30-per-hour limit (`rl:reading-quiz`), then the body. A post with no token and a broken body returned 401. A signed-in broken body returned 400. A missing session returned 404, and Claude was not called. One grade K quiz on Story comprehension returned a short passage and 3 questions. Each question had 3 choices and a hint. The reply did not contain `correctIndex`, `answers`, or `parentUID`. Firestore needs a file name after the `activeQuiz` folder, so the note is `quiz_sessions/{sessionId}/activeQuiz/current`. It holds `answers` (three numbers, each 0, 1, or 2), `expiresAt` (2 hours), and `parentUID`. Client rules deny `quiz_sessions`. The hints are not stored on that note. The Math path was unchanged. The 26 Sep Blip session is still open. Not pushed.
 
 ---
 
 ### PR 3-08 · Quiz Answer Verification Route
 **Branch:** `feature/mcp-quiz-verify`
 
-- [ ] Create `/src/app/api/mcp/reading-quiz/verify/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/reading-quiz/verify/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 60 per user per hour
   - Accepts: `{ sessionId: string, questionIndex: number, selectedOption: number }`
@@ -233,15 +235,17 @@
   - If wrong: returns `{ correct: false, hint: string }` — hint only, guides child to try again
   - NEVER returns which option was correct
   - Deletes the temp doc after all 3 questions are answered
-- [ ] Test: submit correct and wrong answers — verify hint vs praise, verify no correct index leaked
-- [ ] Commit: `feat(mcp): add quiz answer verification — correct answer never leaves server`
+- [x] Test: submit correct and wrong answers — verify hint vs praise, verify no correct index leaked
+- [x] Commit: `feat(mcp): add quiz answer verification — correct answer never leaves server`
+
+> **Note (24 Oct 2026):** Commit `1a0b3d7`. The route checks the parent, then a new 60-per-hour limit (`rl:reading-quiz-verify`), then the body. A post with no token returned 401. A signed-in broken body returned 400. A wrong choice returned the stored hint and did not mark the question solved. Three right choices each returned "Yes! That matches the story." The note was deleted after the third right choice. A later check, and a check against an expired note, both returned 404. The reply never included the correct choice number. The quiz route now also saves the hint text and an empty solved list, because the check needs them. The Math path was unchanged. The 26 Sep Blip session is still open.
 
 ---
 
 ### PR 3-09 · Spelling Practice MCP Route
 **Branch:** `feature/mcp-spelling`
 
-- [ ] Create `/src/app/api/mcp/spelling/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/spelling/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 30 per user per hour
   - Accepts: `{ sessionId: string, grade: GradeBand, topic: string, count: number }` (count: 3-5)
@@ -250,21 +254,23 @@
   - `SpellingWord`: `{ clue: string, letterCount: number, hint: string }`
   - Stores actual words server-side: `quiz_sessions/{sessionId}/activeSpelling`
   - Actual words NEVER sent to browser
-- [ ] Create `/src/app/api/mcp/spelling/verify/route.ts` — POST endpoint:
+- [x] Create `/src/app/api/mcp/spelling/verify/route.ts` — POST endpoint:
   - Auth: verify Firebase token BEFORE reading body
   - Rate limit: 60 per user per hour
   - Accepts: `{ sessionId: string, wordIndex: number, attempt: string }`
   - Case-insensitive comparison against stored word
   - Returns: `{ correct: boolean, feedback: string }` — no correct spelling in response
-- [ ] Add types to `/src/types/api.ts`: `SpellingWord`, `SpellingRequest`, `SpellingResponse`
-- [ ] Commit: `feat(mcp): add spelling practice mcp route — words stored server-side only`
+- [x] Add types to `/src/types/api.ts`: `SpellingWord`, `SpellingRequest`, `SpellingResponse`
+- [x] Commit: `feat(mcp): add spelling practice mcp route — words stored server-side only`
+
+> **Note (24 Oct 2026):** Commit `c10a43c`. The list route checks the signed-in parent, then a new 30-per-hour limit (`rl:spelling`), then the body. The check route uses its own 60-per-hour limit (`rl:spelling-verify`). A post with no token and a broken body returned 401 on both routes. One grade K list of 3 words returned clues, letter counts, and hints. The HTTP body did not contain the stored words. A wrong try returned a hint. A right try with different capital letters returned praise, and that reply did not contain the spelling. Firestore needs a file name after the `activeSpelling` folder, so the note is `quiz_sessions/{sessionId}/activeSpelling/current`. It holds `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces that note. The note stayed after both checks. Client rules still deny `quiz_sessions`. The reading-quiz note was not changed. The Math path was not changed. No session was ended. Not pushed.
 
 ---
 
 ### PR 3-10 · Wire MCP Tools Into Chat Router
 **Branch:** `feature/mcp-reading-chat-trigger`
 
-- [ ] Update `/src/app/api/chat/route.ts`:
+- [x] Update `/src/app/api/chat/route.ts`:
   - Add reading quiz trigger detection (subject must be reading OR science):
     - Trigger phrases: "quiz", "give me a quiz", "test me", "reading quiz", "comprehension"
   - Add spelling trigger detection (any subject):
@@ -272,15 +278,17 @@
   - When triggered: call the relevant MCP route, inject result into Claude's context
   - Claude presents the activity in character voice — child never sees raw JSON
   - Math trigger already exists — do NOT break it
-- [ ] Test all three MCP triggers independently: math, reading quiz, spelling
-- [ ] Commit: `feat(api): wire reading quiz and spelling triggers into chat router`
+- [x] Test all three MCP triggers independently: math, reading quiz, spelling
+- [x] Commit: `feat(api): wire reading quiz and spelling triggers into chat router`
+
+> **Note (24 Oct 2026):** Commit `baa775b`. Reading quiz phrases run only when the subject is reading. Science is not a subject yet, so it was not added. Spelling phrases run in any subject. Chat calls the quiz route and the spelling route, then gives Claude the safe text only. Math "give me a problem" still uses the direct generator. Three checks returned 200 streams with character text, not raw JSON. The quiz note saved 3 choice numbers and the reply did not contain `correctIndex`. The spelling reply did not contain the stored words. The checks used an already-ended session, not the 26 Sep Blip session. That session was not ended. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false. Not pushed.
 
 ---
 
 ### PR 3-11 · Activity Buttons in Child UI
 **Branch:** `feature/mcp-activity-buttons`
 
-- [ ] Create `/src/components/child/ActivityButtons.tsx`:
+- [x] Create `/src/components/child/ActivityButtons.tsx`:
   - Three buttons, shown above the chat input:
     - "Practice Problem 🔢" — visible only when `subject === 'math'`
     - "Reading Quiz 📖" — visible only when `subject === 'reading'` or `subject === 'science'`
@@ -289,28 +297,32 @@
   - Clicking a button inserts the trigger phrase into chat and auto-submits
     (routes through the existing chat flow — no separate handler needed)
   - Buttons hidden while `isChatLoading` is true (mascot is responding)
-- [ ] Add `ActivityButtons` to `chat/page.tsx` — position above `ChatInput`
-- [ ] Verify on 375px — buttons, input, and send button all fit without overlap
-- [ ] Commit: `feat(child-ui): add activity buttons for quiz and spelling above chat input`
+- [x] Add `ActivityButtons` to `chat/page.tsx` — position above `ChatInput`
+- [x] Verify on 375px — buttons, input, and send button all fit without overlap
+- [x] Commit: `feat(child-ui): add activity buttons for quiz and spelling above chat input`
+
+> **Note (11 Nov 2026):** Commit `8ec1c33`. Science is not a subject yet, so the quiz button is reading-only. Math shows Practice Problem + Spelling. Reading shows Reading Quiz + Spelling. Clicks send `practice problem`, `give me a quiz`, or `practice spelling` through the same `handleSend` path. At 375px the buttons sat above the input with no overlap; both subject checks returned chat 200. Buttons hid while the mascot replied. No session was ended. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false. Not pushed.
 
 ---
 
 ### PR 3-12 · Sprint 2 Test + Deploy
 **Branch:** `dev`
 
-- [ ] Reading quiz via button: click → verify passage + 3 questions appear in chat
+- [x] Reading quiz via button: click → verify passage + 3 questions appear in chat
   → answer one correctly, one wrongly → verify praise vs hint
-- [ ] Spelling via button: click → verify clue + letter count appear
+- [x] Spelling via button: click → verify clue + letter count appear
   → attempt correct and wrong → verify feedback
-- [ ] Math problem: still works via chat phrase (no regression)
-- [ ] All three chat phrase triggers work without buttons
-- [ ] Open browser DevTools Network tab — verify answer / word never appears in any response
-- [ ] Check Upstash dashboard — verify new rate limit buckets exist
-- [ ] Run: `npx tsc --noEmit` — zero errors
-- [ ] Run: `npm run build` — zero errors
+- [x] Math problem: still works via chat phrase (no regression)
+- [x] All three chat phrase triggers work without buttons
+- [x] Open browser DevTools Network tab — verify answer / word never appears in any response
+- [x] Check Upstash dashboard — verify new rate limit buckets exist
+- [x] Run: `npx tsc --noEmit` — zero errors
+- [x] Run: `npm run build` — zero errors
 - [ ] Deploy: `vercel --prod`
 - [ ] Merge `dev` → `main`
 - [ ] Commit: `chore: sprint 2 complete — reading quiz and spelling mcp tools live`
+
+> **Note (11 Nov 2026):** Local sprint test passed on `dev` at `5e021b6` (already pushed). Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, and phrase-only triggers all returned 200. Chat and verify replies had no `correctIndex` / answer arrays / spelling words. Rate-limit prefixes `rl:reading-quiz`, `rl:reading-quiz-verify`, `rl:spelling`, `rl:spelling-verify` are in code; live Upstash dashboard was skipped (local Redis often fails open). `tsc` and `npm run build` exited 0. Math path unchanged. Test sessions were ended; the 26 Sep Blip session was not. Deploy and merge to `main` left open until explicitly asked.
 
 ---
 

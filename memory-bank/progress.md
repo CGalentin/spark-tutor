@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Bram and Stella are live at https://spark-tutor-app.vercel.app.** The select screen shows eight drawings. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-07, the reading quiz route.
+**Sprint 2 local test passed; deploy still open.** `origin/dev` has the quiz, spelling, triggers, and activity buttons. https://spark-tutor-app.vercel.app still shows eight drawings without those routes. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is finish PR 3-12 deploy when asked, then Sprint 3.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -60,6 +60,17 @@
 | 3-05 | Character select screen with 8 cards | `feature/character-select-8-cards` | ✅ Already 2×4. No grid code change |
 | 3-06 | Sprint 1 test + deploy | `dev` | ✅ Live. Chat star bounce still open |
 
+## Phase 2 Sprint 2 — PR Checklist
+
+| PR | Title | Branch | Status |
+|---|---|---|---|
+| 3-07 | Reading Quiz MCP Route | `feature/mcp-reading-quiz` | ✅ Commit `0c2980c`. Choice numbers stay on the server |
+| 3-08 | Quiz Answer Verification | `feature/mcp-quiz-verify` | ✅ Commit `1a0b3d7`. Correct choice stays on the server |
+| 3-09 | Spelling Practice MCP Route | `feature/mcp-spelling` | ✅ Commit `c10a43c`. Spellings stay on the server |
+| 3-10 | Wire MCP Tools Into Chat | `feature/mcp-reading-chat-trigger` | ✅ Commit `baa775b`. Child does not see raw JSON |
+| 3-11 | Activity Buttons in Child UI | `feature/mcp-activity-buttons` | ✅ Commit `8ec1c33`. Same send path as typed chat |
+| 3-12 | Sprint 2 Test + Deploy | `dev` | ⏳ Local test ✅. Deploy / merge to `main` still open |
+
 ---
 
 ## v2 Sprint 1 — What Works / What's Left
@@ -97,12 +108,20 @@
 - PR 2-26 live check: six Kindergarten Math messages on Counting to 20 scored 92 and suggested Shapes. The live ring, the session card, and the timeline all showed that score. The suggestion card is still waiting. Approve and reject were not clicked
 - The character select screen lists all eight Spark Squad characters in two columns. Bram and Stella use their SVG drawings. A 375px-wide screen does not scroll sideways
 - Bram and Stella can start a Kindergarten Math visit on Counting to 20. Bram says "Good tracking, cub!" Stella can say "keep floating along." Their drawings float while waiting and tilt while a reply is on the way
+- `POST /api/mcp/reading-quiz` returns a short passage and 3 questions. Each question has 3 choices and a hint. The correct choice numbers are saved at `quiz_sessions/{sessionId}/activeQuiz/current` and are not in the reply
+- `POST /api/mcp/reading-quiz/verify` returns praise for a right choice and the stored hint for a wrong choice. The note is deleted after all 3 questions are gotten right
+- `POST /api/mcp/spelling` returns clues, letter counts, and hints. The spellings are saved at `quiz_sessions/{sessionId}/activeSpelling/current` and are not in the reply
+- `POST /api/mcp/spelling/verify` returns praise for a right spelling and a hint for a wrong one. The spelling is not in the reply. The note stays so a wrong try can be tried again
+- Chat starts a reading quiz when the subject is reading and the child says quiz, test me, or comprehension. It starts spelling practice when the child says spell or spelling, in any subject. Math "give me a problem" still works. The reply is character voice, not raw JSON
+- Activity buttons above the chat input send those phrases the same way a typed message is sent. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. They hide while the mascot is responding
+- Sprint 2 local test: button + phrase triggers, wrong/right verify for quiz and spelling, no answer/spelling leaks, `tsc` and build clean
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
-- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
+- Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force a star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-07: reading quiz route. Correct answer indexes stay on the server
+- Phase 2 PR 3-12 deploy: `vercel --prod`, merge `dev` → `main`, chore commit — only when asked
+- Sprint 3 curriculum expansion (PR 3-13+) after that deploy
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

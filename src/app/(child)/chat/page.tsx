@@ -17,6 +17,7 @@ import { detectTopicBoundary } from '@/lib/mcp/topicBoundary';
 import { MascotAvatar } from '@/components/child/MascotAvatar';
 import { ChatMessageList } from '@/components/child/ChatMessageList';
 import { ChatInput } from '@/components/child/ChatInput';
+import { ActivityButtons } from '@/components/child/ActivityButtons';
 import { SubjectSelector } from '@/components/child/SubjectSelector';
 import { StarBurst } from '@/components/child/StarBurst';
 import { SessionProgressBar } from '@/components/child/SessionProgressBar';
@@ -404,8 +405,9 @@ export default function ChatPage() {
             </div>
           )}
 
-          {/* Chat input pinned to the bottom */}
+          {/* Activity shortcuts + chat input pinned to the bottom */}
           <div className="shrink-0">
+            <ActivityButtons subject={subject} onSend={handleSend} disabled={isChatLoading} />
             <ChatInput onSend={handleSend} disabled={isChatLoading} />
           </div>
 

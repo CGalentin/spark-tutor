@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 characters are live (24 Oct 2026).** https://spark-tutor-app.vercel.app shows eight select cards, including Bram and Stella. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-07, the reading quiz route. That is not v1 Week 3.
+**Phase 2 Sprint 2 local test passed (11 Nov 2026).** `origin/dev` is at `5e021b6` with the quiz, spelling, chat triggers, and activity buttons. https://spark-tutor-app.vercel.app still shows eight select cards; quiz/spelling are not on production yet. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is finish PR 3-12 deploy + merge to `main` when asked, then Sprint 3.
 
 Do not force-push.
 
@@ -272,10 +272,61 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Sessions were ended. No evaluator call. The Math path was not changed
   - Production https://spark-tutor-app.vercel.app shows eight cards. Merge on `main` is `0b3db03`
 
+- [x] PR 3-07 · Reading Quiz MCP Route (`feature/mcp-reading-quiz`)
+  - `POST /api/mcp/reading-quiz` checks the parent, then 30 quizzes per hour (`rl:reading-quiz`), then the body
+  - Claude writes a short passage and 3 questions. Each question has 3 choices and a hint
+  - The browser gets the passage and the questions. Choice numbers stay in `quiz_sessions/{sessionId}/activeQuiz/current`
+  - That note also stores the parent id and an expiry 2 hours later. The hints are not stored there. Client rules deny `quiz_sessions`
+  - Types: `QuizQuestion`, `ReadingQuizRequest`, `ReadingQuizResponse`
+  - No token and a broken body returned 401. A signed-in broken body returned 400. A missing session returned 404
+  - One grade K quiz on Story comprehension returned 200. The reply had no `correctIndex`. The note has 3 choice numbers
+  - The Math path was not changed. The 26 Sep Blip session is still open. Commit `0c2980c`
+
+- [x] PR 3-08 · Quiz Answer Verification (`feature/mcp-quiz-verify`)
+  - `POST /api/mcp/reading-quiz/verify` checks the parent, then 60 checks per hour (`rl:reading-quiz-verify`), then the body
+  - A wrong choice returns the stored hint and leaves the question unsolved
+  - A right choice returns "Yes! That matches the story." The note is deleted only after all 3 are right
+  - The quiz route now also saves `hints` and `solvedQuestionIndexes` on the same note
+  - No token returned 401. An expired note returned 404. The correct choice number stayed off the reply
+  - The Math path was not changed. The 26 Sep Blip session is still open. Commit `1a0b3d7`
+
+- [x] PR 3-09 · Spelling Practice MCP Route (`feature/mcp-spelling`)
+  - `POST /api/mcp/spelling` checks the parent, then 30 lists per hour (`rl:spelling`), then the body
+  - `count` must be 3, 4, or 5. Claude writes that many words. The browser gets clues, letter counts, and hints
+  - The spellings stay in `quiz_sessions/{sessionId}/activeSpelling/current`, with `parentUID` and `expiresAt` (2 hours)
+  - A clue or hint that contains the spelling is thrown away and not saved
+  - `POST /api/mcp/spelling/verify` checks the parent, then 60 checks per hour (`rl:spelling-verify`), then the body
+  - A right try returns praise. A wrong try returns a hint. The reply never includes the spelling
+  - The note stays so a wrong try can be tried again. It does not change the reading-quiz note
+  - No token and a broken body returned 401 on both routes. One grade K list of 3 words returned 200
+  - The Math path was not changed. No session was ended. Commit `c10a43c`
+
+- [x] PR 3-10 · Wire MCP tools into chat (`feature/mcp-reading-chat-trigger`)
+  - A reading subject message that says quiz, test me, or comprehension calls the reading-quiz route
+  - Any subject that says spell or spelling calls the spelling route. Science is not a subject yet, so it was not added
+  - Claude is told the passage and choices, or the clues and letter counts. The reply is character voice, not raw JSON
+  - Math "give me a problem" still uses the existing generator
+  - Three live checks returned 200. The quiz note saved 3 choice numbers. The spelling reply did not contain the stored words
+  - The checks used an already-ended session, not the 26 Sep Blip session. That session was not ended. The Math path was not changed. Commit `baa775b`
+
+- [x] PR 3-11 · Activity buttons in the child UI (`feature/mcp-activity-buttons`)
+  - `ActivityButtons` sits above `ChatInput`. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. Science is not a subject yet
+  - Clicks call the same `handleSend` with `practice problem`, `give me a quiz`, or `practice spelling`
+  - Buttons are at least 48px, rounded-2xl, and hidden while the mascot is responding
+  - At 375px, math and reading both fit with no overlap. Both button clicks returned chat 200. No session was ended. Commit `8ec1c33`
+
+- [x] PR 3-12 · Sprint 2 local test (`dev`) — deploy still open
+  - Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, phrase-only triggers: all 200
+  - No `correctIndex`, answer arrays, or spellings in chat/verify replies
+  - Rate-limit prefixes confirmed in code; live Upstash dashboard skipped
+  - `npx tsc --noEmit` and `npm run build` exited 0. Math path unchanged. Test sessions ended; 26 Sep Blip left open
+  - Pushed to `origin/dev` at `5e021b6`. Deploy / merge to `main` / chore commit wait for an explicit ask
+
 ## Up Next
-- Next work is Phase 2 PR 3-07, the reading quiz route, on `feature/mcp-reading-quiz` from local `dev`. The correct answer indexes stay on the server. Do not confuse this with v1 Week 3.
+- Finish PR 3-12 only when asked: `vercel --prod`, merge `dev` → `main`, then `chore: sprint 2 complete — reading quiz and spelling mcp tools live`. Until then do not deploy and do not merge to `main`.
+- After that deploy, Sprint 3 starts at PR 3-13 (curriculum sources). Do not confuse with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
 ---
 
@@ -362,7 +413,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` is pushed. `origin/main` has merge `0b3db03` for the Bram and Stella deploy. Do not force-push. Do not start a six-message lesson to force a star.
+Local `dev` and `origin/dev` are at `5e021b6` with the reading quiz, spelling, chat triggers, activity buttons, and the Sprint 2 local test notes. `origin/main` is still `0f3a375`. Do not force-push. Do not merge to `main` until asked. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -392,6 +443,10 @@ Local `dev` is pushed. `origin/main` has merge `0b3db03` for the Bram and Stella
 - Do not run six child messages to force a star. Chat celebrate stays open until a shorter visit earns one, or until asked
 - The name question still says "What will you name your" plus the character emoji. Leave it until a later small change
 - `detectsProblemRequest()` only fires for `subject === 'math'` — reading subject still uses RAG only
+- Reading quiz choice numbers live at `quiz_sessions/{sessionId}/activeQuiz/current`. The browser cannot read that collection. The note has `answers`, `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`. The note is deleted after all 3 questions are gotten right
+- Spelling words live at `quiz_sessions/{sessionId}/activeSpelling/current`. The note has `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces it. The check route does not delete it. The spelling is never in the reply
+- Chat calls the reading-quiz route when the subject is reading and the message asks for a quiz. It calls the spelling route when the message asks to spell, in any subject. Math problems still use the direct generator. Science is not a subject yet
+- Activity buttons above the chat input send those same phrases through `handleSend`. Math shows Practice Problem + Spelling. Reading shows Reading Quiz + Spelling. All three hide while `isChatLoading` is true
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type

@@ -19,6 +19,10 @@ Browser (Child or Parent)
    │  /api/summary   → Claude (agentic)         │
    │  /api/rag       → Gemini embed + Firebase  │
    │  /api/mcp/math-problem → Claude MCP tool   │
+   │  /api/mcp/reading-quiz → Claude quiz     │
+   │       answers stored in Firestore        │
+   │  /api/mcp/spelling → Claude word list    │
+   │       spellings stored in Firestore      │
    │  /api/session/start|end → Firestore        │
    │  /api/learning-path/approve|reject       │
    │       → parent confirms next topic       │
@@ -83,6 +87,41 @@ The math problem generator is a Next.js API route that Claude can "call" during 
 - Output to Claude: `{ problem, hint }` — the `answer` field is NEVER sent to client
 - Claude receives the problem and hint, then guides the child Socratically toward the answer
 
+The reading quiz generator is a separate route, `POST /api/mcp/reading-quiz`:
+- Input: `{ sessionId, grade, topic }` with tutoring grade `'K' | '1' | '2' | '3'`
+- The signed-in parent is checked first, then a limit of 30 per hour (`rl:reading-quiz`), then the body
+- Output to the browser: `{ passage, questions }` where each question is `{ question, options, hint }`
+- Correct choice numbers are saved at `quiz_sessions/{sessionId}/activeQuiz/current`
+- That path needs the file name `current` because Firestore alternates folder, file, folder, file
+- The note holds `answers` (0, 1, or 2), `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`
+- `POST /api/mcp/reading-quiz/verify` checks one choice. Right returns praise. Wrong returns the stored hint
+- The correct choice number is never in that reply. A wrong choice can be tried again
+- The note is deleted after questions 0, 1, and 2 have all been gotten right
+- Verify is limited to 60 per hour (`rl:reading-quiz-verify`), separate from quiz creation
+- The spelling list is a separate route, `POST /api/mcp/spelling`:
+  - Input: `{ sessionId, grade, topic, count }` with tutoring grade `'K' | '1' | '2' | '3'`
+  - `count` is 3, 4, or 5. The signed-in parent is checked first, then a limit of 30 per hour (`rl:spelling`), then the body
+  - Output to the browser: `{ words }` where each word is `{ clue, letterCount, hint }`
+  - The spellings are saved at `quiz_sessions/{sessionId}/activeSpelling/current`
+  - That note also holds `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces it
+  - A clue or hint that contains the spelling is rejected and not sent
+  - `POST /api/mcp/spelling/verify` compares one attempt after trimming and ignoring capital letters
+  - Right returns praise. Wrong returns a hint. The spelling is never in that reply
+  - The note stays so a wrong try can be tried again. It does not change the reading-quiz note
+  - Verify is limited to 60 per hour (`rl:spelling-verify`), separate from list creation and from the quiz buckets
+- Chat calls those routes when the child's message asks for one:
+  - Reading quiz only when the subject is reading. Phrases include quiz, test me, and comprehension
+  - Spelling in any subject. Phrases include spell and spelling
+  - Math "give me a problem" still uses the direct generator, not an HTTP route
+  - Science is not a subject yet, so chat does not look for it
+  - The prompt gets the passage and choices, or the clues and letter counts. The reply is character voice, not raw JSON
+- Child UI activity buttons (`ActivityButtons` above `ChatInput`) send those same phrases through the existing chat send path:
+  - Math: "Practice Problem 🔢" → `practice problem`
+  - Reading: "Reading Quiz 📖" → `give me a quiz`
+  - Math and reading: "Spelling Practice ✏️" → `practice spelling`
+  - All three hide while the mascot is responding (`isChatLoading`)
+- Client security rules deny all reads and writes on `quiz_sessions`
+
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:
 - `detectTopicBoundary(messageCount, messages)` is true every `TOPIC_BLOCK_SIZE` (6) child messages, or when the last child message includes "I'm done" / "next topic" / "something else"
 - Count `0` is not a boundary (even though 0 % 6 === 0)
@@ -114,8 +153,22 @@ users/{parentUID}/
     parentApproved: boolean
     parentApprovedAt: Timestamp | null
     lastEvaluatedAt: Timestamp | null
+
+quiz_sessions/{sessionId}/activeQuiz/current   ← Admin SDK only; client rules deny this tree
+  answers: number[]            ← 0, 1, or 2 for each of the 3 questions
+  hints: string[]              ← one hint per question, returned only on a wrong check
+  solvedQuestionIndexes: number[]  ← questions already gotten right
+  expiresAt: Timestamp         ← 2 hours after the quiz was created
+  parentUID: string            ← signed-in parent who requested the quiz
+
+quiz_sessions/{sessionId}/activeSpelling/current   ← Admin SDK only; same deny rule
+  words: string[]              ← the spellings, never sent to the browser
+  hints: string[]              ← one hint per word, returned only on a wrong check
+  expiresAt: Timestamp         ← 2 hours after the list was created
+  parentUID: string            ← signed-in parent who requested the list
 ```
 All child session and learning-path data lives under the parent UID — no child accounts exist.
+The quiz answer note and the spelling note are the exception: they are server-only, outside the parent folder, and the browser cannot read them.
 
 **Two different `GradeBand` types (do not mix them):**
 - Tutoring: `src/constants/gradeBands.ts` — `'K' | '1' | '2' | '3'`
