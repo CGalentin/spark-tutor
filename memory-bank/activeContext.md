@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 Sprint 3 started (11 Nov 2026).** PR 3-14 is done: science placeholders in `TOPIC_MAP` are real K–3 topic names. PR 3-13 source PDFs are still local (39 new files, gitignored, not ingested). Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-15, ingest Grades 2–3 Math + Reading chunks only. Do not ingest Science yet. Do not add a Science subject button yet.
+**Phase 2 Sprint 3 (11 Nov 2026).** PR 3-15 is done: Grades 2–3 Math + Reading chunks are in Firestore. Corpus is **3807** total (was 536). Science PDFs are still local and not ingested. Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-16, ingest Science chunks only. Do not add a Science subject button yet.
 
 Do not force-push.
 
@@ -336,8 +336,16 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - `npx tsc --noEmit` exited 0. Commit `0c263dd`, merged to local `dev`. Not pushed
   - No Science subject button. Not ingested. Math path unchanged
 
+- [x] PR 3-15 · Ingest Grades 2-3 Math + Reading Chunks (`feature/ingest-grades-2-3`)
+  - Pre-ingest count: 536. After: **3807** (math 264, reading 3543)
+  - New: math|2 25, math|3 37, reading|2 1485, reading|3 1724
+  - `src/types/rag.ts` GradeBand now `'K' | '1' | '2' | '3' | 'K-1'`
+  - `scripts/rag/ingestDocuments.ts` supports `--grade 2|3` + grade folders + network retries
+  - Spot-checked 5 grade-2 and 5 grade-3 chunks; dedup re-runs saved 0
+  - Commit `411f213`. Science not ingested. Math path unchanged
+
 ## Up Next
-- Next work is Phase 2 PR 3-15, ingest Grades 2–3 Math + Reading chunks, on `feature/ingest-grades-2-3` from local `dev`. Do not ingest Science yet. Do not add a Science subject button yet.
+- Next work is Phase 2 PR 3-16, ingest Science chunks, on `feature/ingest-science` from local `dev` after this branch is merged. Do not add a Science subject button yet.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
@@ -426,7 +434,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Sprint 2 is on `main` at merge `cba97ab`. Local `dev` has PR 3-14 (science topic map, commit `0c263dd`). Do not force-push. Do not start a six-message lesson to force a star.
+Sprint 2 is on `main` at merge `cba97ab`. Feature branch `feature/ingest-grades-2-3` has PR 3-15 commit `411f213` (not yet merged to local `dev`). Do not force-push. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

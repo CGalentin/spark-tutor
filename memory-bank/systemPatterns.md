@@ -67,9 +67,9 @@ Offline (ingestion scripts — run once, not in the app):
 Online (per child message in /api/chat):
   child message → embedText() → queryByEmbedding(subject, top 3) → inject into Layer 6
 ```
-Corpus: 202 math chunks + 334 reading chunks = 536 total in `curriculum_chunks` Firestore collection.
+Corpus (after PR 3-15): 264 math + 3543 reading = **3807** total in `curriculum_chunks` (was 536 K–1 only). Includes grades 2–3 Math + Reading. Science not ingested yet.
 Cosine similarity is computed in-memory (all subject-filtered chunks fetched, ranked, top-3 returned).
-Why not Firebase Vector Search extension? Corpus < 1 000 chunks; no index config needed; upgrade later if needed.
+Why not Firebase Vector Search extension? Started under 1 000 chunks; still workable at ~4k — upgrade later if query latency grows.
 
 ### 3. Dual-LLM Pattern
 - **Claude** → all conversation generation (chat + session summaries)
@@ -172,7 +172,7 @@ The quiz answer note and the spelling note are the exception: they are server-on
 
 **Two different `GradeBand` types (do not mix them):**
 - Tutoring: `src/constants/gradeBands.ts` — `'K' | '1' | '2' | '3'`
-- RAG chunks: `src/types/rag.ts` — `'K' | '1' | 'K-1'` (curriculum metadata)
+- RAG chunks: `src/types/rag.ts` — `'K' | '1' | '2' | '3' | 'K-1'` (curriculum metadata)
 
 `@/types` currently re-exports the RAG `GradeBand`. Import the tutoring one from `@/constants`.
 

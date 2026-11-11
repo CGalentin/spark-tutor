@@ -12,7 +12,7 @@ v1 shipped for K-1. v2 extends the same product to Grades 2–3 with grade-tuned
 | Parents don't know what their child worked on | Automatic AI-generated session summaries appear on the parent dashboard after every session |
 | Generic AI tutors aren't safe for young children | Claude is constrained by BASE_TUTOR_RULES plus a grade-band layer so language stays age-appropriate |
 | One voice for every age | Grade-band prompts: K uses 2 short sentences; Grade 3 can use 5 sentences and multi-step questions |
-| AI answers aren't grounded in real curriculum | RAG layer retrieves OER curriculum chunks before every Claude response (current corpus is still K-1) |
+| AI answers aren't grounded in real curriculum | RAG layer retrieves OER curriculum chunks before every Claude response (corpus now includes K–3 Math + Reading; Science next) |
 | Child jumps topics with no memory | v2 learning path stores current topic, mastery scores, and a parent-approved next step |
 
 ## The Spark Squad (8 Mascot Characters)

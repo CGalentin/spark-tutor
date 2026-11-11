@@ -4,14 +4,15 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 11 Nov 2026. PR 3-14 is done. Science topic names are real. Nothing more was started.
+Date: 11 Nov 2026. PR 3-15 is done. Grades 2–3 Math + Reading are ingested. Science is not.
 
-- Local `dev` has the PR 3-14 topic-map commit (`0c263dd`) plus the docs check-off
-- 39 new CC-licensed PDFs still sit under `rag-sources/` grade folders (gitignored)
-- Not ingested. Science topics are real in `TOPIC_MAP`. No Science subject button
-- `origin/main` still has merge `cba97ab` (Sprint 2). Live site unchanged for curriculum
+- Feature branch `feature/ingest-grades-2-3` has commit `411f213` plus a docs check-off (merge that branch into local `dev` before starting PR 3-16)
+- Firestore corpus is **3807** total (math 264, reading 3543). New: math|2 25, math|3 37, reading|2 1485, reading|3 1724
+- Science PDFs remain under `rag-sources/science/` (gitignored, not ingested)
+- `origin/main` still has merge `cba97ab` (Sprint 2). Live site code unchanged for this ingest
 - Math path is still Counting to 20, suggestion Shapes, `parentApproved` false
 - The 26 Sep Blip session is still open. Do not end it
+- Gemini billing is linked (Tier 1) — free-tier daily embed limit was hit mid-session; paid quota finished the rest
 
 `AGENTS.md` and `spark_tutor_build_bible_2.docx` are still dirty on purpose. Leave them uncommitted unless I say so in that chat.
 
@@ -25,33 +26,31 @@ I'm building Spark Tutor v2 Phase 2. Read these files before you touch anything.
 - `.cursorrules` in the parent `TutorApp` folder (`C:\Users\GauntletAI\Desktop\GauntletAI\TutorApp\.cursorrules`)
 - `CLAUDE.md`
 - `ROADMAP-v2_1.md` (Phase 1; already shipped)
-- `ROADMAP-v2-phase2.md`. Read the Sprint 3 intro, the PR 3-14 complete note, then PR 3-15 only
+- `ROADMAP-v2-phase2.md`. Read the Sprint 3 intro, the PR 3-15 complete note, then PR 3-16 only
 
 If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-14 science topic map commit. `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-15 ingest commit after you merge `feature/ingest-grades-2-3` into `dev`. `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
-This session is PR 3-15 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/ingest-grades-2-3`. Create that branch from local `dev`. Do not start PR 3-16. Do not ingest Science. Do not deploy.
+This session is PR 3-16 only, from `ROADMAP-v2-phase2.md`. First merge `feature/ingest-grades-2-3` into local `dev` if it is not already merged. Then branch: `feature/ingest-science` from local `dev`. Do not start PR 3-17. Do not add a Science subject button. Do not deploy.
 
-v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-14.
+v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-15.
 
-PR 3-15 · Ingest Grades 2-3 Math + Reading Chunks
+PR 3-16 · Ingest Science Chunks
 
 I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why. After the edits, list each file, what changed, and why.
 
-Follow the checklist in `ROADMAP-v2-phase2.md` for PR 3-15:
+Follow the checklist in `ROADMAP-v2-phase2.md` for PR 3-16:
 
-- Check current chunk count before ingesting: query Firestore `curriculum_chunks` count
-- Run ingestion on each new source folder (math grade 2, math grade 3, reading grade 2, reading grade 3) with the `ts-node` commands listed in the roadmap
-- Verify new chunks in Firestore — `subject` and `gradeBand` metadata correct
-- Note new total chunk count (was 536 before this sprint)
-- Spot-check 5 grade 2 chunks and 5 grade 3 chunks for quality and accuracy
-- Deduplication check: re-running the script must not create duplicate chunks
-- Commit: `feat(rag): ingest grades 2-3 math and reading curriculum chunks`
+- Run ingestion on Science sources with the `ts-node` commands listed in the roadmap (science grade K, 1, 2, 3 as the script expects)
+- Verify science chunks in Firestore with `subject: 'science'` metadata
+- Note final total chunk count after all Phase 2 ingestion so far
+- Spot-check 5 science chunks across different grades
+- Commit: `feat(rag): ingest science curriculum chunks for grades k-3`
 
-Do not ingest Science PDFs. Do not add a Science subject button. Do not change Math, Reading, or Science topic names in `TOPIC_MAP`. Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end older unended sessions. Do not reset the Math path.
+Do not add a Science subject button. Do not change Math, Reading, or Science topic names in `TOPIC_MAP`. Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end older unended sessions. Do not reset the Math path.
 
 Before writing a component, read the Next.js docs in `node_modules/next/dist/docs/` only if you are unsure about a file convention. This app is Next.js 16.
 
@@ -76,6 +75,6 @@ One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with pl
 
 Three PR 2-26 boxes stay open on purpose. The Phase 1 "Zero ESLint warnings" box stays open. The PR 3-04 phone celebrate box stays open.
 
-PR 3-13 source note: 39 local PDFs under `rag-sources/` (EngageNY / CKLA / CKSci). Listed in `rag-sources/README.md`. PR 3-14 replaced science placeholders in `TOPIC_MAP` with real K–3 topic names. Leave Science ingestion for PR 3-16.
+PR 3-15 note: Grades 2–3 Math + Reading ingested. Corpus **3807**. Commit `411f213` on `feature/ingest-grades-2-3`. Gemini billing is linked. Science folders: `rag-sources/science/k-1|grade-2|grade-3` (listed in `rag-sources/README.md`). Leave the Science subject button for a later PR.
 
 Live site: https://spark-tutor-app.vercel.app

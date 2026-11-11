@@ -385,19 +385,21 @@
 ### PR 3-15 · Ingest Grades 2-3 Math + Reading Chunks
 **Branch:** `feature/ingest-grades-2-3`
 
-- [ ] Check current chunk count before ingesting: query Firestore `curriculum_chunks` count
-- [ ] Run ingestion script on each new source folder:
+- [x] Check current chunk count before ingesting: query Firestore `curriculum_chunks` count
+- [x] Run ingestion script on each new source folder:
   ```
   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject math --grade 2
   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject math --grade 3
   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject reading --grade 2
   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject reading --grade 3
   ```
-- [ ] Verify new chunks in Firestore — check `subject` and `gradeBand` metadata correct
-- [ ] Note new total chunk count (was 536 before this sprint)
-- [ ] Spot-check 5 grade 2 chunks and 5 grade 3 chunks for quality and accuracy
-- [ ] Deduplication check: re-running script must not create duplicate chunks
-- [ ] Commit: `feat(rag): ingest grades 2-3 math and reading curriculum chunks`
+- [x] Verify new chunks in Firestore — check `subject` and `gradeBand` metadata correct
+- [x] Note new total chunk count (was 536 before this sprint)
+- [x] Spot-check 5 grade 2 chunks and 5 grade 3 chunks for quality and accuracy
+- [x] Deduplication check: re-running script must not create duplicate chunks
+- [x] Commit: `feat(rag): ingest grades 2-3 math and reading curriculum chunks`
+
+> **Note (11 Nov 2026):** Commit `411f213` on `feature/ingest-grades-2-3`. Pre-ingest count was 536. After grades 2–3 math + reading: **3807** total (math 264, reading 3543). Breakdown: math|2 25, math|3 37, reading|2 1485, reading|3 1724. RAG `GradeBand` now includes `'2' | '3'`. Dedup re-runs saved 0 new chunks. Science PDFs not ingested. No Science subject button. Math path untouched.
 
 ---
 
@@ -741,7 +743,7 @@
 - [x] All new routes: auth before body, rate limit, no answer in response
 
 ### Sprint 3 — Curriculum
-- [ ] Grades 2-3 Math + Reading chunks ingested (CK-12/EngageNY)
+- [x] Grades 2-3 Math + Reading chunks ingested (CK-12/EngageNY)
 - [ ] Science K-3 chunks ingested
 - [x] Science topic map has real topic names (no placeholders)
 - [ ] Science subject button in child UI
