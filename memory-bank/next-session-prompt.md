@@ -6,7 +6,7 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 Date: 11 Nov 2026. PR 3-15 is done and merged to local `dev`. Grades 2–3 Math + Reading are ingested. Science is not.
 
-- Local `dev` is at `5f510d7` and includes PR 3-15 commits `411f213` (ingest) + `5f510d7` (docs). Fast-forward merge from `feature/ingest-grades-2-3`
+- Local `dev` is at `d0497a1` and includes PR 3-15 commits `411f213` (ingest) + `5f510d7` (docs) + `d0497a1` (next-session refresh). Fast-forward merge from `feature/ingest-grades-2-3`
 - Firestore corpus is **3807** total (math 264, reading 3543). Breakdown: math|2 25, math|3 37, reading|2 1485, reading|3 1724
 - Science PDFs remain under `rag-sources/science/` (gitignored, not ingested): `k-1/` (6), `grade-2/` (5), `grade-3/` (4)
 - `origin/main` still has merge `cba97ab` (Sprint 2). Not pushed. Not deployed
@@ -34,7 +34,7 @@ If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-15 ingest commit `411f213` (and docs `5f510d7`). `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-15 ingest commit `411f213` (and docs through `d0497a1`). `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
 This session is PR 3-16 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/ingest-science`. Create that branch from local `dev`. Do not start PR 3-17. Do not add a Science subject button. Do not deploy.
 
@@ -59,6 +59,15 @@ Follow the checklist in `ROADMAP-v2-phase2.md` for PR 3-16:
 - Spot-check 5 science chunks across different grades
 - Deduplication check: re-running must not create duplicates
 - Commit: `feat(rag): ingest science curriculum chunks for grades k-3`
+
+After the feature commit, follow the process in `memory-bank/README.md` before you stop:
+
+- Update `activeContext.md` (current focus, what this PR did, next steps)
+- Update `progress.md` (mark PR 3-16 done, update what works / what's left)
+- Check off PR 3-16 in `ROADMAP-v2-phase2.md` (Phase 2 roadmap — not `ROADMAP-v2_1.md`)
+- If this PR changes architecture (for example `Subject` / RAG metadata / ingest helpers), update `systemPatterns.md` and `techContext.md` in the same docs commit
+- If product scope wording is now wrong (corpus still saying math/reading only, etc.), update `productContext.md` / `projectbrief.md` as needed
+- Refresh `next-session-prompt.md` for the following chat (PR 3-17), then make a separate docs commit. Do not leave the memory bank describing an older state than the code
 
 Do not add a Science subject button. Do not change Math, Reading, or Science topic names in `TOPIC_MAP`. Do not wire Science into child chat/session UI (PR 3-17 / 3-18). Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end older unended sessions. Do not reset the Math path.
 

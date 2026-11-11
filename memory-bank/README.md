@@ -53,7 +53,7 @@ Read all files at the start of every new session to restore full project context
 - Paste-ready prompt for the next Cursor chat
 - Present while work is paused between sessions; remove or shorten when it is stale
 
-**After completing a PR:** Update `activeContext.md` (current focus, next steps) and `progress.md` (mark PR done, update what works / what's left). Check off the PR in `ROADMAP-v2_1.md`.
+**After completing a PR:** Update `activeContext.md` (current focus, next steps) and `progress.md` (mark PR done, update what works / what's left). Check off the PR in the active roadmap (`ROADMAP-v2-phase2.md` for Phase 2; `ROADMAP-v2_1.md` only for Phase 1). Refresh `next-session-prompt.md` for the next chat.
 
 **After a major architectural decision:** Update `systemPatterns.md` and `techContext.md` in the same docs commit (prompt layers, Firestore shape, new files).
 
