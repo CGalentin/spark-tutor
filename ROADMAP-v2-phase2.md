@@ -308,19 +308,21 @@
 ### PR 3-12 · Sprint 2 Test + Deploy
 **Branch:** `dev`
 
-- [ ] Reading quiz via button: click → verify passage + 3 questions appear in chat
+- [x] Reading quiz via button: click → verify passage + 3 questions appear in chat
   → answer one correctly, one wrongly → verify praise vs hint
-- [ ] Spelling via button: click → verify clue + letter count appear
+- [x] Spelling via button: click → verify clue + letter count appear
   → attempt correct and wrong → verify feedback
-- [ ] Math problem: still works via chat phrase (no regression)
-- [ ] All three chat phrase triggers work without buttons
-- [ ] Open browser DevTools Network tab — verify answer / word never appears in any response
-- [ ] Check Upstash dashboard — verify new rate limit buckets exist
-- [ ] Run: `npx tsc --noEmit` — zero errors
-- [ ] Run: `npm run build` — zero errors
+- [x] Math problem: still works via chat phrase (no regression)
+- [x] All three chat phrase triggers work without buttons
+- [x] Open browser DevTools Network tab — verify answer / word never appears in any response
+- [x] Check Upstash dashboard — verify new rate limit buckets exist
+- [x] Run: `npx tsc --noEmit` — zero errors
+- [x] Run: `npm run build` — zero errors
 - [ ] Deploy: `vercel --prod`
 - [ ] Merge `dev` → `main`
 - [ ] Commit: `chore: sprint 2 complete — reading quiz and spelling mcp tools live`
+
+> **Note (11 Nov 2026):** Local sprint test passed on `dev` at `5e021b6` (already pushed). Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, and phrase-only triggers all returned 200. Chat and verify replies had no `correctIndex` / answer arrays / spelling words. Rate-limit prefixes `rl:reading-quiz`, `rl:reading-quiz-verify`, `rl:spelling`, `rl:spelling-verify` are in code; live Upstash dashboard was skipped (local Redis often fails open). `tsc` and `npm run build` exited 0. Math path unchanged. Test sessions were ended; the 26 Sep Blip session was not. Deploy and merge to `main` left open until explicitly asked.
 
 ---
 

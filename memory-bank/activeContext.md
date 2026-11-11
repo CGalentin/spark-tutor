@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 activity buttons are on local dev (11 Nov 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-12, the Sprint 2 test and deploy. That is not v1 Week 3.
+**Phase 2 Sprint 2 local test passed (11 Nov 2026).** `origin/dev` is at `5e021b6` with the quiz, spelling, chat triggers, and activity buttons. https://spark-tutor-app.vercel.app still shows eight select cards; quiz/spelling are not on production yet. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is finish PR 3-12 deploy + merge to `main` when asked, then Sprint 3.
 
 Do not force-push.
 
@@ -315,10 +315,18 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Buttons are at least 48px, rounded-2xl, and hidden while the mascot is responding
   - At 375px, math and reading both fit with no overlap. Both button clicks returned chat 200. No session was ended. Commit `8ec1c33`
 
+- [x] PR 3-12 · Sprint 2 local test (`dev`) — deploy still open
+  - Reading Quiz button + wrong/right verify, Spelling button + wrong/right verify, Math button and phrases, phrase-only triggers: all 200
+  - No `correctIndex`, answer arrays, or spellings in chat/verify replies
+  - Rate-limit prefixes confirmed in code; live Upstash dashboard skipped
+  - `npx tsc --noEmit` and `npm run build` exited 0. Math path unchanged. Test sessions ended; 26 Sep Blip left open
+  - Pushed to `origin/dev` at `5e021b6`. Deploy / merge to `main` / chore commit wait for an explicit ask
+
 ## Up Next
-- Next work is Phase 2 PR 3-12, the Sprint 2 test and deploy, on local `dev`. Do not deploy unless the user asks in that message. Do not confuse this with v1 Week 3.
+- Finish PR 3-12 only when asked: `vercel --prod`, merge `dev` → `main`, then `chore: sprint 2 complete — reading quiz and spelling mcp tools live`. Until then do not deploy and do not merge to `main`.
+- After that deploy, Sprint 3 starts at PR 3-13 (curriculum sources). Do not confuse with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
-- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
+- Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push.
 
 ---
 
@@ -405,7 +413,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` has the reading quiz, the answer check, the spelling routes, the chat triggers, and the activity buttons. `origin/dev` is still `d4d332c`. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
+Local `dev` and `origin/dev` are at `5e021b6` with the reading quiz, spelling, chat triggers, activity buttons, and the Sprint 2 local test notes. `origin/main` is still `0f3a375`. Do not force-push. Do not merge to `main` until asked. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
