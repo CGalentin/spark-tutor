@@ -3,9 +3,11 @@
 // and saves chunks + embeddings to Firestore curriculum_chunks collection.
 //
 // Usage (from project root):
-//   npx ts-node --project tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject math
-//   npx ts-node --project tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject reading
-//   npx ts-node --project tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject all
+//   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject math
+//   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject reading
+//   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject math --grade 2
+//   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject reading --grade 3
+//   npx ts-node -P tsconfig.scripts.json scripts/rag/ingestDocuments.ts --subject all
 
 import * as dotenv from 'dotenv';
 import * as path from 'path';
@@ -30,7 +32,10 @@ interface SourceDoc {
   topic: string;
 }
 
-const MATH_SOURCES: SourceDoc[] = [
+/** Grades the CLI --grade flag may select (K-1 flat folders use no --grade). */
+type IngestGrade = '2' | '3';
+
+const MATH_SOURCES_K1: SourceDoc[] = [
   {
     fileName: 'common-core-math-standards-k12.pdf',
     subject: 'math',
@@ -87,7 +92,85 @@ const MATH_SOURCES: SourceDoc[] = [
   },
 ];
 
-const READING_SOURCES: SourceDoc[] = [
+const MATH_SOURCES_GRADE_2: SourceDoc[] = [
+  {
+    fileName: 'engageny-math-grade2-m1-topic-a-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 sums and differences foundations',
+  },
+  {
+    fileName: 'engageny-math-grade2-m1-topic-b-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 addition and subtraction to 100',
+  },
+  {
+    fileName: 'engageny-math-grade2-m3-topic-a-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 place value foundations',
+  },
+  {
+    fileName: 'engageny-math-grade2-m3-topic-c-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 place value and comparing numbers',
+  },
+  {
+    fileName: 'engageny-math-grade2-m8-module-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 time shapes and fractions overview',
+  },
+  {
+    fileName: 'engageny-math-grade2-m8-topic-d-overview.pdf',
+    subject: 'math',
+    gradeBand: '2',
+    topic: 'Grade 2 fractions as equal parts of shapes',
+  },
+];
+
+const MATH_SOURCES_GRADE_3: SourceDoc[] = [
+  {
+    fileName: 'engageny-math-grade3-m1-topic-a-overview.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 multiplication and division foundations',
+  },
+  {
+    fileName: 'engageny-math-grade3-m1-topic-c-overview.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 multiplication and division problem solving',
+  },
+  {
+    fileName: 'engageny-math-grade3-m4-module-overview.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 multiplication and area overview',
+  },
+  {
+    fileName: 'engageny-math-grade3-m4-topic-a-lesson-1.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 area concepts',
+  },
+  {
+    fileName: 'engageny-math-grade3-m5-module-overview.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 fractions on the number line overview',
+  },
+  {
+    fileName: 'engageny-math-grade3-m5-topic-a-overview.pdf',
+    subject: 'math',
+    gradeBand: '3',
+    topic: 'Grade 3 partition a whole into equal parts',
+  },
+];
+
+const READING_SOURCES_K1: SourceDoc[] = [
   {
     fileName: 'common-core-ela-standards-k12.pdf',
     subject: 'reading',
@@ -138,11 +221,127 @@ const READING_SOURCES: SourceDoc[] = [
   },
 ];
 
+const READING_SOURCES_GRADE_2: SourceDoc[] = [
+  {
+    fileName: 'ckla-grade2-unit2-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '2',
+    topic: 'Grade 2 decoding review and narrative writing',
+  },
+  {
+    fileName: 'ckla-grade2-unit3-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '2',
+    topic: 'Grade 2 informational text comprehension',
+  },
+  {
+    fileName: 'ckla-grade2-unit4-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '2',
+    topic: 'Grade 2 reading skills continuation',
+  },
+  {
+    fileName: 'ckla-grade2-unit5-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '2',
+    topic: 'Grade 2 reading skills unit 5',
+  },
+  {
+    fileName: 'ckla-grade2-unit6-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '2',
+    topic: 'Grade 2 reading skills unit 6',
+  },
+];
+
+const READING_SOURCES_GRADE_3: SourceDoc[] = [
+  {
+    fileName: 'ckla-grade3-unit1-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 classic tales text evidence and story structure',
+  },
+  {
+    fileName: 'ckla-grade3-unit3-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 human body informational text',
+  },
+  {
+    fileName: 'ckla-grade3-unit4-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 ancient Rome inference and text evidence',
+  },
+  {
+    fileName: 'ckla-grade3-unit7-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 astronomy summary and research writing',
+  },
+  {
+    fileName: 'ckla-grade3-unit8-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 Native Americans literary and informational skills',
+  },
+  {
+    fileName: 'ckla-grade3-unit9-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 European exploration',
+  },
+  {
+    fileName: 'ckla-grade3-unit10-teacher-guide.pdf',
+    subject: 'reading',
+    gradeBand: '3',
+    topic: 'Grade 3 colonial America',
+  },
+];
+
 // ─── Ingestion helpers ────────────────────────────────────────────────────────
 
 /** Pauses execution for the given number of milliseconds — used to respect Gemini rate limits. */
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** True for transient network/quota blips that are worth retrying mid-ingest. */
+function isRetryableError(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return (
+    message.includes('UNAVAILABLE') ||
+    message.includes('ETIMEDOUT') ||
+    message.includes('ENETUNREACH') ||
+    message.includes('ECONNRESET') ||
+    message.includes('Too Many Requests') ||
+    message.includes('429')
+  );
+}
+
+/**
+ * Retries an async call a few times with backoff for flaky network errors.
+ * Lets long PDF runs survive a brief Firestore or Gemini blip.
+ */
+async function withRetry<T>(label: string, fn: () => Promise<T>, attempts = 5): Promise<T> {
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (!isRetryableError(err) || attempt === attempts) {
+        throw err;
+      }
+
+      const waitMs = attempt * 2000;
+      console.warn(`     ⏳ ${label} failed (attempt ${attempt}/${attempts}), retrying in ${waitMs}ms`);
+      await sleep(waitMs);
+    }
+  }
+
+  throw lastError;
 }
 
 /**
@@ -181,17 +380,19 @@ async function ingestDocument(
 
   for (const chunk of chunks) {
     // Deduplication: skip if this exact chunk already exists in Firestore
-    const exists = await chunkExists(chunk.source, chunk.chunkIndex);
+    const exists = await withRetry(`chunkExists #${chunk.chunkIndex}`, () =>
+      chunkExists(chunk.source, chunk.chunkIndex),
+    );
     if (exists) {
       skipped++;
       continue;
     }
 
     // Embed the chunk text with Gemini
-    const embedding = await embedText(chunk.text);
+    const embedding = await withRetry(`embed #${chunk.chunkIndex}`, () => embedText(chunk.text));
 
     // Save chunk + embedding to Firestore
-    await saveChunk({ ...chunk, embedding });
+    await withRetry(`saveChunk #${chunk.chunkIndex}`, () => saveChunk({ ...chunk, embedding }));
     processed++;
 
     // Brief pause to stay within Gemini free-tier rate limits (60 RPM)
@@ -200,6 +401,30 @@ async function ingestDocument(
 
   console.log(`     ✅ ${processed} saved, ${skipped} already existed`);
   return { processed, skipped };
+}
+
+/** Returns the absolute folder and source list for a subject + optional grade filter. */
+function resolveSources(
+  ragSourcesDir: string,
+  subject: 'math' | 'reading',
+  grade: IngestGrade | '',
+): Array<{ dir: string; doc: SourceDoc }> {
+  if (grade === '2') {
+    const dir = path.join(ragSourcesDir, subject, 'grade-2');
+    const docs = subject === 'math' ? MATH_SOURCES_GRADE_2 : READING_SOURCES_GRADE_2;
+    return docs.map((doc) => ({ dir, doc }));
+  }
+
+  if (grade === '3') {
+    const dir = path.join(ragSourcesDir, subject, 'grade-3');
+    const docs = subject === 'math' ? MATH_SOURCES_GRADE_3 : READING_SOURCES_GRADE_3;
+    return docs.map((doc) => ({ dir, doc }));
+  }
+
+  // No --grade: keep the original K–1 flat-folder behavior
+  const dir = path.join(ragSourcesDir, subject);
+  const docs = subject === 'math' ? MATH_SOURCES_K1 : READING_SOURCES_K1;
+  return docs.map((doc) => ({ dir, doc }));
 }
 
 // ─── CLI entry point ──────────────────────────────────────────────────────────
@@ -212,27 +437,39 @@ function getArg(name: string, fallback = ''): string {
 
 async function main(): Promise<void> {
   const subject = getArg('subject', 'all') as Subject | 'all';
+  const gradeArg = getArg('grade', '');
 
   if (!['math', 'reading', 'all'].includes(subject)) {
-    console.error('Usage: ts-node ingestDocuments.ts --subject <math|reading|all>');
+    console.error(
+      'Usage: ts-node ingestDocuments.ts --subject <math|reading|all> [--grade 2|3]',
+    );
     process.exit(1);
   }
 
-  const ragSourcesDir = path.resolve(__dirname, '../../rag-sources');
-  const mathDir = path.join(ragSourcesDir, 'math');
-  const readingDir = path.join(ragSourcesDir, 'reading');
+  if (gradeArg !== '' && gradeArg !== '2' && gradeArg !== '3') {
+    console.error('Invalid --grade. Use 2 or 3 (omit --grade for the K–1 folders).');
+    process.exit(1);
+  }
 
+  if (subject === 'all' && gradeArg !== '') {
+    console.error('Omit --grade when using --subject all (K–1 only). Run grade 2-3 per subject.');
+    process.exit(1);
+  }
+
+  const grade = gradeArg as IngestGrade | '';
+  const ragSourcesDir = path.resolve(__dirname, '../../rag-sources');
   const sourcesToIngest: Array<{ dir: string; doc: SourceDoc }> = [];
 
   if (subject === 'math' || subject === 'all') {
-    MATH_SOURCES.forEach((doc) => sourcesToIngest.push({ dir: mathDir, doc }));
+    sourcesToIngest.push(...resolveSources(ragSourcesDir, 'math', grade));
   }
   if (subject === 'reading' || subject === 'all') {
-    READING_SOURCES.forEach((doc) => sourcesToIngest.push({ dir: readingDir, doc }));
+    sourcesToIngest.push(...resolveSources(ragSourcesDir, 'reading', grade));
   }
 
   console.log(`\n🚀 Spark Tutor RAG Ingestion`);
   console.log(`   Subject filter: ${subject}`);
+  console.log(`   Grade filter:   ${grade || 'K-1 (flat folders)'}`);
   console.log(`   Documents to process: ${sourcesToIngest.length}`);
   console.log('─'.repeat(60));
 

@@ -23,7 +23,7 @@ The Teacher system prompt has 7 layers. The original project notes described 3.
 
 ## Two GradeBand types — do not mix them
 - Tutoring grades: `'K' | '1' | '2' | '3'` in `src/constants/gradeBands.ts`
-- RAG chunk grades: `'K' | '1' | 'K-1'` in `src/types/rag.ts`
+- RAG chunk grades: `'K' | '1' | '2' | '3' | 'K-1'` in `src/types/rag.ts`
 
 ## Current Math path — do not reset
 Live Math path for the test parent. Leave it as it is.

@@ -4,7 +4,7 @@
 import type { Subject } from './session';
 
 /** Grade band indicates which grade level a curriculum chunk targets. */
-export type GradeBand = 'K' | '1' | 'K-1';
+export type GradeBand = 'K' | '1' | '2' | '3' | 'K-1';
 
 /**
  * A single curriculum chunk stored in Firestore.
