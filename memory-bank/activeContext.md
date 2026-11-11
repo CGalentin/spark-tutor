@@ -17,7 +17,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - `src/constants/gradeBands.ts` — `GradeBand` (`'K' | '1' | '2' | '3'`) + `GRADE_BAND_CONFIGS`
   - `src/constants/gradeBandPrompts.ts` — `GRADE_BAND_PROMPT` (K: 2 sentences / single-step; 1: 3 / two-step; 2: 4 / two-step; 3: 5 / multi-step)
   - Barrel export from `src/constants/index.ts`
-  - Note: RAG chunk `GradeBand` in `src/types/rag.ts` is still `'K' | '1' | 'K-1'` (curriculum metadata — different type)
+  - Note: RAG chunk `GradeBand` in `src/types/rag.ts` is `'K' | '1' | '2' | '3' | 'K-1'` (curriculum metadata — different from tutoring GradeBand)
 
 - [x] PR 2-02 · Update System Prompt Composer (`feature/grade-band-prompt-layer`)
   - `buildSystemPrompt` takes optional `gradeBand` (defaults to `'K'`)
@@ -434,7 +434,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Sprint 2 is on `main` at merge `cba97ab`. Local `dev` is at `5f510d7` and includes PR 3-15 (`411f213`). Not pushed. Next branch is `feature/ingest-science` from local `dev`. Do not force-push. Do not start a six-message lesson to force a star.
+Sprint 2 is on `main` at merge `cba97ab`. Local `dev` includes PR 3-15 (`411f213`) plus follow-up docs. Confirm with `git merge-base --is-ancestor 411f213 HEAD`. Next branch is `feature/ingest-science` from local `dev`. Do not force-push. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.

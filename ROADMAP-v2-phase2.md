@@ -399,7 +399,7 @@
 - [x] Deduplication check: re-running script must not create duplicate chunks
 - [x] Commit: `feat(rag): ingest grades 2-3 math and reading curriculum chunks`
 
-> **Note (11 Nov 2026):** Commit `411f213` on `feature/ingest-grades-2-3`. Pre-ingest count was 536. After grades 2–3 math + reading: **3807** total (math 264, reading 3543). Breakdown: math|2 25, math|3 37, reading|2 1485, reading|3 1724. RAG `GradeBand` now includes `'2' | '3'`. Dedup re-runs saved 0 new chunks. Science PDFs not ingested. No Science subject button. Math path untouched.
+> **Note (11 Nov 2026):** Commit `411f213` on `feature/ingest-grades-2-3`, merged to local `dev`. Pre-ingest count was 536. After grades 2–3 math + reading: **3807** total (math 264, reading 3543). Breakdown: math|2 25, math|3 37, reading|2 1485, reading|3 1724. RAG `GradeBand` now includes `'2' | '3'`. Dedup re-runs saved 0 new chunks. Science PDFs not ingested. No Science subject button. Math path untouched.
 
 ---
 

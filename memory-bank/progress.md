@@ -77,7 +77,7 @@
 |---|---|---|---|
 | 3-13 | Download + Organize New Source Documents | `feature/curriculum-sources-grades-2-3` | ✅ 39 local PDFs. README + gitignore on `dev`. Not ingested |
 | 3-14 | Update Science Topic Map | `feature/science-topic-map` | ✅ Commit `0c263dd`. Real K–3 science topics on `dev` |
-| 3-15 | Ingest Grades 2-3 Math + Reading Chunks | `feature/ingest-grades-2-3` | ✅ Commit `411f213`. Corpus 3807. Merged to local `dev` (`5f510d7`). Not pushed |
+| 3-15 | Ingest Grades 2-3 Math + Reading Chunks | `feature/ingest-grades-2-3` | ✅ Commit `411f213`. Corpus 3807. On local `dev`. Push `origin/dev` when asked |
 | 3-16 | Ingest Science Chunks | `feature/ingest-science` | ⏳ Next |
 
 ---
