@@ -115,6 +115,11 @@ The reading quiz generator is a separate route, `POST /api/mcp/reading-quiz`:
   - Math "give me a problem" still uses the direct generator, not an HTTP route
   - Science is not a subject yet, so chat does not look for it
   - The prompt gets the passage and choices, or the clues and letter counts. The reply is character voice, not raw JSON
+- Child UI activity buttons (`ActivityButtons` above `ChatInput`) send those same phrases through the existing chat send path:
+  - Math: "Practice Problem 🔢" → `practice problem`
+  - Reading: "Reading Quiz 📖" → `give me a quiz`
+  - Math and reading: "Spelling Practice ✏️" → `practice spelling`
+  - All three hide while the mascot is responding (`isChatLoading`)
 - Client security rules deny all reads and writes on `quiz_sessions`
 
 Topic boundary detection (`src/lib/mcp/topicBoundary.ts`) is a separate client-safe helper in the same folder:

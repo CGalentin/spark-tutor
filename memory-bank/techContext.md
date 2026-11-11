@@ -155,7 +155,8 @@ src/components/child/SessionProgressBar.tsx      ← gradient progress bar + sta
 src/components/child/EndSessionButton.tsx        ← "All Done!" CTA
 src/components/child/WellDoneScreen.tsx          ← post-session celebration screen
 src/components/child/AnimatedAvatar.tsx          ← SVG avatar wrapper with idle/thinking/celebrating states
-src/components/child/avatars/                    ← 6 SVG avatar components + index.ts with getAvatarComponent()
+src/components/child/ActivityButtons.tsx         ← math/reading/spelling shortcuts above ChatInput; same handleSend path
+src/components/child/avatars/                    ← 8 SVG avatar components + index.ts with getAvatarComponent()
 src/components/ui/                               ← Shadcn components (do not edit)
 
 # MCP

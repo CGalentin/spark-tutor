@@ -4,18 +4,18 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 ## Where the last session stopped
 
-Date: 24 Oct 2026. PR 3-10 is done. Nothing was deployed. Nothing was pushed.
+Date: 11 Nov 2026. PR 3-11 is done. Nothing was deployed. Nothing was pushed.
 
 - `origin/dev` is still `d4d332c`
 - `origin/main` is still `0f3a375`
 - `dev` and `main` are not the same hash, because `main` has merge commits
-- Local `dev` contains `baa775b` (`feat(api): wire reading quiz and spelling triggers into chat router`)
-- The notes commit on top of `baa775b` checks off PR 3-10 and points this prompt at PR 3-11. That commit is local only
+- Local `dev` contains `8ec1c33` (`feat(child-ui): add activity buttons for quiz and spelling above chat input`)
+- The notes commit on top of that checks off PR 3-11 and points this prompt at PR 3-12. That commit is local only
 - Live site https://spark-tutor-app.vercel.app still shows the eight character cards. The quiz and spelling routes are not on production.
 
-Chat starts a reading quiz when the subject is reading and the message says quiz, test me, or comprehension. It starts spelling when the message says spell or spelling, in any subject. Math "give me a problem" still uses the direct generator. Science is not a subject yet. The child sees character voice, not raw JSON. The spelling and the correct choice stay on the server. Do not redo that.
+Activity buttons sit above the chat input. Math shows Practice Problem + Spelling. Reading shows Reading Quiz + Spelling. Science is not a subject yet. Clicks send `practice problem`, `give me a quiz`, or `practice spelling` through the same chat send path. Buttons hide while the mascot replies. Do not redo that.
 
-The trigger check used an already-ended session, not the 26 Sep Blip session. It did not end that session. Chat still increments `messageCount` when a session id is sent. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false.
+The browser check started short Math and Reading visits and did not end them. Do not end the 26 Sep Blip session either. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false.
 
 `AGENTS.md` and `spark_tutor_build_bible_2.docx` are still dirty on purpose. Leave them uncommitted unless I say so in that chat.
 
@@ -31,43 +31,27 @@ I'm building Spark Tutor v2 Phase 2. Read these files before you touch anything.
 - `.cursorrules` in the parent `TutorApp` folder (`C:\Users\GauntletAI\Desktop\GauntletAI\TutorApp\.cursorrules`)
 - `CLAUDE.md`
 - `ROADMAP-v2_1.md` (Phase 1; already shipped)
-- `ROADMAP-v2-phase2.md`. Read the Sprint 1 decisions, the PR 3-09 note, the PR 3-10 note, and PR 3-11
+- `ROADMAP-v2-phase2.md`. Read the Sprint 1 decisions, the PR 3-10 note, the PR 3-11 note, and PR 3-12
 
 If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-`origin/dev` should still be `d4d332c`. `origin/main` should still be `0f3a375` and should contain `0b3db03` and `c0576bd`. `git log --oneline` should contain `baa775b`, `c10a43c`, `d4d332c`, `1a0b3d7`, `f2663ca`, `0c2980c`, `5706dfc`, `8e2732e`, `7d3cc98`, `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should contain `baa775b`. `dev` and `main` are not the same hash. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`origin/dev` should still be `d4d332c`. `origin/main` should still be `0f3a375` and should contain `0b3db03` and `c0576bd`. `git log --oneline` should contain `8ec1c33`, `575ce48`, `baa775b`, `c10a43c`, `d4d332c`, `1a0b3d7`, `f2663ca`, `0c2980c`, `5706dfc`, `8e2732e`, `7d3cc98`, `87f36d5`, `44029d9`, `63800fa`, `84b81b1`, `a7cc3e3`, `6df4460`, `dc0a074`, `c954c31`, and `9a71fcb`. Local `dev` should contain `8ec1c33`. `dev` and `main` are not the same hash. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main`. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
-This session is PR 3-11 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/mcp-activity-buttons`. Create that branch from local `dev`. Do not start PR 3-12. Do not deploy.
+This session is PR 3-12 only, from `ROADMAP-v2-phase2.md`. Work on local `dev`. Do not start a new feature branch unless the roadmap says to. Do not start Sprint 3. Do not deploy unless I say to deploy in that same message.
 
-v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. v1 Week 3 also has a PR 3-09, and that one is already done. Do not redo it. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-10.
+v1 Week 2 PRs 2-01 through 2-10, and v1 Week 3 PRs 3-01 through 3-06, are already done. Phase 2 work uses the numbers in `ROADMAP-v2-phase2.md`. Do not mix them up. v1 Week 3 also has a PR 3-09, and that one is already done. Do not redo it. Do not redo PRs 2-28 or Phase 2 PRs 3-01 through 3-11.
 
-PR 3-11 · Activity buttons in the child UI
+PR 3-12 · Sprint 2 Test + Deploy
 
 I am newer to coding. Before you edit a file, tell me in plain language what you are about to change and why. After the edits, list each file, what changed, and why.
 
-Create `src/components/child/ActivityButtons.tsx`. Show it above the chat input on `src/app/(child)/chat/page.tsx`.
+Follow the checklist in `ROADMAP-v2-phase2.md` for PR 3-12. Test reading quiz via button, spelling via button, math via chat phrase, and the chat phrase triggers without buttons. Confirm answers and spellings never appear in network responses. Run `npx tsc --noEmit` and `npm run build`. Deploy and merge to `main` only if I explicitly say to deploy and merge in that same message. If I do not say deploy, stop after the local test and the notes commit.
 
-Three buttons:
-
-- "Practice Problem 🔢" only when the subject is math. Clicking it sends `practice problem`.
-- "Reading Quiz 📖" only when the subject is reading. Science is not a subject yet. Do not add it. Clicking it sends `give me a quiz`.
-- "Spelling Practice ✏️" for math and for reading. Clicking it sends `practice spelling`.
-
-Those phrases are ones the chat route already understands. Do not add a second submit path. The button should put the phrase into the chat and send it the same way a typed message is sent.
-
-Each button is at least 48px tall, rounded-2xl, and bright. Hide all three while the mascot is responding.
-
-This PR changes the child screen. Verify it in the browser. Check math and reading. At 375px, the buttons, the input, and the send button fit without overlap. Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end any session.
+Do not click "Yes, start this next" or "Keep practicing current topic". Do not end the 26 Sep Blip session. Do not end older unended sessions unless the roadmap requires ending only the new test sessions you start.
 
 Before writing a component, read the Next.js docs in `node_modules/next/dist/docs/` only if you are unsure about a file convention. This app is Next.js 16.
-
-Commit only the files for this PR. The commit message is:
-
-`feat(child-ui): add activity buttons for quiz and spelling above chat input`
-
-Then update `memory-bank/activeContext.md`, `memory-bank/progress.md`, `memory-bank/systemPatterns.md`, and `memory-bank/techContext.md`. Check off PR 3-11 in `ROADMAP-v2-phase2.md`. Refresh `memory-bank/next-session-prompt.md` so the next session starts at PR 3-12. Commit those notes separately. Merge the feature branch into local `dev`. Do not push. Do not merge to `main`.
 
 The pre-commit hook runs `tsc`, Prettier, and ESLint. Let it run. If it fails, fix the problem and make a new commit. Do not amend.
 
@@ -88,6 +72,6 @@ Leave the Shapes suggestion in place. Math stays on Counting to 20. `suggestedNe
 
 One PR 2-25 checkbox is still open: "Verify all new endpoints return 429 with plain-English message on limit hit." Do not redo 2-25 to close that box.
 
-Three PR 2-26 boxes stay open on purpose. They are the "no active session" line, the approve-topic line, and the reject-flow line. The Phase 1 "Zero ESLint warnings" box stays open. The PR 3-04 phone celebrate box stays open. Do not check the Sprint 2 overview box. That waits for the sprint test.
+Three PR 2-26 boxes stay open on purpose. They are the "no active session" line, the approve-topic line, and the reject-flow line. The Phase 1 "Zero ESLint warnings" box stays open. The PR 3-04 phone celebrate box stays open. Do not check the Sprint 2 overview box until the sprint test is done.
 
 Live site: https://spark-tutor-app.vercel.app

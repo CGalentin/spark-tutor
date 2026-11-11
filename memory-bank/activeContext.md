@@ -1,7 +1,7 @@
 # Active Context — Spark Tutor
 
 ## Current Status
-**Phase 2 chat triggers are on local dev (24 Oct 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-11, the activity buttons above the chat input. That is not v1 Week 3.
+**Phase 2 activity buttons are on local dev (11 Nov 2026).** https://spark-tutor-app.vercel.app still shows eight select cards, including Bram and Stella. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. The chat celebrate bounce is still open. Do not run six messages just to earn a star. The Math suggestion card still says Shapes. Do not click it unless asked. Next work is Phase 2 PR 3-12, the Sprint 2 test and deploy. That is not v1 Week 3.
 
 Do not force-push.
 
@@ -309,8 +309,14 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
   - Three live checks returned 200. The quiz note saved 3 choice numbers. The spelling reply did not contain the stored words
   - The checks used an already-ended session, not the 26 Sep Blip session. That session was not ended. The Math path was not changed. Commit `baa775b`
 
+- [x] PR 3-11 · Activity buttons in the child UI (`feature/mcp-activity-buttons`)
+  - `ActivityButtons` sits above `ChatInput`. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. Science is not a subject yet
+  - Clicks call the same `handleSend` with `practice problem`, `give me a quiz`, or `practice spelling`
+  - Buttons are at least 48px, rounded-2xl, and hidden while the mascot is responding
+  - At 375px, math and reading both fit with no overlap. Both button clicks returned chat 200. No session was ended. Commit `8ec1c33`
+
 ## Up Next
-- Next work is Phase 2 PR 3-11, the activity buttons above the chat input, on `feature/mcp-activity-buttons` from local `dev`. A button should send a phrase the chat route already understands. Do not confuse this with v1 Week 3.
+- Next work is Phase 2 PR 3-12, the Sprint 2 test and deploy, on local `dev`. Do not deploy unless the user asks in that message. Do not confuse this with v1 Week 3.
 - The Shapes card stays. Do not click "Yes, start this next" or "Keep practicing current topic" unless the user asks in that message. Approve would leave Counting to 20 and append it to `topicsCompleted`. Reject would only clear Shapes, and it would leave `parentApproved` false.
 - Do not redo the 6-message test. Do not redo PR 2-25 to close the live 429 box. Do not force-push. Do not merge to `main`. Do not deploy again unless asked.
 
@@ -399,7 +405,7 @@ v1 MVP (Weeks 1–4) is complete. v2 phase 1 is now the production site at https
 ---
 
 ## Active Branch
-Local `dev` has the reading quiz, the answer check, the spelling routes, and the chat triggers. `origin/dev` is still `d4d332c`. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
+Local `dev` has the reading quiz, the answer check, the spelling routes, the chat triggers, and the activity buttons. `origin/dev` is still `d4d332c`. `origin/main` is `0f3a375`. Do not force-push. Do not merge to `main`. Do not start a six-message lesson to force a star.
 
 ## Known Issues / Decisions
 - `MasteryIndicator` takes `topic` and `score` only. `useLiveSession` listens and passes the score in. Do not subscribe inside the ring.
@@ -432,6 +438,7 @@ Local `dev` has the reading quiz, the answer check, the spelling routes, and the
 - Reading quiz choice numbers live at `quiz_sessions/{sessionId}/activeQuiz/current`. The browser cannot read that collection. The note has `answers`, `hints`, `solvedQuestionIndexes`, `expiresAt` (2 hours), and `parentUID`. The note is deleted after all 3 questions are gotten right
 - Spelling words live at `quiz_sessions/{sessionId}/activeSpelling/current`. The note has `words`, `hints`, `expiresAt` (2 hours), and `parentUID`. A new list replaces it. The check route does not delete it. The spelling is never in the reply
 - Chat calls the reading-quiz route when the subject is reading and the message asks for a quiz. It calls the spelling route when the message asks to spell, in any subject. Math problems still use the direct generator. Science is not a subject yet
+- Activity buttons above the chat input send those same phrases through `handleSend`. Math shows Practice Problem + Spelling. Reading shows Reading Quiz + Spelling. All three hide while `isChatLoading` is true
 - PowerShell on Windows 10 — quote paths with `(child)` in git commands
 - Git rule: always merge feature branch to dev BEFORE creating next feature branch
 - Summary is saved as `session.summary` nested field (not subcollection) — matches `Session` type

@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**The chat triggers are on local dev.** https://spark-tutor-app.vercel.app still shows eight drawings. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-11, the activity buttons above the chat input.
+**The activity buttons are on local dev.** https://spark-tutor-app.vercel.app still shows eight drawings. The quiz and spelling routes are not deployed. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-12, the Sprint 2 test and deploy.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -68,6 +68,7 @@
 | 3-08 | Quiz Answer Verification | `feature/mcp-quiz-verify` | ✅ Commit `1a0b3d7`. Correct choice stays on the server |
 | 3-09 | Spelling Practice MCP Route | `feature/mcp-spelling` | ✅ Commit `c10a43c`. Spellings stay on the server |
 | 3-10 | Wire MCP Tools Into Chat | `feature/mcp-reading-chat-trigger` | ✅ Commit `baa775b`. Child does not see raw JSON |
+| 3-11 | Activity Buttons in Child UI | `feature/mcp-activity-buttons` | ✅ Commit `8ec1c33`. Same send path as typed chat |
 
 ---
 
@@ -111,12 +112,13 @@
 - `POST /api/mcp/spelling` returns clues, letter counts, and hints. The spellings are saved at `quiz_sessions/{sessionId}/activeSpelling/current` and are not in the reply
 - `POST /api/mcp/spelling/verify` returns praise for a right spelling and a hint for a wrong one. The spelling is not in the reply. The note stays so a wrong try can be tried again
 - Chat starts a reading quiz when the subject is reading and the child says quiz, test me, or comprehension. It starts spelling practice when the child says spell or spelling, in any subject. Math "give me a problem" still works. The reply is character voice, not raw JSON
+- Activity buttons above the chat input send those phrases the same way a typed message is sent. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. They hide while the mascot is responding
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force the star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-11: activity buttons above the chat input. Each button sends a phrase the chat route already understands
+- Phase 2 PR 3-12: Sprint 2 test + deploy. Do not deploy unless asked
 - Merge `docs/v2-readme-update` into `dev`, and `dev` into `main`, only when the user asks
 
 **Live in production**

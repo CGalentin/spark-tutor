@@ -288,7 +288,7 @@
 ### PR 3-11 · Activity Buttons in Child UI
 **Branch:** `feature/mcp-activity-buttons`
 
-- [ ] Create `/src/components/child/ActivityButtons.tsx`:
+- [x] Create `/src/components/child/ActivityButtons.tsx`:
   - Three buttons, shown above the chat input:
     - "Practice Problem 🔢" — visible only when `subject === 'math'`
     - "Reading Quiz 📖" — visible only when `subject === 'reading'` or `subject === 'science'`
@@ -297,9 +297,11 @@
   - Clicking a button inserts the trigger phrase into chat and auto-submits
     (routes through the existing chat flow — no separate handler needed)
   - Buttons hidden while `isChatLoading` is true (mascot is responding)
-- [ ] Add `ActivityButtons` to `chat/page.tsx` — position above `ChatInput`
-- [ ] Verify on 375px — buttons, input, and send button all fit without overlap
-- [ ] Commit: `feat(child-ui): add activity buttons for quiz and spelling above chat input`
+- [x] Add `ActivityButtons` to `chat/page.tsx` — position above `ChatInput`
+- [x] Verify on 375px — buttons, input, and send button all fit without overlap
+- [x] Commit: `feat(child-ui): add activity buttons for quiz and spelling above chat input`
+
+> **Note (11 Nov 2026):** Commit `8ec1c33`. Science is not a subject yet, so the quiz button is reading-only. Math shows Practice Problem + Spelling. Reading shows Reading Quiz + Spelling. Clicks send `practice problem`, `give me a quiz`, or `practice spelling` through the same `handleSend` path. At 375px the buttons sat above the input with no overlap; both subject checks returned chat 200. Buttons hid while the mascot replied. No session was ended. The Math path stayed on Counting to 20, suggestion Shapes, `parentApproved` false. Not pushed.
 
 ---
 
