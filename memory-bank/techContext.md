@@ -136,7 +136,7 @@ src/constants/characters.ts       ← all 6 Spark Squad character configs
 src/constants/prompts.ts          ← BASE_TUTOR_RULES, SUMMARY_SYSTEM_PROMPT
 src/constants/gradeBands.ts       ← tutoring GradeBand 'K'|'1'|'2'|'3' + GRADE_BAND_CONFIGS
 src/constants/gradeBandPrompts.ts ← GRADE_BAND_PROMPT strings (Layer 4)
-src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading K–3; science placeholder)
+src/constants/topicMap.ts         ← TOPIC_MAP + getTopics() (math/reading/science K–3; science has real topics)
 src/constants/subjects.ts         ← SUBJECTS, MAX_SESSION_STARS (legacy GRADE_BANDS still K|1 for RAG-era constants)
 src/store/useChildStore.ts        ← character selection state
 src/store/useSessionStore.ts      ← active session state (sessionId, subject, currentTopic, currentGrade, stars, messageCount, topicMessageCount)

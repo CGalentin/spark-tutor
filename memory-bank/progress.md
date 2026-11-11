@@ -1,7 +1,7 @@
 # Progress — Spark Tutor
 
 ## Overall Status
-**Sprint 3 started.** PR 3-13 source docs are local (39 new CC PDFs, not ingested). Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-14, real science topics in `TOPIC_MAP`.
+**Sprint 3 started.** PR 3-14 science topics are real K–3 names in `TOPIC_MAP`. PR 3-13 source docs are local (39 new CC PDFs, not ingested). Sprint 2 is still live at https://spark-tutor-app.vercel.app. `origin/main` includes merge `cba97ab`. Stella's voice prompt stays. The name question still uses the emoji. Chat celebrate stays open. Next work is PR 3-15, ingest Grades 2–3 Math + Reading.
 
 ## v2 Sprint 1 — PR Checklist
 
@@ -76,8 +76,8 @@
 | PR | Title | Branch | Status |
 |---|---|---|---|
 | 3-13 | Download + Organize New Source Documents | `feature/curriculum-sources-grades-2-3` | ✅ 39 local PDFs. README + gitignore on `dev`. Not ingested |
-| 3-14 | Update Science Topic Map | `feature/science-topic-map` | ⏳ Next |
-| 3-15 | Ingest Grades 2-3 Math + Reading Chunks | `feature/ingest-grades-2-3` | ⏳ Pending |
+| 3-14 | Update Science Topic Map | `feature/science-topic-map` | ✅ Commit `0c263dd`. Real K–3 science topics on `dev` |
+| 3-15 | Ingest Grades 2-3 Math + Reading Chunks | `feature/ingest-grades-2-3` | ⏳ Next |
 
 ---
 
@@ -124,13 +124,14 @@
 - Activity buttons above the chat input send those phrases the same way a typed message is sent. Math: Practice Problem + Spelling. Reading: Reading Quiz + Spelling. They hide while the mascot is responding
 - Sprint 2 local test: button + phrase triggers, wrong/right verify for quiz and spelling, no answer/spelling leaks, `tsc` and build clean
 - PR 3-13: local `rag-sources/` grade folders hold 39 new CC-licensed PDFs (EngageNY Math, CKLA Reading, CKSci Science). Listed in `rag-sources/README.md`. Not ingested
+- PR 3-14: `TOPIC_MAP` science entries are real K–3 topic names (six per grade). Math and Reading unchanged
 
 **Not built yet**
 - Parent decision on the waiting Shapes suggestion. Do not click it unless asked
 - Watch celebrate in chat when Bram or Stella earns a star, at phone size. Idle and thinking were already watched. That PR 3-04 box stays open. Do not run six messages just to force a star
 - The name question still uses the character emoji. Leave it
-- Phase 2 PR 3-14: replace science placeholders in `TOPIC_MAP` with real K–3 topic names
-- Ingest Grades 2–3 + Science chunks; Science subject button; grade promotion — later Sprint 3 PRs
+- Phase 2 PR 3-15: ingest Grades 2–3 Math + Reading chunks (corpus still 536 K–1)
+- Ingest Science chunks; Science subject button; grade promotion — later Sprint 3 PRs
 - Merge leftover docs notes only when the user asks
 
 **Live in production**

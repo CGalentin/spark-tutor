@@ -368,15 +368,17 @@
 ### PR 3-14 · Update Science Topic Map
 **Branch:** `feature/science-topic-map`
 
-- [ ] Update `/src/constants/topicMap.ts`:
+- [x] Update `/src/constants/topicMap.ts`:
   - Replace the six science placeholder strings with real topic names per grade:
     - K: Living and non-living things, Types of weather, Parts of the body, Animal habitats, Plant parts, Sun moon and stars
     - 1: Plant and animal needs, Seasonal changes, The five senses, Animal life cycles, How plants grow, Earth and space
     - 2: Ecosystems, Weather patterns, Body systems, Adaptations, Photosynthesis, Landforms and water
     - 3: Food chains, Climate vs weather, Human body systems, Animal behavior, Plant reproduction, Earth's resources
-- [ ] Verify topic format matches Math and Reading entries exactly
-- [ ] Run: `npx tsc --noEmit` — zero errors
-- [ ] Commit: `feat(constants): replace science placeholders with real k-3 topic names`
+- [x] Verify topic format matches Math and Reading entries exactly
+- [x] Run: `npx tsc --noEmit` — zero errors
+- [x] Commit: `feat(constants): replace science placeholders with real k-3 topic names`
+
+> **Note (11 Nov 2026):** Commit `0c263dd` on `feature/science-topic-map`, merged to local `dev`. Science now has six real topics per grade K–3. Math and Reading topic lists unchanged. No Science subject button. Not ingested. Math path untouched.
 
 ---
 
@@ -741,7 +743,7 @@
 ### Sprint 3 — Curriculum
 - [ ] Grades 2-3 Math + Reading chunks ingested (CK-12/EngageNY)
 - [ ] Science K-3 chunks ingested
-- [ ] Science topic map has real topic names (no placeholders)
+- [x] Science topic map has real topic names (no placeholders)
 - [ ] Science subject button in child UI
 - [ ] Grade promotion on approve when topic crosses grade boundary
 - [ ] Same-grade approve does NOT change `currentGrade`
