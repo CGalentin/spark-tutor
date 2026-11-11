@@ -6,7 +6,7 @@ Stop. Do not start this prompt's work in the same chat that wrote it.
 
 Date: 11 Nov 2026. PR 3-15 is done and merged to local `dev`. Grades 2–3 Math + Reading are ingested. Science is not.
 
-- Local `dev` is at `dae971d` and includes PR 3-15 commits `411f213` (ingest) + docs through `dae971d` (README close-out in next-session prompt). Fast-forward merge from `feature/ingest-grades-2-3`
+- Local `dev` includes PR 3-15 commit `411f213` (ingest) plus later docs commits on `dev` (next-session prompt + README close-out). Fast-forward merge from `feature/ingest-grades-2-3`. Confirm with `git merge-base --is-ancestor 411f213 HEAD`
 - Firestore corpus is **3807** total (math 264, reading 3543). Breakdown: math|2 25, math|3 37, reading|2 1485, reading|3 1724
 - Science PDFs remain under `rag-sources/science/` (gitignored, not ingested): `k-1/` (6), `grade-2/` (5), `grade-3/` (4)
 - `origin/main` still has merge `cba97ab` (Sprint 2). Not pushed. Not deployed
@@ -34,7 +34,7 @@ If those files disagree with this message, follow this message.
 
 Confirm git before editing. Shell is PowerShell. Use `;` between commands. Do not use `&&`. `git commit -m "message"` is fine.
 
-`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-15 ingest commit `411f213` (and docs through `dae971d`). `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
+`origin/main` should contain merge `cba97ab` and should still contain `0b3db03` and `c0576bd`. Local `dev` should contain the PR 3-15 ingest commit `411f213` (`git merge-base --is-ancestor 411f213 HEAD` must succeed). `dev` and `main` are not the same hash, because `main` has merge commits. If those commits are missing, stop and tell me. Do not force-push. Do not merge to `main` unless I explicitly say to merge in that same message. Do not push unless I explicitly say to push in that same message. Do not run `vercel --prod` unless I explicitly say to deploy in that same message.
 
 This session is PR 3-16 only, from `ROADMAP-v2-phase2.md`. Branch: `feature/ingest-science`. Create that branch from local `dev`. Do not start PR 3-17. Do not add a Science subject button. Do not deploy.
 
